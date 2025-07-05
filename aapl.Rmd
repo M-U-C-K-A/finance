@@ -1,0 +1,164 @@
+---
+title: "Analyse complète du CAC 40"
+author: "Votre nom"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyquant)
+library(tidyverse)
+library(lubridate)
+library(plotly)
+library(corrplot)
+library(PerformanceAnalytics)
+library(timetk)
+```
+
+## 1. Introduction
+
+Ce rapport présente une analyse complète du **CAC 40**, l'indice boursier phare de la Bourse de Paris. L’analyse inclut la composition de l’indice, les tendances historiques, la volatilité, les corrélations et la performance comparative des actions composantes.
+
+---
+
+## 2. Récupération des données
+
+Nous utilisons `tidyquant` pour récupérer les données historiques des sociétés du CAC 40.
+
+```{r tickers}
+# Liste des tickers Yahoo Finance du CAC 40
+tickers <- c("^FCHI", "OR.PA", "AI.PA", "AIR.PA", "MT.AS", "ATO.PA", "CS.PA", 
+             "BNP.PA", "EN.PA", "CAP.PA", "CA.PA", "ACA.PA", "BN.PA", "KER.PA", 
+             "ML.PA", "LR.PA", "MC.PA", "SGO.PA", "SAN.PA", "SU.PA", "GLE.PA", 
+             "VIE.PA", "DG.PA", "VIV.PA", "FR.PA", "RMS.PA", "SAF.PA", "STLA.PA", 
+             "STMPA.PA", "SW.PA", "HO.PA", "URW.AS", "WLN.PA", "EL.PA")
+
+start_date <- "2020-01-01"
+
+data_cac <- tq_get(tickers, from = start_date, get = "stock.prices")
+```
+
+---
+
+## 3. Visualisation de l'indice CAC 40
+
+```{r plot-cac40}
+data_index <- data_cac %>% filter(symbol == "^FCHI")
+
+ggplot(data_index, aes(x = date, y = adjusted)) +
+  geom_line(color = "#2C3E50") +
+  labs(title = "Evolution de l'indice CAC 40", y = "Prix ajusté", x = "Date") +
+  theme_minimal()
+```
+
+---
+
+## 4. Performances cumulées des actions
+
+```{r perf-cumulee}
+returns <- data_cac %>%
+  group_by(symbol) %>%
+  tq_transmute(select = adjusted, mutate_fun = periodReturn, period = "daily", col_rename = "returns") %>%
+  spread(key = symbol, value = returns) %>%
+  tk_xts()
+
+charts.PerformanceSummary(returns, main = "Performance cumulée des actions du CAC 40")
+```
+
+---
+
+## 5. Corrélations entre actions
+
+```{r correlation}
+returns_monthly <- data_cac %>%
+  group_by(symbol) %>%
+  tq_transmute(select = adjusted, mutate_fun = periodReturn, period = "monthly", col_rename = "returns") %>%
+  spread(symbol, returns) %>%
+  drop_na()
+
+corr_matrix <- cor(returns_monthly[,-1], use = "complete.obs")
+
+corrplot(corr_matrix, method = "color", tl.cex = 0.7, title = "Corrélation entre les actions", mar = c(0,0,1,0))
+```
+
+---
+
+## 6. Volatilité des titres
+
+```{r volat}
+volat <- data_cac %>%
+  group_by(symbol) %>%
+  tq_transmute(select = adjusted, mutate_fun = periodReturn, period = "daily") %>%
+  summarise(volatilite = sd(daily.returns, na.rm = TRUE)) %>%
+  arrange(desc(volatilite))
+
+ggplot(volat, aes(x = reorder(symbol, -volatilite), y = volatilite)) +
+  geom_col(fill = "#3498DB") +
+  labs(title = "Volatilité des actions du CAC 40", x = "Ticker", y = "Écart-type des rendements quotidiens") +
+  coord_flip() +
+  theme_minimal()
+```
+
+---
+
+## 7. Analyse interactive (Plotly)
+
+```{r plotly}
+plot_ly(data_index, x = ~date, y = ~adjusted, type = 'scatter', mode = 'lines',
+        name = "CAC 40") %>%
+  layout(title = "Indice CAC 40 - Vue interactive")
+```
+
+---
+
+## 8. Meilleures et pires performances
+
+```{r top-bottom}
+perf <- data_cac %>%
+  group_by(symbol) %>%
+  filter(date == max(date) | date == min(date)) %>%
+  arrange(symbol, date) %>%
+  summarise(rendement_total = last(adjusted) / first(adjusted) - 1) %>%
+  arrange(desc(rendement_total))
+
+top_5 <- head(perf, 5)
+bottom_5 <- tail(perf, 5)
+
+bind_rows(top_5, bottom_5) %>%
+  ggplot(aes(x = reorder(symbol, rendement_total), y = rendement_total, fill = rendement_total > 0)) +
+  geom_col() +
+  scale_fill_manual(values = c("TRUE" = "green", "FALSE" = "red")) +
+  coord_flip() +
+  labs(title = "Top/Flop actions du CAC 40", y = "Rendement depuis 2020", x = "Ticker") +
+  theme_minimal()
+```
+
+---
+
+## 9. Conclusion
+
+Ce rapport a mis en lumière :
+
+* La performance de l’indice CAC 40
+* Les comportements individuels des actions
+* Les corrélations et volatilités
+* Les leaders et retardataires du marché
+
+---
+
+## 10. Recommandations futures
+
+* Étendre l’analyse à d'autres indices (DAX, S\&P 500)
+* Intégrer l'analyse fondamentale (ratios, dividendes)
+* Utiliser des modèles prédictifs (ARIMA, LSTM)
+
+---
+
+```
+

@@ -1,0 +1,25 @@
+{
+  "ticker": "AAPL",
+  "DCF": true,
+  "CAPM": true,
+  "MonteCarlo": true,
+  "Graham": true,
+  "BlackScholes": true,
+  "TechAnalysis": true,
+
+  "cash_flows": [8, 9, 10, 11, 12],
+  "discount_rate": 0.08,
+
+  "risk_free_rate": 0.02,
+  "market_return": 0.08,
+  "beta": 1.2,
+
+  "mu": 0.08,
+  "sigma": 0.25,
+  "T": 1,
+  "N": 252,
+  "M": 1000,
+
+  "EPS": 6,
+  "growth_rate": 10
+}

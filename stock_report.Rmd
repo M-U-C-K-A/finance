@@ -1,0 +1,134 @@
+---
+title: "Rapport Analytique des Cours Boursiers"
+subtitle: "AAPL & GOOGL - Analyse Intraday"
+author: "Système Automatisé HedgeFound"
+date: "`r format(Sys.time(), '%d %B %Y à %H:%M')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(dplyr)
+library(scales)
+library(plotly)
+```
+
+```{r load-data}
+# Trouver le fichier le plus récent
+files <- list.files("stock_data", pattern = ".*_stock_data\\.csv$", full.names = TRUE)
+latest_file <- files[which.max(file.info(files)$mtime)]
+
+# Charger les données
+stock_data <- read.csv(latest_file)
+stock_data$Datetime <- as.POSIXct(stock_data$Datetime)
+stock_data$Timestamp <- as.POSIXct(stock_data$Timestamp)
+
+# Calculer les indicateurs techniques
+stock_data <- stock_data %>%
+  group_by(Ticker) %>%
+  mutate(
+    SMA_5 = zoo::rollmean(Price, 5, fill = NA, align = "right"),
+    RSI = TTR::RSI(Price, n = 14)
+  ) %>%
+  ungroup()
+```
+
+## Analyse des Cours Boursiers AAPL et GOOGL
+
+### Contexte de Marché
+Les données présentées ci-dessous représentent une analyse intraday des actions Apple (AAPL) et Alphabet (GOOGL), deux des composantes majeures du NASDAQ-100. Cette analyse s'inscrit dans le cadre de notre phase de test du système automatisé HedgeFound, visant à identifier des opportunités de trading à haute fréquence.
+
+Dernière mise à jour: `r format(as.POSIXct(max(stock_data$Timestamp)), '%d %B %Y à %H:%M:%S')`
+
+```{r plot-main, fig.height=6}
+# Graphique principal avec moyenne mobile
+ggplot(stock_data, aes(x = Datetime, y = Price, color = Ticker)) +
+  geom_line(size = 0.8) +
+  geom_line(aes(y = SMA_5), color = "darkblue", linetype = "dashed", size = 0.6) +
+  labs(title = "Évolution des cours avec Moyenne Mobile (5 périodes)",
+       subtitle = "Analyse intraday des dernières transactions",
+       x = "Heure",
+       y = "Prix ($)",
+       caption = "Source: Données boursières en temps réel") +
+  scale_x_datetime(labels = date_format("%H:%M:%S")) +
+  theme_minimal() +
+  theme(legend.position = "top") +
+  scale_color_manual(values = c("AAPL" = "#1f77b4", "GOOGL" = "#ff7f0e"))
+```
+
+### Indicateurs Clés
+```{r summary}
+stock_summary <- stock_data %>%
+  group_by(Ticker) %>%
+  summarise(
+    Prix_min = min(Price, na.rm = TRUE),
+    Prix_max = max(Price, na.rm = TRUE),
+    Dernier_prix = last(Price),
+    Volatilité = sd(Price, na.rm = TRUE),
+    Variation = (last(Price) - first(Price)) / first(Price) * 100
+  )
+
+stock_summary %>%
+  knitr::kable(format = "html", digits = 2, 
+               col.names = c("Symbole", "Minimum", "Maximum", "Dernier", "Volatilité", "Variation (%)"),
+               caption = "Résumé des indicateurs clés")
+```
+
+```{r additional-plots, fig.height=8, fig.width=10}
+# Création de graphiques supplémentaires
+p1 <- ggplot(stock_data, aes(x = Datetime, y = Price, color = Ticker)) +
+  geom_point(alpha = 0.6) +
+  facet_wrap(~Ticker, scales = "free_y", ncol = 1) +
+  labs(title = "Distribution des prix par ticker",
+       x = "Temps",
+       y = "Prix") +
+  theme_minimal()
+
+p2 <- ggplot(stock_data, aes(x = Datetime, y = RSI, color = Ticker)) +
+  geom_line() +
+  geom_hline(yintercept = c(30, 70), linetype = "dashed", color = "red") +
+  labs(title = "Indice de Force Relative (RSI 14 périodes)",
+       x = "Temps",
+       y = "RSI") +
+  theme_minimal()
+
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
+
+### Analyse Technique
+Les données présentées montrent une évolution significative des cours sur la période analysée. Les indicateurs techniques calculés en temps réel permettent d'identifier :
+
+1. **Tendances** : La moyenne mobile simple (5 périodes) montre la direction court-terme
+2. **Momentum** : Le RSI (14 périodes) indique les conditions de surachat (>70) ou de survente (<30)
+3. **Volatilité** : L'écart-type des prix donne une mesure de l'instabilité du marché
+
+### Recommandations de Test
+Dans le cadre de cette phase de test, nous suggérons de :
+- Surveiller les croisements de prix avec la moyenne mobile
+- Tester des stratégies de mean-reversion lorsque le RSI sort des zones extrêmes
+- Valider les paramètres de gestion du risque avec ces données historiques
+
+```{r volume-plot, fig.height=5}
+# Graphique de volume si la colonne existe
+if("Volume" %in% colnames(stock_data)) {
+  ggplot(stock_data, aes(x = Datetime, y = Volume, fill = Ticker)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    labs(title = "Volume des transactions",
+         x = "Heure",
+         y = "Volume") +
+    theme_minimal()
+} else {
+  cat("Les données de volume ne sont pas disponibles dans ce jeu de données.")
+}
+```
+
+### Perspectives
+Cette analyse préliminaire servira de base pour les développements futurs du système HedgeFound. Les prochaines itérations incluront :
+- Des indicateurs techniques supplémentaires (MACD, Bollinger Bands)
+- Une analyse des corrélations entre actifs
+- Des tests de stratégies automatisées
+
+> **Note importante** : Ces résultats sont purement expérimentaux et ne constituent pas un conseil en investissement. Le système est en phase de test et nécessite des validations supplémentaires.
+```
+
