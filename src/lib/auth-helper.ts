@@ -6,7 +6,7 @@ export const auth = async() => {
 	return session?.user;
 }
 
-export const requireAuth = async() => {
+export const requiredAuth = async() => {
 	const user = await auth();
 	if (!user) {
 		unauthorized();

@@ -15,25 +15,30 @@ export async function AuthButton() {
 		)
 	}
 	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button variant={"outline"}>{user.email}</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent align="end">
-				<DropdownMenuItem>
-					<form>
-						<Button
-							formAction={async () => {
-								"use server";
-								await signOut();
-								revalidatePath("/");
-							}}
-							>
-							Sign Out
-						</Button>
-					</form>
-				</DropdownMenuItem>
-			</DropdownMenuContent>
-		</DropdownMenu>
+	<DropdownMenu>
+		<DropdownMenuTrigger asChild>
+			<Button variant="outline" className="max-w-xs truncate">
+				{user.email}
+			</Button>
+		</DropdownMenuTrigger>
+		<DropdownMenuContent align="end" className="w-48">
+			<DropdownMenuItem className="p-0">
+				<form className="w-full">
+					<Button
+						formAction={async () => {
+							"use server";
+							await signOut();
+							revalidatePath("/");
+						}}
+						variant="ghost"
+						size="sm"
+						className="w-full justify-start"
+					>
+						Sign Out
+					</Button>
+				</form>
+			</DropdownMenuItem>
+		</DropdownMenuContent>
+	</DropdownMenu>
 	)
 }

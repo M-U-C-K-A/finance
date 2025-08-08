@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { cn } from "@/lib/utils";
 import { Header } from "@/components/layout/header";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,19 +23,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal?: React.ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={cn(geistSans.variable, geistMono.variable, "bg-background text-foreground antialiased h-full flex flex-col gap-6")}
+        className={cn(geistSans.variable, geistMono.variable, "bg-background text-foreground antialiased h-screen flex flex-col gap-6")}
       >
         <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
           <Header />
           <main className="flex-1">
             {children}
           </main>
+          <Toaster />
+          {modal}
         </ThemeProvider>
       </body>
     </html>
