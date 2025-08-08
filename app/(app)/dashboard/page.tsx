@@ -9,7 +9,7 @@ export default async function Dashboard() {
   
   return (
 	<>
-	
+	<h1>PUTA</h1>
 	</>
   )
   }

@@ -8,7 +8,7 @@ export default async function Private() {
   const user = await requiredAuth();
   
   return (
-    <div className="mx-auto max-w-3xl w-full min-h-screen px-4 sm:px-6 lg:max-w-7xl lg:px-8 py-12">
+    <div className="mx-auto max-w-3xl w-full flex items-center justify-center h-full px-4 sm:px-6 lg:max-w-7xl lg:px-8 py-12">
       <div className="flex flex-col items-center justify-center gap-8">
         <Card className="w-full max-w-2xl">
           <CardHeader className="space-y-1">

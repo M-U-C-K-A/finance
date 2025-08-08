@@ -41,6 +41,9 @@ yarn-error.log*
 next-env.d.ts
 
 a.jpg
-/pdf
+/pdf/venv
+/data/*
+/pdf/temp_charts
 
 /src/generated/prisma
+ 
