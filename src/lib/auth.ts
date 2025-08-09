@@ -1,39 +1,49 @@
 // src/lib/auth.ts
-import { PrismaAdapter } from "@auth/prisma-adapter"
 import NextAuth from "next-auth"
-import type { Provider } from "next-auth/providers"
-import Resend from "next-auth/providers/resend"
 import GitHub from "next-auth/providers/github"
+import Google from "next-auth/providers/google"
+import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "./prisma"
 
-const providers: Provider[] = [
-	Resend({
-		from: "GSHjnik@financetest.chickenkiller.com"
-	}),
-	GitHub,
-]
-
-export const providerMap = providers
-	.map((provider) => {
-		if (typeof provider === "function") {
-			const providerData = provider()
-			return { id: providerData.id, name: providerData.name }
-		} else {
-			return { id: provider.id, name: provider.name }
-		}
-	})
-	.filter((provider) => provider.id !== "resend")
-
-
+// Configuration de NextAuth v5
 export const {
-	handlers,
-	signIn,
-	signOut,
-	auth: baseAuth
+  auth,       // Middleware / vérification côté serveur
+  handlers,   // API route handlers GET/POST
+  signIn,     // Fonction pour déclencher login
+  signOut,    // Fonction pour logout
 } = NextAuth({
-	adapter: PrismaAdapter(prisma),
-	providers: providers,
-	pages: {
-		signIn: "/signin",
-	}
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    GitHub({
+      clientId: process.env.GITHUB_ID!,      // Doit correspondre à ta .env.local
+      clientSecret: process.env.GITHUB_SECRET!,
+    }),
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    // Tu peux ajouter d'autres providers ici si besoin
+  ],
+  pages: {
+    signIn: "/signin", // Page de connexion personnalisée
+  },
+  session: {
+    strategy: "database", // Sessions stockées en base avec Prisma
+  },
+  callbacks: {
+    async session({ session, user }) {
+      if (session.user) {
+        session.user.id = user.id  // Ajoute l'id Prisma à la session
+      }
+      return session
+    },
+  },
+  secret: process.env.AUTH_SECRET, // Nécessaire pour sécuriser les tokens
 })
+
+// Map des providers utilisés côté UI
+export const providerMap = {
+  github: { id: "github", name: "GitHub" },
+  google: { id: "google", name: "Google" },
+  resend: { id: "resend", name: "Email" },  // Email via Resend par exemple
+}

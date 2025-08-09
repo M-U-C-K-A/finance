@@ -1,5 +1,4 @@
 import { ThemeToggle } from "../theme/theme-mode-toggle";
-import { AuthButton } from "../auth/auth-button";
 import { SidebarTrigger } from "../ui/sidebar";
 
 export function Header()
@@ -10,7 +9,6 @@ export function Header()
             <SidebarTrigger/>
 			<p>Header</p>
 			<div className="flex-1"></div>
-			<AuthButton />
 			<ThemeToggle />
 		</div>
 	)

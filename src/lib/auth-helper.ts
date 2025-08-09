@@ -1,16 +1,16 @@
-//src/lib/auth-helper.ts
-import { unauthorized } from "next/navigation";
-import { baseAuth } from "./auth"
+// src/lib/auth-helper.ts
+import { unauthorized } from "next/navigation"
+import { auth } from "./auth"  // on importe "auth" et pas "baseAuth"
 
-export const auth = async() => {
-	const session = await baseAuth();
-	return session?.user;
+export const getAuthUser = async () => {
+  const session = await auth()
+  return session?.user
 }
 
-export const requiredAuth = async() => {
-	const user = await auth();
-	if (!user) {
-		unauthorized();
-	}
-	return user;
+export const requireAuth = async () => {
+  const user = await getAuthUser()
+  if (!user) {
+    unauthorized()
+  }
+  return user
 }
