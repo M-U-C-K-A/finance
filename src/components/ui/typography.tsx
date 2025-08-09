@@ -101,3 +101,27 @@ export const Code = createComponent<HTMLPreElement>(
   'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
   'Code'
 );
+
+export const Table = createComponent<HTMLTableElement>(
+  'table',
+  'w-full table-auto',
+  'Table'
+);
+
+export const Td = createComponent<HTMLTableCellElement>(
+  'td',
+  'py-2 px-4 border-t border-b border-slate-300',
+  'Td'
+);
+
+export const Th = createComponent<HTMLTableCellElement>(
+  'th',
+  'py-2 px-4 font-semibold border-t border-b border-slate-300',
+  'Th'
+);
+
+export const Tr = createComponent<HTMLTableRowElement>(
+  'tr',
+  '',
+  'Tr'
+);

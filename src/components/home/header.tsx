@@ -70,22 +70,23 @@ export const Header = () => {
   const [isOpen, setOpen] = useState(false);
   
   return (
-    <header className="w-full z-40 fixed top-0 left-0 bg-background border-b">
+    <header className="w-full z-40 fixed top-0 left-0 bg-black/80 text-white backdrop-blur-md border-b border-gray-800">
       <div className="container relative mx-auto min-h-20 flex gap-4 flex-row lg:grid lg:grid-cols-3 items-center">
+        {/* Desktop Navigation - Left */}
         <div className="justify-start items-center gap-4 lg:flex hidden flex-row">
-          <NavigationMenu className="flex justify-start items-start">
+          <NavigationMenu>
             <NavigationMenuList className="flex justify-start gap-4 flex-row">
               {navigationItems.map((item) => (
                 <NavigationMenuItem key={item.title}>
                   {item.href ? (
-                    <Link href={item.href} legacyBehavior passHref>
-                      <NavigationMenuLink>
-                        <Button variant="ghost">{item.title}</Button>
-                      </NavigationMenuLink>
-                    </Link>
+                    <NavigationMenuLink asChild>
+                      <Link href={item.href} className="hover:bg-accent hover:text-accent-foreground px-4 py-2 rounded-md text-sm font-medium">
+                        {item.title}
+                      </Link>
+                    </NavigationMenuLink>
                   ) : (
                     <>
-                      <NavigationMenuTrigger className="font-medium text-sm">
+                      <NavigationMenuTrigger className="font-medium text-sm bg-transparent hover:bg-accent data-[state=open]:bg-accent">
                         {item.title}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent className="!w-[450px] p-4">
@@ -103,12 +104,15 @@ export const Header = () => {
                           </div>
                           <div className="flex flex-col text-sm h-full justify-end">
                             {item.items?.map((subItem) => (
-                              <Link href={subItem.href} key={subItem.title} legacyBehavior passHref>
-                                <NavigationMenuLink className="flex flex-row justify-between items-center hover:bg-muted py-2 px-4 rounded">
+                              <NavigationMenuLink asChild key={subItem.title}>
+                                <Link
+                                  href={subItem.href}
+                                  className="flex flex-row justify-between items-center hover:bg-muted py-2 px-4 rounded"
+                                >
                                   <span>{subItem.title}</span>
                                   <MoveRight className="w-4 h-4 text-muted-foreground" />
-                                </NavigationMenuLink>
-                              </Link>
+                                </Link>
+                              </NavigationMenuLink>
                             ))}
                           </div>
                         </div>
@@ -121,49 +125,57 @@ export const Header = () => {
           </NavigationMenu>
         </div>
         
+        {/* Logo - Center */}
         <div className="flex lg:justify-center">
-          <Link href="/">
+          <Link href="/" className="hover:opacity-80 transition-opacity">
             <p className="font-bold text-lg">FinInsight<span className="text-primary">AI</span></p>
           </Link>
         </div>
         
+        {/* Desktop Buttons - Right */}
         <div className="flex justify-end w-full gap-4">
-          <Button variant="ghost" className="hidden md:inline">
-            API Docs
+          <Button variant="ghost" className="hidden md:inline" asChild>
+            <Link href="/api-docs">API Docs</Link>
           </Button>
           <div className="border-r hidden md:inline"></div>
-          <Button variant="outline">Sign in</Button>
-          <Button className="bg-primary hover:bg-primary/90">Get started</Button>
+          <Button variant="outline" className="text-black" asChild>
+            <Link href="/login">Sign in</Link>
+          </Button>
+          <Button className="bg-primary hover:bg-primary/90" asChild>
+            <Link href="/signup">Get started</Link>
+          </Button>
         </div>
         
-        {/* Mobile menu */}
+        {/* Mobile Menu */}
         <div className="flex w-12 shrink lg:hidden items-end justify-end">
-          <Button variant="ghost" onClick={() => setOpen(!isOpen)}>
+          <Button 
+            variant="ghost" 
+            onClick={() => setOpen(!isOpen)}
+            className="p-2"
+          >
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
           {isOpen && (
             <div className="absolute top-20 border-t flex flex-col w-full right-0 bg-background shadow-lg py-4 container gap-8">
               {navigationItems.map((item) => (
-                <div key={item.title}>
-                  <div className="flex flex-col gap-2">
-                    {item.href ? (
-                      <Link
-                        href={item.href}
-                        className="flex justify-between items-center"
-                        onClick={() => setOpen(false)}
-                      >
-                        <span className="text-lg">{item.title}</span>
-                        <MoveRight className="w-4 h-4 stroke-1 text-muted-foreground" />
-                      </Link>
-                    ) : (
-                      <p className="text-lg font-medium">{item.title}</p>
-                    )}
-                    {item.items &&
-                      item.items.map((subItem) => (
+                <div key={item.title} className="flex flex-col gap-2">
+                  {item.href ? (
+                    <Link
+                      href={item.href}
+                      className="flex justify-between items-center py-2"
+                      onClick={() => setOpen(false)}
+                    >
+                      <span className="text-lg">{item.title}</span>
+                      <MoveRight className="w-4 h-4 stroke-1 text-muted-foreground" />
+                    </Link>
+                  ) : (
+                    <>
+                      <p className="text-lg font-medium py-2">{item.title}</p>
+                      {item.items?.map((subItem) => (
                         <Link
                           key={subItem.title}
                           href={subItem.href}
-                          className="flex justify-between items-center pl-4 py-1"
+                          className="flex justify-between items-center pl-4 py-2"
                           onClick={() => setOpen(false)}
                         >
                           <span className="text-muted-foreground">
@@ -172,13 +184,16 @@ export const Header = () => {
                           <MoveRight className="w-4 h-4 stroke-1" />
                         </Link>
                       ))}
-                  </div>
+                    </>
+                  )}
                 </div>
               ))}
               <div className="flex flex-col gap-2 pt-4 border-t">
-                <Button className="w-full">Sign in</Button>
-                <Button variant="outline" className="w-full">
-                  Request Demo
+                <Button className="w-full text-black" asChild>
+                  <Link href="/login">Sign in</Link>
+                </Button>
+                <Button variant="outline" className="w-full" asChild>
+                  <Link href="/signup">Get started</Link>
                 </Button>
               </div>
             </div>

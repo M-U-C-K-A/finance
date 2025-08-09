@@ -12,6 +12,9 @@ import {
   PlusCircle,
   User2,
   ChevronUp,
+  Code,
+  BookOpen,
+  Zap,
 } from "lucide-react";
 
 import {
@@ -35,7 +38,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import Link from "next/link";
-import SignInModal from "@/components/auth/signInModal"; // Modale à créer ou adapter
+import SignInModal from "@/components/auth/signInModal";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const menuItems = [
   {
@@ -44,27 +48,36 @@ const menuItems = [
     icon: Home,
   },
   {
-    title: "Rapports",
-    url: "/reports",
+    title: "Reports",
+    url: "/dashboard/reports",
     icon: BarChart2,
     subItems: [
-      { title: "Historique", url: "/reports/history" },
-      { title: "Nouveau Rapport", url: "/reports/new", icon: PlusCircle },
+      { title: "History", url: "/reports/history" },
+      { title: "New Report", url: "/reports/new", icon: PlusCircle },
     ],
   },
   {
-    title: "Abonnements",
-    url: "/subscriptions",
+    title: "Subscribe",
+    url: "/dashboard/subscriptions",
     icon: Calendar,
   },
   {
-    title: "Crédits",
-    url: "/credits",
-    icon: CreditCard,
+    title: "Terms of Service",
+    url: "/dashboard/terms",
+    icon: FileText,
   },
   {
-    title: "Paramètres",
-    url: "/settings",
+    title: "API",
+    url: "/dashboard/api",
+    icon: Code,
+    subItems: [
+      { title: "API Access", url: "/dashboard/api/access", icon: Zap },
+      { title: "Documentation", url: "/dashboard/api/documentation", icon: BookOpen },
+    ],
+  },
+  {
+    title: "Settings",
+    url: "/dashboard/settings",
     icon: Settings,
   },
 ];
@@ -132,7 +145,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <Link
                       href="/reports/new"
-                      className="bg-primary text-white hover:bg-primary-dark flex items-center gap-2 px-2 py-1 rounded"
+                      className="bg-primary text-background hover:bg-primary-dark flex items-center gap-2 px-2 py-1 rounded"
                     >
                       <PlusCircle className="w-5 h-5" />
                       Nouvelle Analyse
@@ -162,11 +175,18 @@ export function AppSidebar() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <SidebarMenuButton className="hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2 w-full">
-                      <img
-                        src={session.user?.image ?? "/default-avatar.png"}
-                        alt="Avatar"
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
+                      <Avatar>
+                        <AvatarImage src={session.user?.image ?? "/default-avatar.png"} alt={"avatar de l'utilisateur"} />
+                        <AvatarFallback>
+                          {session.user?.email
+                            ? session.user.email
+                              .split("@")[0]
+                              .slice(0, 2)
+                              .toUpperCase()
+                            : "  "}
+                        </AvatarFallback>
+                      </Avatar>
+
                       <span className="truncate">{session.user?.email}</span>
                       <ChevronUp className="ml-auto transform rotate-180 w-4 h-4" />
                     </SidebarMenuButton>
@@ -186,7 +206,7 @@ export function AppSidebar() {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link href="/terms" className="flex items-center gap-2">
+                      <Link href="/dashboard/terms" className="flex items-center gap-2">
                         <FileText className="w-4 h-4" />
                         Conditions d'utilisation
                       </Link>

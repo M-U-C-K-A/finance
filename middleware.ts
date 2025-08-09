@@ -5,11 +5,10 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get("next-auth.session-token")?.value;
   // ou vérifie un token ou session d’une autre façon
 
-  // Si pas connecté, redirige vers signin
+  // Si pas connecté, affiche un toast
   if (!token) {
-    const url = req.nextUrl.clone();
-    url.pathname = "/signin";
-    return NextResponse.redirect(url);
+    // Code pour afficher un toast côté client peut être ajouté ici
+    return NextResponse.next();
   }
 
   return NextResponse.next();
@@ -21,3 +20,4 @@ export const config = {
     "/billing/:path*",
   ],
 };
+

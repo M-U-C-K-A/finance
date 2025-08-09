@@ -1,69 +1,65 @@
+// components/settings/securityForm.tsx
 "use client"
 
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { securitySchema } from "@/lib/schemas"
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from "react"
 
 export function SecurityForm() {
-  const form = useForm({
-    resolver: zodResolver(securitySchema),
-    defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-    },
-  })
+  const [twoFA, setTwoFA] = useState(false)
 
-  const onSubmit = (data) => {
-    console.log(data)
+  const handleSave = () => {
+    console.log("2FA:", twoFA)
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="currentPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Current Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <div className="space-y-6">
+      {/* 2FA */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Authentification à deux facteurs</CardTitle>
+        </CardHeader>
+        <CardContent className="flex items-center justify-between">
+          <Label>Activer la 2FA</Label>
+          <Switch checked={twoFA} onCheckedChange={setTwoFA} />
+        </CardContent>
+      </Card>
 
-        <FormField
-          control={form.control}
-          name="newPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>New Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      {/* Sessions actives */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Sessions actives</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <p className="text-sm text-muted-foreground">
+            Liste des appareils actuellement connectés à votre compte.
+          </p>
+          <ul className="space-y-1">
+            <li>MacBook Pro — Paris, FR — 08/08/2025 <Button variant="ghost" size="sm">Déconnecter</Button></li>
+            <li>iPhone 14 — Paris, FR — 05/08/2025 <Button variant="ghost" size="sm">Déconnecter</Button></li>
+          </ul>
+        </CardContent>
+      </Card>
 
-        <div className="flex items-center justify-between p-4 border rounded-lg">
-          <div>
-            <FormLabel>Two-Factor Authentication</FormLabel>
-            <p className="text-sm text-muted-foreground">
-              Add an extra layer of security
-            </p>
-          </div>
-          <Switch />
-        </div>
+      {/* Historique des connexions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Historique des connexions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">
+            Dernières connexions détectées :
+          </p>
+          <ul className="text-sm mt-2 space-y-1">
+            <li>08/08/2025 — 14:32 — Paris, FR</li>
+            <li>07/08/2025 — 19:12 — Paris, FR</li>
+          </ul>
+        </CardContent>
+      </Card>
 
-        <Button type="submit">Update Security</Button>
-      </form>
-    </Form>
+      <Button onClick={handleSave}>Enregistrer les paramètres</Button>
+    </div>
   )
 }
