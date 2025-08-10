@@ -1,3 +1,4 @@
+// app/(app)/api/auth/signOutAction.ts
 "use server";
 
 import { signOut } from "next-auth/react";

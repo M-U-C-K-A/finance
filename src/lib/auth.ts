@@ -1,10 +1,11 @@
+// src/lib/auth.ts
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./prisma";
 
-export const { auth, signIn, signOut, handlers } = NextAuth({
+export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     GitHub({
@@ -16,14 +17,22 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  session: {
-    strategy: "database",
-  },
+  session: { strategy: "jwt" },
   callbacks: {
-    async session({ session, user }) {
-      if (session?.user) {
-        session.user.id = user.id;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = (user as any).id;
+        token.email = user.email;
+        token.name = user.name;
+        token.image = user.image;
       }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.id = (token as any).id;
+      session.user.email = token.email as string;
+      session.user.name = token.name as string;
+      session.user.image = token.image as string;
       return session;
     },
   },
