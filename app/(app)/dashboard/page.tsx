@@ -1,18 +1,17 @@
-import { requireAuth } from "@/lib/auth-helper";
+"use client";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HelpCircle, Settings } from "lucide-react";
 import Unauthorized from "./unauthorized";
+import { useSession } from "@/lib/auth-client";
 
-
-export default async function Dashboard() {
-  const user = await requireAuth();
+export default function Dashboard() {
+  const { session: user } = useSession();
 
   if (!user) {
     return <Unauthorized />;
   }
-
 
   return (
     <div className="mx-auto max-w-3xl w-full flex items-center justify-center h-full px-4 sm:px-6 lg:max-w-7xl lg:px-8 py-12">
@@ -20,12 +19,15 @@ export default async function Dashboard() {
         <Card className="w-full max-w-2xl">
           <CardHeader className="space-y-1">
             <div className="flex items-center gap-4">
-              <Avatar className="h-12 w-12">
-                <AvatarImage src={user?.image ?? undefined} />
+              <Avatar>
+                <AvatarImage src={user?.image ?? "/default-avatar.png"} alt={"avatar de l'utilisateur"} />
                 <AvatarFallback>
-                  {user?.name?.charAt(0).toUpperCase() ||
-                    user?.email?.charAt(0).toUpperCase() ||
-                    "U"}
+                  {user?.email
+                    ? user.email
+                        .split("@")[0]
+                        .slice(0, 2)
+                        .toUpperCase()
+                    : "  "}
                 </AvatarFallback>
               </Avatar>
               <div>
@@ -56,9 +58,7 @@ export default async function Dashboard() {
             {user ? (
               <>
                 <div className="rounded-lg border p-4">
-                  <h2 className="text-xl font-semibold mb-2">
-                    Accès sécurisé
-                  </h2>
+                  <h2 className="text-xl font-semibold mb-2">Accès sécurisé</h2>
                   <p className="text-muted-foreground">
                     Cette page est réservée aux utilisateurs authentifiés.
                   </p>

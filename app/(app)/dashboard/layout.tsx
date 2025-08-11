@@ -1,9 +1,10 @@
+"use client";
 import { ReactNode } from "react";
-import { getAuthUser } from "@/lib/auth-helper";
+import { useSession } from "@/lib/auth-client";
 import Unauthorized from "./unauthorized";
 
-export default async function DashboardLayout({ children }: { children: ReactNode }) {
-  const user = await getAuthUser();
+export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const user = useSession();
 
   if (!user) {
     return <Unauthorized />;
@@ -15,3 +16,4 @@ export default async function DashboardLayout({ children }: { children: ReactNod
     </div>
   );
 }
+

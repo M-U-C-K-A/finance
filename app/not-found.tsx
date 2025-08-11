@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react"
 import { Header } from "@/components/home/header"
 import { Code } from "@/components/ui/typography"
-import { getAuthUser } from "@/lib/auth-helper"
+import { authClient } from "@/lib/auth-client"
 import { Bug } from "lucide-react"
 import Link from "next/link"
 
 export default function NotFound() {
   const [path, setPath] = useState("")
-  const user = getAuthUser()
+  const user = authClient.useSession()
 
   useEffect(() => {
     if (typeof window !== "undefined") {

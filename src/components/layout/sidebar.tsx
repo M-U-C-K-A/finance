@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut } from "@/lib/auth-client";
 import {
   Calendar,
   Home,
@@ -83,7 +83,7 @@ const menuItems = [
 ];
 
 export function AppSidebar() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [modalOpen, setModalOpen] = useState(false);
 
   const openModal = () => setModalOpen(true);

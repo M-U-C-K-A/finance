@@ -1,103 +1,203 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { useTheme } from "next-themes";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { ThemeToggle } from "@/components/theme/theme-mode-toggle";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useState } from "react";
+import { Loader2, Key } from "lucide-react";
+import { signIn } from "@/lib/auth-client";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-export default function AuthPage() {
+export default function SignIn() {
   const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const { theme } = useTheme();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      await signIn("email", { email, redirect: false, callbackUrl: "/dashboard" });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/dashboard" });
-  };
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   return (
-    <div className="flex h-screen bg-background">
-      <div className="fixed top-5 left-5">
-        <ThemeToggle />
-      </div>
-      {/* Partie gauche - Formulaire */}
-      <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-8 space-y-8">
-        <div className="w-full max-w-md space-y-6">
-          <div className="space-y-2 text-center">
-            <h1 className="text-3xl font-bold tracking-tight">Connectez-vous</h1>
-            <p className="text-muted-foreground">
-              Utilisez votre email pour continuer
-            </p>
-          </div>
+    <Card className="max-w-md">
+      <CardHeader>
+        <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
+        <CardDescription className="text-xs md:text-sm">
+          Enter your email below to login to your account
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-4">
+          
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="sr-only">Email</Label>
+          <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="votre@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="m@example.com"
                 required
-                className="h-12 text-base"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                value={email}
               />
+              <Button
+                disabled={loading}
+                className="gap-2"
+                onClick={async () => {
+                  await signIn.magicLink(
+                  {
+                    email
+                  },
+                  {
+                     onRequest: (ctx) => {
+                        setLoading(true);
+                      },
+                     onResponse: (ctx) => {
+                         setLoading(false);
+                     },
+                   },
+                  );
+                 }}>
+                  {loading ? (
+                     <Loader2 size={16} className="animate-spin" />
+                     ):(
+                         <p>Sign-in with Magic Link</p>
+                   )}
+              </Button>
             </div>
-            <Button 
-              type="submit" 
-              className="w-full h-12 text-base"
-              disabled={isLoading}
-            >
-              {isLoading ? "Chargement..." : "Continuer"}
-            </Button>
-          </form>
 
-          <Separator className="my-6" />
+          
 
-          <div className="space-y-4">
-            <Button
-              variant="outline"
-              className="w-full h-12 text-base"
-              onClick={handleGoogleSignIn}
-              disabled={isLoading}
-            >
-              Continuer avec Google 
-            </Button>
+          
+
+          <div className={cn(
+              "w-full gap-2 flex items-center",
+              "justify-between flex-col"
+            )}>
+              
+				<Button
+                  variant="outline"
+                  className={cn(
+                    "w-full gap-2"
+                  )}
+                  disabled={loading}
+                  onClick={async () => {
+                    await signIn.social(
+                    {
+                      provider: "linkedin",
+                      callbackURL: "/dashboard"
+                    },
+                    {
+                      onRequest: (ctx) => {
+                         setLoading(true);
+                      },
+                      onResponse: (ctx) => {
+                         setLoading(false);
+                      },
+                     },
+                    );
+                  }}
+                >
+                  <svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="1em"
+				height="1em"
+				viewBox="0 0 24 24"
+			>
+				<path
+					fill="currentColor"
+					d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93zM6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37z"
+				></path>
+			</svg>
+                  Sign in with Linkedin
+                </Button>
+				<Button
+                  variant="outline"
+                  className={cn(
+                    "w-full gap-2"
+                  )}
+                  disabled={loading}
+                  onClick={async () => {
+                    await signIn.social(
+                    {
+                      provider: "microsoft",
+                      callbackURL: "/dashboard"
+                    },
+                    {
+                      onRequest: (ctx) => {
+                         setLoading(true);
+                      },
+                      onResponse: (ctx) => {
+                         setLoading(false);
+                      },
+                     },
+                    );
+                  }}
+                >
+                  <svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="1em"
+				height="1em"
+				viewBox="0 0 24 24"
+			>
+				<path
+					fill="currentColor"
+					d="M2 3h9v9H2zm9 19H2v-9h9zM21 3v9h-9V3zm0 19h-9v-9h9z"
+				></path>
+			</svg>
+                  Sign in with Microsoft
+                </Button>
+				<Button
+                  variant="outline"
+                  className={cn(
+                    "w-full gap-2"
+                  )}
+                  disabled={loading}
+                  onClick={async () => {
+                    await signIn.social(
+                    {
+                      provider: "google",
+                      callbackURL: "/dashboard"
+                    },
+                    {
+                      onRequest: (ctx) => {
+                         setLoading(true);
+                      },
+                      onResponse: (ctx) => {
+                         setLoading(false);
+                      },
+                     },
+                    );
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="0.98em" height="1em" viewBox="0 0 256 262">
+				<path fill="#4285F4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"></path>
+				<path fill="#34A853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055c-34.523 0-63.824-22.773-74.269-54.25l-1.531.13l-40.298 31.187l-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"></path>
+				<path fill="#FBBC05" d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82c0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602z"></path>
+				<path fill="#EB4335" d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"></path>
+			</svg>
+                  Sign in with Google
+                </Button>
+            </div>
+        </div>
+      </CardContent>
+      <CardFooter>
+          <div className="flex justify-center w-full border-t py-4">
+            <p className="text-center text-xs text-neutral-500">
+             built with{" "}
+              <Link
+                href="https://better-auth.com"
+                className="underline"
+                target="_blank"
+              >
+                <span className="dark:text-white/70 cursor-pointer">
+									better-auth.
+								</span>
+              </Link>
+            </p>
           </div>
-        </div>
-
-        <footer className="text-sm text-muted-foreground mt-8 text-center">
-          En continuant, vous acceptez nos conditions d'utilisation
-        </footer>
-      </div>
-
-      {/* Partie droite - Image */}
-      <div className="w-full md:block md:w-1/2 p-8">
-        <div className="relative h-full w-full rounded-xl overflow-hidden">
-          <Image
-            src={theme === "dark" ? "/dark-login.jpeg" : "/light-login.jpeg"}
-            alt="Illustration de connexion"
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
-        </div>
-      </div>
-    </div>
+        </CardFooter>
+    </Card>
   );
 }
