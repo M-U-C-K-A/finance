@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input"
 import { signIn } from "@/lib/auth-client"
 import { toast } from "sonner"
 import { Separator } from "../ui/separator"
+import { RequiredIndicator } from "../ui/required-indicator"
 
 
 type ProviderEnum = Parameters<typeof signIn.social>[0]["provider"]
@@ -92,8 +93,8 @@ export function SignInForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                Email <span className="text-destructive">*</span>
+              <FormLabel className="flex items-center gap-1">
+                Email <RequiredIndicator />
               </FormLabel>
               <FormControl>
                 <Input
@@ -114,8 +115,8 @@ export function SignInForm() {
           render={({ field }) => (
             <FormItem>
               <div className="flex justify-between items-center">
-                <FormLabel>
-                  Password <span className="text-destructive">*</span>
+                <FormLabel className="flex items-center gap-1">
+                  Password <RequiredIndicator />
                 </FormLabel>
                 <Link
                   href="/auth/forgot-password"

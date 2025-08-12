@@ -1,13 +1,22 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "./prisma";
- 
+import { resend } from "./resend";
+
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: "postgresql",
     }),
     emailAndPassword: {
         enabled: true,
+        sendResetPassword: async ({ user, url}) => {
+            await resend.emails.send({
+                to: user.email,
+                subject: "Reset your Password",
+                html: `Click the link to reset your password: <a href="${url}">${url}</a>`,
+                from: "noreply@resend.finanalytics.com",
+            })
+        }
     },
     socialProviders: {
         github: {
