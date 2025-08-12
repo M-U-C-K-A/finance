@@ -8,7 +8,7 @@ export async function middleware(req: NextRequest) {
   if (req.nextUrl.pathname.startsWith("/admin")) {
     if (!token) {
       // Redirige vers page de connexion
-      const signInUrl = new URL("/signin", req.url);
+      const signInUrl = new URL("/auth", req.url);
       return NextResponse.redirect(signInUrl);
     }
   }

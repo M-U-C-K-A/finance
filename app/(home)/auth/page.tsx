@@ -2,64 +2,68 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Card } from "@/components/ui/card";
-import { SignInForm } from "./signin-form";
-import { SignUpForm } from "./signup-form";
+import { SignInForm } from "@/components/auth/signin-form";
+import { SignUpForm } from "@/components/auth/signup-form";
 import { ThemeToggle } from "@/components/theme/theme-mode-toggle";
-import { CardHeader, CardFooter, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
-
+import { GalleryVerticalEnd } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardDescription, CardFooter, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
 
+  const toggleAuthMode = () => {
+    setIsLogin(!isLogin);
+  };
+
   return (
-    <div className="min-h-screen grid grid-cols-1">
-      <div className="absolute top-4 right-4"><ThemeToggle /></div>
-      {/* Left side - Auth forms */}
-      <div className="flex items-center justify-center p-4 bg-background">
-        <div className="w-full max-w-md space-y-8">
-
-          <div className="w-full max-w-md space-y-8 mb-4">
-            <div className="flex justify-center gap-4 mb-8">
-              <button
-                onClick={() => setIsLogin(true)}
-                className={`px-4 py-2 rounded-md font-medium ${isLogin
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-accent hover:text-accent-foreground"
-                  }`}
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => setIsLogin(false)}
-                className={`px-4 py-2 rounded-md font-medium ${!isLogin
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-accent hover:text-accent-foreground"
-                  }`}
-              >
-                Sign Up
-              </button>
+    <div className="grid min-h-svh xl:grid-cols-2">
+      <div className="flex flex-col gap-4 p-6 md:p-10">
+        <div className="flex justify-center gap-2 md:justify-start">
+          <a href="#" className="flex items-center gap-2 font-medium">
+            <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
+              <GalleryVerticalEnd className="size-4" />
             </div>
-          </div>
-          <Card>
-            {isLogin ? (
-              <CardHeader>
-                <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
-                <CardDescription className="text-sm md:text-md">Sign in to your account</CardDescription>
-              </CardHeader>
-            ) : (
-              <CardHeader>
-                <CardTitle className="text-lg md:text-xl">Sign Up</CardTitle>
-                <CardDescription className="text-sm md:text-md">Create an account</CardDescription>
-              </CardHeader>
-            )}
-            <CardContent className="min-h-[350px] max-h-[350px]">
-
-              {isLogin ? <SignInForm /> : <SignUpForm />}
-
-            </CardContent>
-          </Card>
+            Acme Inc.
+          </a>
+          <ThemeToggle />
         </div>
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full max-w-md">
+            <Card>
+              <CardHeader>
+                <CardTitle>{isLogin ? "Sign in" : "Sign up"}</CardTitle>
+                <CardDescription>
+                  {isLogin ? "Log in to your account" : "Create an account"}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {isLogin ? <SignInForm /> : <SignUpForm />}
+              </CardContent>
+              <CardFooter className="flex justify-center">
+                {isLogin ? "Don't have an account? " : "Already have an account? " }
+                <Button 
+                  variant="ghost" 
+                  onClick={toggleAuthMode}
+                  className="text-muted-foreground p-2 hover:underline ml-1"
+                >
+                  {isLogin 
+                    ? "Sign up" 
+                    : "Sign in"}
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
+      </div>
+      <div className="bg-muted relative hidden xl:block">
+        <Image
+          fill
+          priority
+          src="/dark-login.jpeg"
+          alt="Image"
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+        />
       </div>
     </div>
   );

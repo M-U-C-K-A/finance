@@ -139,10 +139,10 @@ export const Header = () => {
           </Button>
           <div className="border-r hidden md:inline"></div>
           <Button variant="outline" className="text-black" asChild>
-            <Link href="/signin">Sign in</Link>
+            <Link href="/auth">Sign in</Link>
           </Button>
           <Button className="bg-primary hover:bg-primary/90" asChild>
-            <Link href="/signup">Get started</Link>
+            <Link href="/auth">Get started</Link>
           </Button>
         </div>
         
@@ -190,10 +190,10 @@ export const Header = () => {
               ))}
               <div className="flex flex-col gap-2 pt-4 border-t">
                 <Button className="w-full text-black" asChild>
-                  <Link href="/signin">Sign in</Link>
+                  <Link href="/auth">Sign in</Link>
                 </Button>
                 <Button variant="outline" className="w-full" asChild>
-                  <Link href="/signup">Get started</Link>
+                  <Link href="/auth">Get started</Link>
                 </Button>
               </div>
             </div>

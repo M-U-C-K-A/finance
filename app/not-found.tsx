@@ -47,7 +47,7 @@ export default function NotFound() {
         ) : (
           <p className="text-2xl mt-4">
             If you are not logged in, you can{" "}
-            <Link href="/signin" className="text-background underline-offset-4 underline">
+            <Link href="/auth" className="text-background underline-offset-4 underline">
               sign in
             </Link>{" "}
             to access more features.

@@ -25,7 +25,7 @@ export default function Unauthorized() {
         <AlertDescription className="mt-2">
           <p className="mb-3">Vous n'avez pas les permissions requises pour visualiser cette page.</p>
           <Link 
-            href="/signin" 
+            href="/auth" 
             className="text-primary hover:text-primary/90 underline-offset-4 underline flex gap-2 items-center w-fit"
           >
             Se connecter

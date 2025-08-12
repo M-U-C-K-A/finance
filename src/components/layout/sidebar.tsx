@@ -38,7 +38,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import Link from "next/link";
-import SignInModal from "@/components/auth/signInModal";
+import { SignInModal } from "@/components/auth/signInModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "../ui/skeleton";
 
@@ -171,82 +171,87 @@ export function AppSidebar() {
 
         <Suspense fallback={<Skeleton className="h-12 rounded-none" />}>
 
-        <SidebarFooter className="p-2 border-t dark:border-gray-800">
-          <SidebarMenu>
-            <SidebarMenuItem>
-              {session ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <SidebarMenuButton className="hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2 w-full">
-                      <Avatar>
-                        <AvatarImage
-                          src={
-                            session.user?.image ??
-                            `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${session.user?.email}`
-                          }
-                          alt={"avatar de l'utilisateur"}
-                        />
-                        <AvatarFallback>
-                          {session.user?.email
-                            ? session.user.email
-                              .split("@")[0]
-                              .slice(0, 2)
-                              .toUpperCase()
-                            : "  "}
-                        </AvatarFallback>
-                      </Avatar>
+          <SidebarFooter className="p-2 border-t dark:border-gray-800">
+            <SidebarMenu>
+              <SidebarMenuItem>
+                {session ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <SidebarMenuButton className="hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2 w-full">
+                        <Avatar>
+                          <AvatarImage
+                            src={
+                              session.user?.image ??
+                              `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${session.user?.email}`
+                            }
+                            alt={"avatar de l'utilisateur"}
+                          />
+                          <AvatarFallback>
+                            {session.user?.email
+                              ? session.user.email
+                                .split("@")[0]
+                                .slice(0, 2)
+                                .toUpperCase()
+                              : "  "}
+                          </AvatarFallback>
+                        </Avatar>
 
-                      <span className="truncate">{session.user?.email}</span>
-                      <ChevronUp className="ml-auto transform rotate-180 w-4 h-4" />
-                    </SidebarMenuButton>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent side="top" align="end" className="min-w-[220px]">
-                    <DropdownMenuItem asChild>
-                      <Link href="/account" className="flex items-center gap-2">
-                        <User2 className="w-4 h-4" />
-                        Profil
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/billing" className="flex items-center gap-2">
-                        <CreditCard className="w-4 h-4" />
-                        Facturation
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href="/dashboard/terms" className="flex items-center gap-2">
-                        <FileText className="w-4 h-4" />
-                        Conditions d'utilisation
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-red-600 cursor-pointer"
-                      onClick={() => signOut()}
-                    >
-                      Déconnexion
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <SidebarMenuButton
-                  onClick={openModal}
-                  className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
-                    <User2 className="w-4 h-4" />
-                  </div>
-                  <span>Se connecter</span>
-                </SidebarMenuButton>
-              )}
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
+                        <span className="truncate">{session.user?.email}</span>
+                        <ChevronUp className="ml-auto transform rotate-180 w-4 h-4" />
+                      </SidebarMenuButton>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent side="top" align="end" className="min-w-[220px]">
+                      <DropdownMenuItem asChild>
+                        <Link href="/account" className="flex items-center gap-2">
+                          <User2 className="w-4 h-4" />
+                          Profil
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/billing" className="flex items-center gap-2">
+                          <CreditCard className="w-4 h-4" />
+                          Facturation
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/dashboard/terms" className="flex items-center gap-2">
+                          <FileText className="w-4 h-4" />
+                          Conditions d'utilisation
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        className="text-red-600 cursor-pointer"
+                        onClick={async () => {
+                          await signOut();
+                          window.location.reload(); // Recharge la page après déconnexion
+                          // Ou alternativement pour rediriger vers la page d'accueil :
+                          // window.location.href = "/";
+                        }}
+                      >
+                        Déconnexion
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <SidebarMenuButton
+                    onClick={openModal}
+                    className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
+                      <User2 className="w-4 h-4" />
+                    </div>
+                    <span>Se connecter</span>
+                  </SidebarMenuButton>
+                )}
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarFooter>
         </Suspense>
       </Sidebar>
 
-      {modalOpen && <SignInModal onClose={closeModal} />}
+      <SignInModal onClose={closeModal} open={modalOpen} />
     </>
   );
 }

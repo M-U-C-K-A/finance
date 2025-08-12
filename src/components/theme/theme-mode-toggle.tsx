@@ -5,7 +5,11 @@ import { Button } from '@/components/ui/button';
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   return (
-    <Button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} variant="secondary">
+    <Button
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      variant="secondary"
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+    >
       {theme === 'dark' ? <Sun /> : <Moon />}
     </Button>
   );
