@@ -8,7 +8,8 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertTriangle, Key } from "lucide-react"
 
-export default function ApiAccessPage() {
+export default function ApiAccessClientPage() {
+
   const [email, setEmail] = useState("")
   const [company, setCompany] = useState("")
   const [apiKey, setApiKey] = useState<string | null>(null)

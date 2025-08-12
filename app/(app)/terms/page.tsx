@@ -1,13 +1,19 @@
 // app/terms/page.tsx
 import { H1, H2, H3, P } from "@/components/ui/typography";
 import type { Metadata } from "next";
+import { getUser } from "@/lib/auth-server";
+import Unauthorized from "@/components/layout/unauthorized";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
   description: "Read our comprehensive terms of service",
 };
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const user = await getUser()
+  if (!user) {
+    return <Unauthorized />
+  }
   return (
     <div className="mt-5 max-w-6xl mx-auto px-4 py-8">
       <H1>Terms of Service</H1>

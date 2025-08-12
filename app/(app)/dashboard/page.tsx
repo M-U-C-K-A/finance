@@ -2,15 +2,11 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HelpCircle, Settings } from "lucide-react";
-import Unauthorized from "./unauthorized";
+import Unauthorized from "@/components/layout/unauthorized";
 import { getUser } from "@/lib/auth-server";
 
 export default async function Dashboard() {
   const user = await getUser();
-
-  if (!user) {
-    return <Unauthorized />;
-  }
 
   return (
     <div className="mx-auto max-w-3xl w-full flex items-center justify-center h-full px-4 sm:px-6 lg:max-w-7xl lg:px-8 py-12">
@@ -19,13 +15,19 @@ export default async function Dashboard() {
           <CardHeader className="space-y-1">
             <div className="flex items-center gap-4">
               <Avatar>
-                <AvatarImage src={user?.image ?? "/default-avatar.png"} alt={"avatar de l'utilisateur"} />
+                <AvatarImage
+                  src={
+                    user?.image ??
+                    `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${user?.email}`
+                  }
+                  alt={"avatar de l'utilisateur"}
+                />
                 <AvatarFallback>
                   {user?.email
                     ? user.email
-                        .split("@")[0]
-                        .slice(0, 2)
-                        .toUpperCase()
+                      .split("@")[0]
+                      .slice(0, 2)
+                      .toUpperCase()
                     : "  "}
                 </AvatarFallback>
               </Avatar>

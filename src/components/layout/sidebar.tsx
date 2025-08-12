@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSession, signOut } from "@/lib/auth-client";
 import {
   Calendar,
@@ -40,6 +40,7 @@ import {
 import Link from "next/link";
 import SignInModal from "@/components/auth/signInModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "../ui/skeleton";
 
 const menuItems = [
   {
@@ -49,7 +50,7 @@ const menuItems = [
   },
   {
     title: "Reports",
-    url: "/dashboard/reports",
+    url: "/reports",
     icon: BarChart2,
     subItems: [
       { title: "History", url: "/reports/history" },
@@ -58,26 +59,26 @@ const menuItems = [
   },
   {
     title: "Subscribe",
-    url: "/dashboard/subscriptions",
+    url: "/subscriptions",
     icon: Calendar,
   },
   {
     title: "Terms of Service",
-    url: "/dashboard/terms",
+    url: "/terms",
     icon: FileText,
   },
   {
     title: "API",
-    url: "/dashboard/api",
+    url: "/api",
     icon: Code,
     subItems: [
-      { title: "API Access", url: "/dashboard/api/access", icon: Zap },
-      { title: "Documentation", url: "/dashboard/api/documentation", icon: BookOpen },
+      { title: "API Access", url: "/api/access", icon: Zap },
+      { title: "Documentation", url: "/api/documentation", icon: BookOpen },
     ],
   },
   {
     title: "Settings",
-    url: "/dashboard/settings",
+    url: "/settings",
     icon: Settings,
   },
 ];
@@ -168,6 +169,8 @@ export function AppSidebar() {
           </SidebarGroup>
         </SidebarContent>
 
+        <Suspense fallback={<Skeleton className="h-12 rounded-none" />}>
+
         <SidebarFooter className="p-2 border-t dark:border-gray-800">
           <SidebarMenu>
             <SidebarMenuItem>
@@ -176,7 +179,13 @@ export function AppSidebar() {
                   <DropdownMenuTrigger asChild>
                     <SidebarMenuButton className="hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2 w-full">
                       <Avatar>
-                        <AvatarImage src={session.user?.image ?? "/default-avatar.png"} alt={"avatar de l'utilisateur"} />
+                        <AvatarImage
+                          src={
+                            session.user?.image ??
+                            `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${session.user?.email}`
+                          }
+                          alt={"avatar de l'utilisateur"}
+                        />
                         <AvatarFallback>
                           {session.user?.email
                             ? session.user.email
@@ -234,6 +243,7 @@ export function AppSidebar() {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>
+        </Suspense>
       </Sidebar>
 
       {modalOpen && <SignInModal onClose={closeModal} />}

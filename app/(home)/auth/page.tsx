@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
-import SignIn from "./signin-form";
+import { SignInForm } from "./signin-form";
 import { SignUpForm } from "./signup-form";
 import { ThemeToggle } from "@/components/theme/theme-mode-toggle";
 import { CardHeader, CardFooter, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
@@ -42,15 +42,20 @@ export default function AuthPage() {
             </div>
           </div>
           <Card>
-            <CardHeader>
-              <CardTitle className="text-lg md:text-xl">Sign Up</CardTitle>
-              <CardDescription className="text-xs md:text-sm">
-                Let's get started by filling out the form below.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+            {isLogin ? (
+              <CardHeader>
+                <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
+                <CardDescription className="text-sm md:text-md">Sign in to your account</CardDescription>
+              </CardHeader>
+            ) : (
+              <CardHeader>
+                <CardTitle className="text-lg md:text-xl">Sign Up</CardTitle>
+                <CardDescription className="text-sm md:text-md">Create an account</CardDescription>
+              </CardHeader>
+            )}
+            <CardContent className="min-h-[350px] max-h-[350px]">
 
-              {isLogin ? <SignIn /> : <SignUpForm />}
+              {isLogin ? <SignInForm /> : <SignUpForm />}
 
             </CardContent>
           </Card>

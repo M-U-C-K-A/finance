@@ -1,3 +1,4 @@
+// app/(app)/dashboard/subscriptions/page.tsx
 "use client"
 
 import { useState } from "react"
@@ -8,6 +9,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Check, MoveRight, PhoneCall } from "lucide-react"
 
 export default function SubscriptionsPage() {
+  
   const [tab, setTab] = useState<"abos" | "credits">("abos")
 
   return (
@@ -249,4 +251,5 @@ function CreditPacks() {
       ))}
     </div>
   )
+
 }

@@ -1,3 +1,4 @@
+// app/(app)/api/documentation/apiDocumentationPage.tsx
 "use client"
 
 import { useState } from "react"
@@ -5,7 +6,8 @@ import Link from "next/link"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Code, H1, H2, H3, P, List, MultilineCode, Table, Td, Th, Tr } from "@/components/ui/typography"
 
-export default function ApiDocumentationPage() {
+export default function ApiDocumentationClientPage() {
+
   const [activeSection, setActiveSection] = useState("introduction")
 
   const sections = [
@@ -21,7 +23,8 @@ export default function ApiDocumentationPage() {
     { id: "support", title: "Support Technique" },
   ]
 
-  return (
+
+	return (
     <div className="flex h-screen max-h-[calc(100vh-64px)]">
       {/* Navigation latérale */}
       <aside className="w-64 border-r bg-muted/30 p-4 flex-shrink-0">
@@ -72,7 +75,7 @@ export default function ApiDocumentationPage() {
           <section id="quickstart" className="pt-12">
             <H2>Démarrage Rapide</H2>
             <P>Commencez en 3 étapes :</P>
-            <List type="ordered">
+            <List>
               <li>Obtenez votre clé API dans le dashboard</li>
               <li>Configurez l'en-tête d'authentification</li>
               <li>Envoyez votre première requête</li>
@@ -282,5 +285,5 @@ Content-Type: application/json
         </main>
       </ScrollArea>
     </div>
-  )
+	);
 }

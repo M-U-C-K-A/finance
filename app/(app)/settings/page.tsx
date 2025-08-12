@@ -1,19 +1,15 @@
 // app/settings/page.tsx
-"use client"
-import { useSession } from "@/lib/auth-client"
+
+import { getUser } from "@/lib/auth-server"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { UserProfileForm } from "@/components/settings/userProfileForm"
 import { NotificationsForm } from "@/components/settings/notificationsForm"
 import { SecurityForm } from "@/components/settings/securityForm"
 import { BillingForm } from "@/components/settings/billingForm"
 import { PreferencesForm } from "@/components/settings/preferencesForm"
-import Unauthorized from "./unauthorized"
 
-export default function SettingsPage() {
-  const user = useSession()
-  if (!user) {
-    return <Unauthorized />
-  }
+export default async function SettingsPage() {
+  
   return (
 
     <div className="mx-auto max-w-3xl w-full flex h-full px-4 sm:px-6 lg:max-w-7xl lg:px-8 py-12">

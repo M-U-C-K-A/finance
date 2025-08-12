@@ -8,8 +8,9 @@ import { useEffect } from "react"
 
 export default function Unauthorized() {
   useEffect(() => {
+    const url = window.location.href
     toast.error("Accès refusé", {
-      description: "Vous n'avez pas les autorisations nécessaires pour accéder à cette page.",
+      description: `Vous n'avez pas les autorisations nécessaires pour accéder à cette page: ${url}`,
       duration: 5000,
     })
   }, [])
