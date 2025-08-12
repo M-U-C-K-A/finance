@@ -1,203 +1,61 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
-import { Loader2, Key } from "lucide-react";
-import { signIn } from "@/lib/auth-client";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { Card } from "@/components/ui/card";
+import SignIn from "./signin-form";
+import { SignUpForm } from "./signup-form";
+import { ThemeToggle } from "@/components/theme/theme-mode-toggle";
+import { CardHeader, CardFooter, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 
-export default function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+
+export default function AuthPage() {
+  const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <Card className="max-w-md">
-      <CardHeader>
-        <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
-        <CardDescription className="text-xs md:text-sm">
-          Enter your email below to login to your account
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-4">
-          
+    <div className="min-h-screen grid grid-cols-1">
+      <div className="absolute top-4 right-4"><ThemeToggle /></div>
+      {/* Left side - Auth forms */}
+      <div className="flex items-center justify-center p-4 bg-background">
+        <div className="w-full max-w-md space-y-8">
 
-          <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                value={email}
-              />
-              <Button
-                disabled={loading}
-                className="gap-2"
-                onClick={async () => {
-                  await signIn.magicLink(
-                  {
-                    email
-                  },
-                  {
-                     onRequest: (ctx) => {
-                        setLoading(true);
-                      },
-                     onResponse: (ctx) => {
-                         setLoading(false);
-                     },
-                   },
-                  );
-                 }}>
-                  {loading ? (
-                     <Loader2 size={16} className="animate-spin" />
-                     ):(
-                         <p>Sign-in with Magic Link</p>
-                   )}
-              </Button>
-            </div>
-
-          
-
-          
-
-          <div className={cn(
-              "w-full gap-2 flex items-center",
-              "justify-between flex-col"
-            )}>
-              
-				<Button
-                  variant="outline"
-                  className={cn(
-                    "w-full gap-2"
-                  )}
-                  disabled={loading}
-                  onClick={async () => {
-                    await signIn.social(
-                    {
-                      provider: "linkedin",
-                      callbackURL: "/dashboard"
-                    },
-                    {
-                      onRequest: (ctx) => {
-                         setLoading(true);
-                      },
-                      onResponse: (ctx) => {
-                         setLoading(false);
-                      },
-                     },
-                    );
-                  }}
-                >
-                  <svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="1em"
-				height="1em"
-				viewBox="0 0 24 24"
-			>
-				<path
-					fill="currentColor"
-					d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93zM6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37z"
-				></path>
-			</svg>
-                  Sign in with Linkedin
-                </Button>
-				<Button
-                  variant="outline"
-                  className={cn(
-                    "w-full gap-2"
-                  )}
-                  disabled={loading}
-                  onClick={async () => {
-                    await signIn.social(
-                    {
-                      provider: "microsoft",
-                      callbackURL: "/dashboard"
-                    },
-                    {
-                      onRequest: (ctx) => {
-                         setLoading(true);
-                      },
-                      onResponse: (ctx) => {
-                         setLoading(false);
-                      },
-                     },
-                    );
-                  }}
-                >
-                  <svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="1em"
-				height="1em"
-				viewBox="0 0 24 24"
-			>
-				<path
-					fill="currentColor"
-					d="M2 3h9v9H2zm9 19H2v-9h9zM21 3v9h-9V3zm0 19h-9v-9h9z"
-				></path>
-			</svg>
-                  Sign in with Microsoft
-                </Button>
-				<Button
-                  variant="outline"
-                  className={cn(
-                    "w-full gap-2"
-                  )}
-                  disabled={loading}
-                  onClick={async () => {
-                    await signIn.social(
-                    {
-                      provider: "google",
-                      callbackURL: "/dashboard"
-                    },
-                    {
-                      onRequest: (ctx) => {
-                         setLoading(true);
-                      },
-                      onResponse: (ctx) => {
-                         setLoading(false);
-                      },
-                     },
-                    );
-                  }}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="0.98em" height="1em" viewBox="0 0 256 262">
-				<path fill="#4285F4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"></path>
-				<path fill="#34A853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055c-34.523 0-63.824-22.773-74.269-54.25l-1.531.13l-40.298 31.187l-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"></path>
-				<path fill="#FBBC05" d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82c0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602z"></path>
-				<path fill="#EB4335" d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"></path>
-			</svg>
-                  Sign in with Google
-                </Button>
-            </div>
-        </div>
-      </CardContent>
-      <CardFooter>
-          <div className="flex justify-center w-full border-t py-4">
-            <p className="text-center text-xs text-neutral-500">
-             built with{" "}
-              <Link
-                href="https://better-auth.com"
-                className="underline"
-                target="_blank"
+          <div className="w-full max-w-md space-y-8 mb-4">
+            <div className="flex justify-center gap-4 mb-8">
+              <button
+                onClick={() => setIsLogin(true)}
+                className={`px-4 py-2 rounded-md font-medium ${isLogin
+                  ? "bg-primary text-primary-foreground"
+                  : "hover:bg-accent hover:text-accent-foreground"
+                  }`}
               >
-                <span className="dark:text-white/70 cursor-pointer">
-									better-auth.
-								</span>
-              </Link>
-            </p>
+                Sign In
+              </button>
+              <button
+                onClick={() => setIsLogin(false)}
+                className={`px-4 py-2 rounded-md font-medium ${!isLogin
+                  ? "bg-primary text-primary-foreground"
+                  : "hover:bg-accent hover:text-accent-foreground"
+                  }`}
+              >
+                Sign Up
+              </button>
+            </div>
           </div>
-        </CardFooter>
-    </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg md:text-xl">Sign Up</CardTitle>
+              <CardDescription className="text-xs md:text-sm">
+                Let's get started by filling out the form below.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+
+              {isLogin ? <SignIn /> : <SignUpForm />}
+
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,13 +1,12 @@
-"use client";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HelpCircle, Settings } from "lucide-react";
 import Unauthorized from "./unauthorized";
-import { useSession } from "@/lib/auth-client";
+import { getUser } from "@/lib/auth-server";
 
-export default function Dashboard() {
-  const { session: user } = useSession();
+export default async function Dashboard() {
+  const user = await getUser();
 
   if (!user) {
     return <Unauthorized />;
