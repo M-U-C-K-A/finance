@@ -1,33 +1,31 @@
-// components/settings/notificationsForm.tsx
-"use client"
+'use client'
 
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
+import { EmailNotificationsCard, PushNotificationsCard, SmsNotificationsCard } from './notification'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 
-export function NotificationsForm() {
-  const { register, handleSubmit } = useForm()
-
-  const onSubmit = (data) => {
-    console.log("Notifications :", data)
-  }
-
+export function NotificationsForm(/* user: { email: string } */) {
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Label>Emails marketing</Label>
-        <Switch {...register("marketingEmails")} />
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h2 className="text-2xl font-bold tracking-tight">Notifications</h2>
+        <p className="text-muted-foreground">
+          Configure how you receive notifications and alerts
+        </p>
       </div>
-      <div className="flex items-center justify-between">
-        <Label>Alertes importantes</Label>
-        <Switch {...register("importantAlerts")} />
+
+      <Separator />
+
+      <div className="space-y-4">
+        <EmailNotificationsCard /*{ email={user.email} }*/ />
+        <PushNotificationsCard />
+        <SmsNotificationsCard />
       </div>
-      <div className="flex items-center justify-between">
-        <Label>Notifications push</Label>
-        <Switch {...register("pushNotifications")} />
+
+      <div className="flex justify-end">
+        <Button>Save preferences</Button>
       </div>
-      <Button type="submit">Sauvegarder</Button>
-    </form>
+    </div>
   )
 }
+

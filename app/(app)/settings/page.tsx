@@ -1,6 +1,5 @@
 // app/settings/page.tsx
-
-import { getUser } from "@/lib/auth-server"
+"use server"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { UserProfileForm } from "@/components/settings/userProfileForm"
 import { NotificationsForm } from "@/components/settings/notificationsForm"

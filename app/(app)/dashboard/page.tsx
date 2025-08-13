@@ -1,91 +1,155 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { HelpCircle, Settings } from "lucide-react";
-import Unauthorized from "@/components/layout/unauthorized";
+// Page principale - dashboard/page.tsx
 import { getUser } from "@/lib/auth-server";
+import { Card, CardContent } from "@/components/ui/card";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import { StatsCards } from "@/components/dashboard/stats-cards";
+import { MarketOverview } from "@/components/dashboard/market-overview";
+import { ReportsTable } from "@/components/dashboard/reports-table";
+import { QuickActions } from "@/components/dashboard/quick-actions";
+
+// Types et données fictives
+interface Report {
+  id: string;
+  title: string;
+  type: 'monthly' | 'weekly' | 'daily';
+  status: 'completed' | 'processing' | 'pending' | 'error';
+  createdAt: string;
+  completedAt?: string;
+  downloadUrl?: string;
+  symbol: string;
+  market: string;
+}
+
+interface Subscription {
+  plan: 'free' | 'basic' | 'premium' | 'enterprise';
+  reportsUsed: number;
+  reportsLimit: number;
+  renewsAt: string;
+  isActive: boolean;
+}
+
+interface MarketData {
+  symbol: string;
+  name: string;
+  price: number;
+  change: number;
+  changePercent: number;
+  lastUpdate: string;
+}
+
+const mockReports: Report[] = [
+  {
+    id: '1',
+    title: 'Analyse Mensuelle - Apple Inc.',
+    type: 'monthly',
+    status: 'completed',
+    createdAt: '2024-08-10T10:00:00Z',
+    completedAt: '2024-08-10T10:15:00Z',
+    downloadUrl: '/reports/apple-monthly-aug2024.pdf',
+    symbol: 'AAPL',
+    market: 'NASDAQ'
+  },
+  {
+    id: '2',
+    title: 'Rapport Hebdomadaire - CAC 40',
+    type: 'weekly',
+    status: 'processing',
+    createdAt: '2024-08-13T08:30:00Z',
+    symbol: 'CAC40',
+    market: 'Euronext Paris'
+  },
+  {
+    id: '3',
+    title: 'Analyse Quotidienne - Tesla',
+    type: 'daily',
+    status: 'completed',
+    createdAt: '2024-08-12T16:00:00Z',
+    completedAt: '2024-08-12T16:05:00Z',
+    downloadUrl: '/reports/tesla-daily-aug12.pdf',
+    symbol: 'TSLA',
+    market: 'NASDAQ'
+  },
+  {
+    id: '4',
+    title: 'Rapport Mensuel - Microsoft',
+    type: 'monthly',
+    status: 'error',
+    createdAt: '2024-08-09T14:20:00Z',
+    symbol: 'MSFT',
+    market: 'NASDAQ'
+  },
+  {
+    id: '5',
+    title: 'Analyse Hebdo - S&P 500',
+    type: 'weekly',
+    status: 'pending',
+    createdAt: '2024-08-13T09:45:00Z',
+    symbol: 'SPX',
+    market: 'NYSE'
+  }
+];
+
+const mockSubscription: Subscription = {
+  plan: 'premium',
+  reportsUsed: 12,
+  reportsLimit: 25,
+  renewsAt: '2024-09-15T00:00:00Z',
+  isActive: true
+};
+
+const mockMarketData: MarketData[] = [
+  {
+    symbol: 'AAPL',
+    name: 'Apple Inc.',
+    price: 225.77,
+    change: 2.34,
+    changePercent: 1.05,
+    lastUpdate: '2024-08-13T16:00:00Z'
+  },
+  {
+    symbol: 'TSLA',
+    name: 'Tesla Inc.',
+    price: 248.50,
+    change: -5.23,
+    changePercent: -2.06,
+    lastUpdate: '2024-08-13T16:00:00Z'
+  },
+  {
+    symbol: 'MSFT',
+    name: 'Microsoft Corp.',
+    price: 425.61,
+    change: 8.94,
+    changePercent: 2.15,
+    lastUpdate: '2024-08-13T16:00:00Z'
+  }
+];
 
 export default async function Dashboard() {
   const user = await getUser();
 
-  return (
-    <div className="mx-auto max-w-3xl w-full flex items-center justify-center h-full px-4 sm:px-6 lg:max-w-7xl lg:px-8 py-12">
-      <div className="flex flex-col items-center justify-center gap-8">
-        <Card className="w-full max-w-2xl">
-          <CardHeader className="space-y-1">
-            <div className="flex items-center gap-4">
-              <Avatar>
-                <AvatarImage
-                  src={
-                    user?.image ??
-                    `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${user?.email}`
-                  }
-                  alt={"avatar de l'utilisateur"}
-                />
-                <AvatarFallback>
-                  {user?.email
-                    ? user.email
-                      .split("@")[0]
-                      .slice(0, 2)
-                      .toUpperCase()
-                    : "  "}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                {user ? (
-                  <>
-                    <CardTitle className="text-2xl">
-                      Bienvenue, {user.name ?? user.email}!
-                    </CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      Vous êtes connecté avec {user.email}
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <CardTitle className="text-2xl">
-                      Bienvenue invité 👋
-                    </CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      Connectez-vous pour accéder à toutes les fonctionnalités.
-                    </p>
-                  </>
-                )}
-              </div>
-            </div>
-          </CardHeader>
-
-          <CardContent className="grid gap-6">
-            {user ? (
-              <>
-                <div className="rounded-lg border p-4">
-                  <h2 className="text-xl font-semibold mb-2">Accès sécurisé</h2>
-                  <p className="text-muted-foreground">
-                    Cette page est réservée aux utilisateurs authentifiés.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Button variant="outline" className="gap-2">
-                    <Settings className="h-4 w-4" />
-                    Paramètres du compte
-                  </Button>
-                  <Button variant="outline" className="gap-2">
-                    <HelpCircle className="h-4 w-4" />
-                    Centre d&apos;aide
-                  </Button>
-                </div>
-              </>
-            ) : (
-              <div className="rounded-lg border p-4 text-center">
-                <p className="text-muted-foreground">
-                  Veuillez vous connecter pour voir le contenu.
-                </p>
-              </div>
-            )}
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-6 text-center">
+            <p className="text-muted-foreground">
+              Veuillez vous connecter pour accéder au dashboard.
+            </p>
           </CardContent>
         </Card>
       </div>
+    );
+  }
+
+  const completedReports = mockReports.filter(r => r.status === 'completed').length;
+
+  return (
+    <div className="space-y-8 p-8">
+      <DashboardHeader user={user} />
+      <StatsCards subscription={mockSubscription} completedReports={completedReports} />
+      <MarketOverview marketData={mockMarketData} />
+      <ReportsTable reports={mockReports} />
+      <QuickActions subscription={mockSubscription} />
     </div>
   );
 }

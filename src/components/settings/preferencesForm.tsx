@@ -1,43 +1,56 @@
-// components/settings/preferencesForm.tsx
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useForm } from "react-hook-form"
+import { 
+  AppearanceCard, 
+  LanguageCard, 
+  AccessibilityCard,
+  DashboardCard,
+  DataPreferencesCard,
+  SidebarCard
+} from './preference-cards/page'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export function PreferencesForm() {
-  const { handleSubmit } = useForm()
-
-  const onSubmit = (data) => {
-    console.log("Préférences :", data)
-  }
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
-        <Label>Langue</Label>
-        <Select>
-          <SelectTrigger><SelectValue placeholder="Choisir une langue" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="fr">Français</SelectItem>
-            <SelectItem value="en">English</SelectItem>
-            <SelectItem value="es">Español</SelectItem>
-          </SelectContent>
-        </Select>
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h2 className="text-2xl font-bold tracking-tight">Preferences</h2>
+        <p className="text-muted-foreground">
+          Tailor your experience to match your workflow
+        </p>
       </div>
-      <div>
-        <Label>Thème</Label>
-        <Select>
-          <SelectTrigger><SelectValue placeholder="Choisir un thème" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">Clair</SelectItem>
-            <SelectItem value="dark">Sombre</SelectItem>
-            <SelectItem value="system">Système</SelectItem>
-          </SelectContent>
-        </Select>
+
+      <Separator />
+
+      <Tabs defaultValue="interface" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="interface">Interface</TabsTrigger>
+          <TabsTrigger value="data">Data</TabsTrigger>
+          <TabsTrigger value="navigation">Navigation</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="interface" className="space-y-4">
+          <AppearanceCard />
+          <LanguageCard />
+          <AccessibilityCard />
+        </TabsContent>
+
+        <TabsContent value="data" className="space-y-4">
+          <DataPreferencesCard />
+          <DashboardCard />
+        </TabsContent>
+
+        <TabsContent value="navigation" className="space-y-4">
+          <SidebarCard />
+        </TabsContent>
+      </Tabs>
+
+      <div className="flex justify-between">
+        <Button variant="outline">Reset Defaults</Button>
+        <Button>Save Preferences</Button>
       </div>
-      <Button type="submit">Sauvegarder</Button>
-    </form>
+    </div>
   )
 }

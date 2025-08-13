@@ -28,4 +28,13 @@ export const auth = betterAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
         },
     },
+    session: {
+      modelName: "Session",
+      expiresIn: 60 * 60 * 24 * 30, // 30 days
+      updateAge: 60 * 60 * 24, // 24 hours
+      cookieCache: {
+        enabled: true,
+        maxAge: 60 * 5, // 5 minutes
+      }
+    },
 });
