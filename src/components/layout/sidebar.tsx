@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useSession, signOut } from "@/lib/auth-client";
+import { useIsAdmin } from "@/hooks/use-admin";
 import {
   Calendar,
   Home,
@@ -12,9 +13,11 @@ import {
   PlusCircle,
   User2,
   ChevronUp,
+  Coins,
+  Repeat,
+  Key,
   Code,
-  BookOpen,
-  Zap,
+  Shield,
 } from "lucide-react";
 
 import {
@@ -41,6 +44,7 @@ import Link from "next/link";
 import { SignInModal } from "@/components/auth/signInModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "../ui/skeleton";
+import { ReportGeneratorDialog } from "@/components/reports/report-generator-dialog";
 
 const menuItems = [
   {
@@ -54,26 +58,42 @@ const menuItems = [
     icon: BarChart2,
     subItems: [
       { title: "History", url: "/reports/history" },
-      { title: "New Report", url: "/reports/new", icon: PlusCircle },
+      { title: "Generate Report", url: "/reports/generate", icon: PlusCircle },
+      { title: "Recurring Reports", url: "/reports/recurring", icon: Repeat },
+      { title: "One-time Purchase", url: "/reports/purchase", icon: CreditCard },
     ],
   },
   {
-    title: "Subscribe",
-    url: "/subscriptions",
+    title: "Plan",
+    url: "/plan",
     icon: Calendar,
+    subItems: [
+      { title: "Current Plan", url: "/plan/current" },
+      { title: "Buy Credits", url: "/plan/buy-credits" },
+      { title: "Upgrade", url: "/plan/upgrade" },
+      { title: "Billing", url: "/plan/billing" },
+    ],
   },
   {
-    title: "Terms of Service",
-    url: "/terms",
-    icon: FileText,
-  },
-  {
-    title: "API",
+    title: "API", 
     url: "/api",
     icon: Code,
+    requiresApiAccess: true,
     subItems: [
-      { title: "API Access", url: "/api/access", icon: Zap },
-      { title: "Documentation", url: "/api/documentation", icon: BookOpen },
+      { title: "Documentation", url: "/api/documentation", icon: FileText },
+      { title: "Clés API", url: "/api/access", icon: Key },
+    ],
+  },
+  {
+    title: "Admin",
+    url: "/admin",
+    icon: Shield,
+    requiresAdmin: true,
+    subItems: [
+      { title: "Dashboard", url: "/admin/dashboard", icon: BarChart2 },
+      { title: "Utilisateurs", url: "/admin/users", icon: User2 },
+      { title: "Rapports", url: "/admin/reports", icon: FileText },
+      { title: "Abonnements", url: "/admin/subscriptions", icon: CreditCard },
     ],
   },
   {
@@ -85,6 +105,7 @@ const menuItems = [
 
 export function AppSidebar() {
   const { data: session } = useSession();
+  const { isAdmin } = useIsAdmin();
   const [modalOpen, setModalOpen] = useState(false);
 
   const openModal = () => setModalOpen(true);
@@ -102,7 +123,13 @@ export function AppSidebar() {
             <SidebarGroupLabel>Navigation</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {menuItems.map((item) => (
+                {menuItems
+                  .filter(item => {
+                    if (item.requiresApiAccess && !session?.user) return false; // TODO: check real API access
+                    if (item.requiresAdmin && !isAdmin) return false; // Vérification admin réelle
+                    return true;
+                  })
+                  .map((item) => (
                   <SidebarMenuItem key={item.title}>
                     {item.subItems ? (
                       <DropdownMenu>
@@ -143,24 +170,30 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link
-                      href="/reports/new"
-                      className="bg-primary text-background hover:bg-primary-dark flex items-center gap-2 px-2 py-1 rounded"
-                    >
-                      <PlusCircle className="w-5 h-5" />
-                      Nouvelle Analyse
-                    </Link>
-                  </SidebarMenuButton>
+                  <ReportGeneratorDialog
+                    trigger={
+                      <SidebarMenuButton className="bg-primary text-background hover:bg-primary/90 flex items-center gap-2 px-2 py-1 rounded">
+                        <PlusCircle className="w-5 h-5" />
+                        Générer Rapport
+                      </SidebarMenuButton>
+                    }
+                    userCredits={{
+                      balance: 287, // TODO: récupérer les vraies données
+                      apiAccess: true
+                    }}
+                    onReportGenerated={(reportId) => {
+                      window.location.href = '/reports/history';
+                    }}
+                  />
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <Link
-                      href="/credits/add"
+                      href="/plan/buy-credits"
                       className="bg-green-600 text-white hover:bg-green-700 flex items-center gap-2 px-2 py-1 rounded"
                     >
                       <CreditCard className="w-5 h-5" />
-                      Recharger Crédits
+                      Acheter Crédits
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

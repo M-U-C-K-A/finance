@@ -119,7 +119,7 @@ export function SignInForm() {
                   Password <RequiredIndicator />
                 </FormLabel>
                 <Link
-                  href="/auth/forgot-password"
+                  href="/auth/forget-password"
                   className="text-sm text-muted-foreground hover:underline"
                 >
                   Forgot your password?

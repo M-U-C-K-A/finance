@@ -4,77 +4,91 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { 
   CreditCard,
-  BarChart3,
+  Coins,
   CheckCircle2,
-  Calendar
+  Calendar,
+  Zap
 } from "lucide-react";
 
-interface Subscription {
-  plan: 'free' | 'basic' | 'premium' | 'enterprise';
-  reportsUsed: number;
-  reportsLimit: number;
-  renewsAt: string;
-  isActive: boolean;
+interface UserCreditsInfo {
+  balance: number;
+  monthlyCredits: number;
+  lastRecharge?: Date | null;
+  plan: 'FREE' | 'STARTER' | 'PROFESSIONAL' | 'ENTERPRISE';
+  apiAccess: boolean;
+  isActiveSubscription: boolean;
+  renewsAt?: Date | null;
 }
 
 interface StatsCardsProps {
-  subscription: Subscription;
+  creditsInfo: UserCreditsInfo;
   completedReports: number;
 }
 
 const getPlanColor = (plan: string) => {
   switch (plan) {
-    case 'free': return 'bg-gray-100 text-gray-800';
-    case 'basic': return 'bg-blue-100 text-blue-800';
-    case 'premium': return 'bg-purple-100 text-purple-800';
-    case 'enterprise': return 'bg-gold-100 text-gold-800';
+    case 'FREE': return 'bg-gray-100 text-gray-800';
+    case 'STARTER': return 'bg-blue-100 text-blue-800';
+    case 'PROFESSIONAL': return 'bg-purple-100 text-purple-800';
+    case 'ENTERPRISE': return 'bg-amber-100 text-amber-800';
     default: return 'bg-gray-100 text-gray-800';
   }
 };
 
 const getPlanLabel = (plan: string) => {
   switch (plan) {
-    case 'free': return 'Gratuit';
-    case 'basic': return 'Basique';
-    case 'premium': return 'Premium';
-    case 'enterprise': return 'Entreprise';
+    case 'FREE': return 'Gratuit';
+    case 'STARTER': return 'Starter';
+    case 'PROFESSIONAL': return 'Professional';
+    case 'ENTERPRISE': return 'Enterprise';
     default: return plan;
   }
 };
 
-export function StatsCards({ subscription, completedReports }: StatsCardsProps) {
-  const usagePercentage = (subscription.reportsUsed / subscription.reportsLimit) * 100;
+export function StatsCards({ creditsInfo, completedReports }: StatsCardsProps) {
+  const usedCredits = creditsInfo.monthlyCredits - creditsInfo.balance;
+  const usagePercentage = creditsInfo.monthlyCredits > 0 ? (usedCredits / creditsInfo.monthlyCredits) * 100 : 0;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Abonnement</CardTitle>
+          <CardTitle className="text-sm font-medium">Plan</CardTitle>
           <CreditCard className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{getPlanLabel(subscription.plan)}</div>
-          <Badge className={getPlanColor(subscription.plan)} variant="secondary">
-            {subscription.isActive ? 'Actif' : 'Inactif'}
-          </Badge>
+          <div className="text-2xl font-bold">{getPlanLabel(creditsInfo.plan)}</div>
+          <div className="flex items-center gap-2 mt-1">
+            <Badge className={getPlanColor(creditsInfo.plan)} variant="secondary">
+              {creditsInfo.isActiveSubscription ? 'Actif' : 'Inactif'}
+            </Badge>
+            {creditsInfo.apiAccess && (
+              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                <Zap className="h-3 w-3 mr-1" />
+                API
+              </Badge>
+            )}
+          </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Rapports utilisés</CardTitle>
-          <BarChart3 className="h-4 w-4 text-muted-foreground" />
+          <CardTitle className="text-sm font-medium">Crédits</CardTitle>
+          <Coins className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{subscription.reportsUsed}/{subscription.reportsLimit}</div>
-          <Progress
-            value={usagePercentage}
-            className="mt-2"
-            aria-label="Utilisation des rapports"
-          />
-          <p className="text-xs text-muted-foreground mt-1">
-            {Math.round(usagePercentage)}% utilisé ce mois
-          </p>
+          <div className="text-2xl font-bold">{creditsInfo.balance}</div>
+          <div className="text-sm text-muted-foreground">
+            {creditsInfo.monthlyCredits > 0 ? `sur ${creditsInfo.monthlyCredits} mensuels` : 'crédits disponibles'}
+          </div>
+          {creditsInfo.monthlyCredits > 0 && (
+            <Progress
+              value={usagePercentage}
+              className="mt-2"
+              aria-label="Utilisation des crédits"
+            />
+          )}
         </CardContent>
       </Card>
 
@@ -95,10 +109,16 @@ export function StatsCards({ subscription, completedReports }: StatsCardsProps) 
           <Calendar className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            {new Date(subscription.renewsAt).getDate()} Sept
-          </div>
-          <p className="text-xs text-muted-foreground">Prochain paiement</p>
+          {creditsInfo.renewsAt ? (
+            <div className="text-2xl font-bold">
+              {new Date(creditsInfo.renewsAt).getDate()} {new Date(creditsInfo.renewsAt).toLocaleString('fr-FR', { month: 'short' })}
+            </div>
+          ) : (
+            <div className="text-2xl font-bold">-</div>
+          )}
+          <p className="text-xs text-muted-foreground">
+            {creditsInfo.renewsAt ? 'Prochain paiement' : 'Aucun abonnement'}
+          </p>
         </CardContent>
       </Card>
     </div>

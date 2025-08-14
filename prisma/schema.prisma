@@ -1,4 +1,8 @@
 
+// ===================================================================
+// 🗃️ SCHEMA PRINCIPAL FinAnalytics - Organisé par domaines métier  
+// ===================================================================
+
 datasource db {
   provider = "postgres"
   url      = env("DATABASE_URL")
@@ -8,16 +12,38 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// ===================================================================
+// 🔐 AUTHENTIFICATION ET UTILISATEURS
+// ===================================================================
+
+enum UserRole {
+  USER
+  ADMIN
+  
+  @@map("user_roles")
+}
+
 model User {
   id            String    @id
   name          String
   email         String
   emailVerified Boolean
   image         String?
+  role          UserRole  @default(USER)
   createdAt     DateTime
   updatedAt     DateTime
+  
+  // Relations auth
   sessions      Session[]
   accounts      Account[]
+  
+  // Relations business
+  subscription  Subscription?
+  credits       Credits?
+  creditTransactions CreditTransaction[]
+  reports       Report[]
+  reportSchedules ReportSchedule[]
+  apiKeys       ApiKey[]
 
   @@unique([email])
   @@map("user")
@@ -66,4 +92,275 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+// ===================================================================
+// 💳 ABONNEMENTS ET CRÉDITS
+// ===================================================================
+
+enum SubscriptionPlan {
+  FREE
+  STARTER      // 29€/mois - 100 crédits
+  PROFESSIONAL // 99€/mois - 500 crédits  
+  ENTERPRISE   // 299€/mois - 2000 crédits
+
+  @@map("subscription_plans")
+}
+
+enum BillingCycle {
+  MONTHLY
+  YEARLY
+
+  @@map("billing_cycles")
+}
+
+model Subscription {
+  id           String           @id @default(cuid())
+  userId       String           @unique
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  plan         SubscriptionPlan @default(FREE)
+  billingCycle BillingCycle     @default(MONTHLY)
+  
+  // Accès API exclusif aux abonnés
+  apiAccess    Boolean          @default(false)
+  
+  isActive     Boolean          @default(true)
+  startedAt    DateTime         @default(now())
+  renewsAt     DateTime?
+  cancelledAt  DateTime?
+  
+  // Métadonnées Polar
+  polarSubscriptionId String?
+  polarCustomerId     String?
+  polarProductId      String?
+  
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@map("subscriptions")
+}
+
+model Credits {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  balance   Int      @default(0)
+  
+  // Crédits mensuels qui se rechargent pour les abonnés
+  monthlyCredits  Int      @default(0)
+  lastRecharge    DateTime?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("credits")
+}
+
+enum TransactionType {
+  SUBSCRIPTION_RECHARGE // Recharge mensuelle abonnement
+  PACK_PURCHASE        // Achat pack crédits
+  REPORT_USAGE         // Utilisation pour rapport
+  REFUND              // Remboursement
+  BONUS               // Bonus admin
+  EXPIRY              // Expiration
+
+  @@map("transaction_types")
+}
+
+model CreditTransaction {
+  id             String          @id @default(cuid())
+  userId         String
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type           TransactionType
+  amount         Int             // Positif pour achat/bonus, négatif pour usage
+  description    String
+  balanceAfter   Int
+  
+  // Relations optionnelles
+  reportId       String?
+  report         Report?         @relation(fields: [reportId], references: [id])
+  
+  // Métadonnées Polar/Stripe
+  externalId     String?         // ID transaction externe
+  metadata       Json?
+  
+  createdAt      DateTime        @default(now())
+
+  @@map("credit_transactions")
+}
+
+// ===================================================================
+// 📊 RAPPORTS ET GÉNÉRATION
+// ===================================================================
+
+enum ReportStatus {
+  PENDING     // En attente de traitement
+  PROCESSING  // En cours de génération
+  COMPLETED   // Terminé avec succès
+  FAILED      // Échec de génération
+  CANCELLED   // Annulé par l'utilisateur
+
+  @@map("report_status")
+}
+
+enum AssetType {
+  ETF
+  INDEX
+  STOCK
+  MARKET
+
+  @@map("asset_types")
+}
+
+enum ReportType {
+  BASELINE     // Rapport simple
+  DEEP_ANALYSIS // Analyse approfondie
+  PRICER       // Pricer custom ou générique
+  BENCHMARK    // Comparaisons
+
+  @@map("report_types")
+}
+
+model Report {
+  id              String       @id @default(cuid())
+  userId          String
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Configuration du rapport
+  title           String
+  assetType       AssetType
+  assetSymbol     String       // Ex: AAPL, CAC40, etc.
+  reportType      ReportType   @default(BASELINE)
+  
+  // Options de rapport
+  includeBenchmark Boolean     @default(false)
+  includeApiExport Boolean     @default(false)
+  
+  // Coût et statut
+  creditsCost     Int
+  status          ReportStatus @default(PENDING)
+  
+  // Fichiers générés
+  pdfPath         String?
+  csvPath         String?
+  
+  // Métadonnées de traitement
+  processingStartedAt DateTime?
+  completedAt         DateTime?
+  failureReason       String?
+  
+  // Relations
+  transactions    CreditTransaction[]
+  schedule        ReportSchedule?
+  
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@map("reports")
+}
+
+enum ScheduleFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+
+  @@map("schedule_frequencies")
+}
+
+model ReportSchedule {
+  id              String            @id @default(cuid())
+  userId          String
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  reportId        String            @unique
+  report          Report            @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  
+  // Configuration récurrence
+  frequency       ScheduleFrequency
+  hour            Int               @default(9)  // Heure d'exécution (0-23)
+  dayOfWeek       Int?              // Pour WEEKLY (1=Lundi, 7=Dimanche)
+  dayOfMonth      Int?              // Pour MONTHLY (1-31)
+  
+  // Contrôle
+  isActive        Boolean           @default(true)
+  nextRunAt       DateTime
+  lastRunAt       DateTime?
+  
+  // Estimation coûts
+  estimatedMonthlyCost Int
+  
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@map("report_schedules")
+}
+
+// ===================================================================
+// 🔑 API KEYS ET ACCÈS
+// ===================================================================
+
+model ApiKey {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name        String   // Nom donné par l'utilisateur
+  keyHash     String   @unique // Hash de la clé (jamais la clé en clair)
+  keyPrefix   String   // Préfixe visible pour l'utilisateur (ex: "fa_live_abc...")
+  
+  // Permissions et limites
+  isActive    Boolean  @default(true)
+  rateLimit   Int      @default(100) // Requêtes par heure
+  
+  // Métadonnées
+  lastUsedAt  DateTime?
+  usageCount  Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  expiresAt   DateTime?
+
+  @@map("api_keys")
+}
+
+enum ApiRequestStatus {
+  SUCCESS
+  RATE_LIMITED
+  UNAUTHORIZED
+  INSUFFICIENT_CREDITS
+  ERROR
+
+  @@map("api_request_status")
+}
+
+model ApiRequest {
+  id              String           @id @default(cuid())
+  userId          String
+  
+  // Détails de la requête
+  endpoint        String
+  method          String
+  ipAddress       String?
+  userAgent       String?
+  
+  // Authentification
+  apiKeyId        String?
+  
+  // Résultat
+  status          ApiRequestStatus
+  responseTime    Int?             // en millisecondes
+  creditsUsed     Int              @default(0)
+  
+  // Métadonnées
+  requestSize     Int?             // taille en bytes
+  responseSize    Int?             // taille en bytes
+  errorMessage    String?
+  
+  createdAt       DateTime         @default(now())
+
+  @@index([userId, createdAt])
+  @@index([apiKeyId, createdAt])
+  @@map("api_requests")
 }

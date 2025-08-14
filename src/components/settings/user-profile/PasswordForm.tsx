@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { useSession } from '@/lib/auth-client'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { updateUserPassword } from '@/actions/user'
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(8, 'Minimum 8 caractères'),
@@ -40,11 +41,17 @@ export function PasswordForm() {
   async function onSubmit(values: z.infer<typeof passwordSchema>) {
     try {
       setIsLoading(true)
-      // await changePassword(values.currentPassword, values.newPassword)
-      toast.success('Mot de passe mis à jour')
+      
+      const formData = new FormData()
+      formData.append('currentPassword', values.currentPassword)
+      formData.append('newPassword', values.newPassword)
+      formData.append('confirmPassword', values.confirmPassword)
+      
+      await updateUserPassword(formData)
+      toast.success('Mot de passe mis à jour avec succès')
       form.reset()
-    } catch (error) {
-      toast.error('Erreur lors du changement de mot de passe')
+    } catch (error: any) {
+      toast.error(error.message || 'Erreur lors du changement de mot de passe')
     } finally {
       setIsLoading(false)
     }

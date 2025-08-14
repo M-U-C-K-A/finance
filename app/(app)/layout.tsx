@@ -23,7 +23,6 @@ export default async function AppLayout({
             <Header />
             <main className="flex-1">
 
-              <h1 className="text-3xl">BITCHES !!!!</h1>
               <Unauthorized />
             </main>
           </div>

@@ -20,13 +20,6 @@ interface Report {
   market: string;
 }
 
-interface Subscription {
-  plan: 'free' | 'basic' | 'premium' | 'enterprise';
-  reportsUsed: number;
-  reportsLimit: number;
-  renewsAt: string;
-  isActive: boolean;
-}
 
 interface MarketData {
   symbol: string;
@@ -89,12 +82,14 @@ const mockReports: Report[] = [
   }
 ];
 
-const mockSubscription: Subscription = {
-  plan: 'premium',
-  reportsUsed: 12,
-  reportsLimit: 25,
-  renewsAt: '2024-09-15T00:00:00Z',
-  isActive: true
+const mockCreditsInfo = {
+  balance: 287,
+  monthlyCredits: 500,
+  lastRecharge: new Date('2024-08-15T00:00:00Z'),
+  plan: 'PROFESSIONAL' as const,
+  apiAccess: true,
+  isActiveSubscription: true,
+  renewsAt: new Date('2024-09-15T00:00:00Z')
 };
 
 const mockMarketData: MarketData[] = [
@@ -146,10 +141,10 @@ export default async function Dashboard() {
   return (
     <div className="space-y-8 p-8">
       <DashboardHeader user={user} />
-      <StatsCards subscription={mockSubscription} completedReports={completedReports} />
+      <StatsCards creditsInfo={mockCreditsInfo} completedReports={completedReports} />
       <MarketOverview marketData={mockMarketData} />
       <ReportsTable reports={mockReports} />
-      <QuickActions subscription={mockSubscription} />
+      <QuickActions creditsInfo={mockCreditsInfo} />
     </div>
   );
 }
