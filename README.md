@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📍 FinAnalytics — Roadmap
 
-## Getting Started
+## Phase 1 — Foundations
+🛠 Goal: Set up the core technical structure of the SaaS.
 
-First, run the development server:
+- [ ] **Authentication & User Management**
+  - [ ] Integrate Better Auth with:
+    - [ ] Google login
+    - [ ] GitHub login (temporary)
+    - [ ] Email/password
+  - [ ] Store profiles & subscription plans in Prisma
+  - [ ] Prepare 2FA activation (optional for v1)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [ ] **App Structure (Next.js 15 + Tailwind + shadcn/ui)**
+  - [ ] Dashboard
+  - [ ] Reports pages (History / Generate / Recurring / Purchase)
+  - [ ] Subscription pages (Current Plan / Upgrade / Billing)
+  - [ ] Credits pages (Buy / History)
+  - [ ] Settings
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [ ] **Database Setup**
+  - [ ] PostgreSQL + Prisma
+  - [ ] Models: Users, Reports, Subscriptions, Credits, RecurringReports, PaymentHistory
+  - [ ] Seed test data
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [ ] **Internal API**
+  - [ ] Endpoints for:
+    - [ ] Report generation
+    - [ ] Report list
+    - [ ] Remaining credits
+    - [ ] Subscription details
+  - [ ] Middleware for quota & permissions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Phase 2 — Report Engine
+⚙️ Goal: End-to-end flow from submission → processing → delivery.
 
-To learn more about Next.js, take a look at the following resources:
+- [ ] **Python Worker**
+  - [ ] Scripts to fetch market, index, ETF data (API or scraping)
+  - [ ] Basic analysis + options (custom pricer, deep analysis…)
+  - [ ] Save results to storage (S3/local)
+  - [ ] Update DB with report status
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [ ] **Workflow**
+  - [ ] Report form in UI
+  - [ ] API → Prisma → Worker → Storage → UI
+  - [ ] Polling or WebSocket for progress
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Phase 3 — Monetization
+💰 Goal: Enable payments & usage control.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [ ] **Plans & Credits**
+  - [ ] Subscription plans (Starter / Pro / Enterprise)
+  - [ ] Credit packs (100 / 500 / 2000)
+  - [ ] Credits as add-on to subscription
+  - [ ] Metered pricing for API (future)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] **Payment Integration**
+  - [ ] Polar (or Stripe)
+  - [ ] Checkout page + webhook
+  - [ ] Payment history in dashboard
+
+---
+
+## Phase 4 — Recurring Reports & Public API
+🔄 Goal: Automate & allow integrations.
+
+- [ ] **Recurring Reports**
+  - [ ] UI to schedule recurring reports
+  - [ ] Cron job to trigger automatically
+  - [ ] Auto-credit consumption
+
+- [ ] **External API (subscription required)**
+  - [ ] API key per account
+  - [ ] Endpoints:
+    - [ ] Generate report
+    - [ ] Retrieve reports
+    - [ ] Check credits
+
+---
+
+## Phase 5 — Marketing & Advanced Features
+🚀 Goal: Grow user base & increase value.
+
+- [ ] **Marketing**
+  - [ ] Landing page with clear product pitch
+  - [ ] Instagram campaign + affiliation system
+  - [ ] Blog SEO content
+
+- [ ] **Advanced Features**
+  - [ ] Multi-asset comparison
+  - [ ] News integration
+  - [ ] Advanced export formats (CSV enriched, XLSX)
