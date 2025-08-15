@@ -18,6 +18,7 @@ import {
   Key,
   Code,
   Shield,
+  History,
 } from "lucide-react";
 
 import {
@@ -57,10 +58,9 @@ const menuItems = [
     url: "/reports",
     icon: BarChart2,
     subItems: [
-      { title: "History", url: "/reports/history" },
+      { title: "History", url: "/reports/history", icon: History },
       { title: "Generate Report", url: "/reports/generate", icon: PlusCircle },
       { title: "Recurring Reports", url: "/reports/recurring", icon: Repeat },
-      { title: "One-time Purchase", url: "/reports/purchase", icon: CreditCard },
     ],
   },
   {
@@ -81,7 +81,7 @@ const menuItems = [
     requiresApiAccess: true,
     subItems: [
       { title: "Documentation", url: "/api/documentation", icon: FileText },
-      { title: "Clés API", url: "/api/access", icon: Key },
+      { title: "API Keys", url: "/api/access", icon: Key },
     ],
   },
   {
@@ -91,9 +91,11 @@ const menuItems = [
     requiresAdmin: true,
     subItems: [
       { title: "Dashboard", url: "/admin/dashboard", icon: BarChart2 },
-      { title: "Utilisateurs", url: "/admin/users", icon: User2 },
-      { title: "Rapports", url: "/admin/reports", icon: FileText },
-      { title: "Abonnements", url: "/admin/subscriptions", icon: CreditCard },
+      { title: "Analytics", url: "/admin/analytics", icon: BarChart2 },
+      { title: "Users", url: "/admin/users", icon: User2 },
+      { title: "Credits", url: "/admin/credits", icon: Coins },
+      { title: "Reports", url: "/admin/reports", icon: FileText },
+      { title: "Subscriptions", url: "/admin/subscriptions", icon: CreditCard },
     ],
   },
   {
@@ -126,7 +128,7 @@ export function AppSidebar() {
                 {menuItems
                   .filter(item => {
                     if (item.requiresApiAccess && !session?.user) return false; // TODO: check real API access
-                    if (item.requiresAdmin && !isAdmin) return false; // Vérification admin réelle
+                    if (item.requiresAdmin && !isAdmin) return false; // Real admin verification
                     return true;
                   })
                   .map((item) => (
@@ -166,25 +168,19 @@ export function AppSidebar() {
           </SidebarGroup>
 
           <SidebarGroup className="mt-6">
-            <SidebarGroupLabel>Actions Rapides</SidebarGroupLabel>
+            <SidebarGroupLabel>Quick Actions</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <ReportGeneratorDialog
-                    trigger={
-                      <SidebarMenuButton className="bg-primary text-background hover:bg-primary/90 flex items-center gap-2 px-2 py-1 rounded">
-                        <PlusCircle className="w-5 h-5" />
-                        Générer Rapport
-                      </SidebarMenuButton>
-                    }
-                    userCredits={{
-                      balance: 287, // TODO: récupérer les vraies données
-                      apiAccess: true
-                    }}
-                    onReportGenerated={(reportId) => {
-                      window.location.href = '/reports/history';
-                    }}
-                  />
+                  <SidebarMenuButton asChild>
+                    <Link
+                      href="/reports/generate"
+                      className="bg-primary text-background hover:bg-primary/90 flex items-center gap-2 px-2 py-1 rounded"
+                    >
+                      <PlusCircle className="w-5 h-5" />
+                      Generate Report
+                    </Link>
+                  </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
@@ -193,7 +189,7 @@ export function AppSidebar() {
                       className="bg-green-600 text-white hover:bg-green-700 flex items-center gap-2 px-2 py-1 rounded"
                     >
                       <CreditCard className="w-5 h-5" />
-                      Acheter Crédits
+                      Buy Credits
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -217,7 +213,7 @@ export function AppSidebar() {
                               session.user?.image ??
                               `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${session.user?.email}`
                             }
-                            alt={"avatar de l'utilisateur"}
+                            alt={"user avatar"}
                           />
                           <AvatarFallback>
                             {session.user?.email
@@ -237,20 +233,20 @@ export function AppSidebar() {
                       <DropdownMenuItem asChild>
                         <Link href="/account" className="flex items-center gap-2">
                           <User2 className="w-4 h-4" />
-                          Profil
+                          Profile
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Link href="/billing" className="flex items-center gap-2">
                           <CreditCard className="w-4 h-4" />
-                          Facturation
+                          Billing
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
                         <Link href="/dashboard/terms" className="flex items-center gap-2">
                           <FileText className="w-4 h-4" />
-                          Conditions d'utilisation
+                          Terms of Service
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
@@ -258,12 +254,12 @@ export function AppSidebar() {
                         className="text-red-600 cursor-pointer"
                         onClick={async () => {
                           await signOut();
-                          window.location.reload(); // Recharge la page après déconnexion
-                          // Ou alternativement pour rediriger vers la page d'accueil :
+                          window.location.reload(); // Reload page after logout
+                          // Or alternatively to redirect to home page:
                           // window.location.href = "/";
                         }}
                       >
-                        Déconnexion
+                        Sign Out
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -275,7 +271,7 @@ export function AppSidebar() {
                     <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
                       <User2 className="w-4 h-4" />
                     </div>
-                    <span>Se connecter</span>
+                    <span>Sign In</span>
                   </SidebarMenuButton>
                 )}
               </SidebarMenuItem>

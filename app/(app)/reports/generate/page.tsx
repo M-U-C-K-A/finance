@@ -9,6 +9,11 @@ import { Badge } from "@/components/ui/badge";
 import { Coins, FileText, AlertTriangle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
+export const metadata = {
+  title: 'Generate Report - FinAnalytics',
+  description: 'Generate detailed financial analysis reports for stocks, ETFs, and market indices.',
+};
+
 export default async function GenerateReportPage() {
   const user = await getUser();
   
@@ -39,16 +44,16 @@ export default async function GenerateReportPage() {
   const processingReports = userInfo.reports;
 
   return (
-    <div className="container mx-auto max-w-4xl py-8 px-4">
-      <div className="space-y-6">
+    <div className="w-full max-w-none py-8 px-6">
+      <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
             <FileText className="h-8 w-8" />
-            Générer un rapport
+            Generate Report
           </h1>
           <p className="text-muted-foreground mt-2">
-            Créez des analyses financières détaillées avec notre IA spécialisée.
+            Create detailed financial analysis with our specialized AI.
           </p>
         </div>
 
@@ -57,24 +62,24 @@ export default async function GenerateReportPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Coins className="h-5 w-5" />
-              Statut des crédits
+              Credit Status
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold">{creditsInfo.balance}</div>
-                <p className="text-sm text-muted-foreground">Crédits disponibles</p>
+                <p className="text-sm text-muted-foreground">Available Credits</p>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold">{creditsInfo.monthlyCredits}</div>
-                <p className="text-sm text-muted-foreground">Crédits mensuels</p>
+                <p className="text-sm text-muted-foreground">Monthly Credits</p>
               </div>
               <div className="text-center">
                 <Badge variant={creditsInfo.isActiveSubscription ? "default" : "secondary"}>
                   {creditsInfo.plan}
                 </Badge>
-                <p className="text-sm text-muted-foreground mt-1">Plan actuel</p>
+                <p className="text-sm text-muted-foreground mt-1">Current Plan</p>
               </div>
             </div>
 
@@ -82,10 +87,10 @@ export default async function GenerateReportPage() {
               <Alert className="mt-4">
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  Attention : Il vous reste moins de 40 crédits. 
+                  Warning: You have less than 40 credits remaining. 
                   <a href="/plan/buy-credits" className="font-medium underline ml-1">
-                    Rechargez votre solde
-                  </a> pour continuer à générer des rapports.
+                    Recharge your balance
+                  </a> to continue generating reports.
                 </AlertDescription>
               </Alert>
             )}
@@ -96,9 +101,9 @@ export default async function GenerateReportPage() {
         {processingReports.length > 0 && (
           <Card>
             <CardHeader>
-              <CardTitle>Rapports en cours de traitement</CardTitle>
+              <CardTitle>Reports in Progress</CardTitle>
               <CardDescription>
-                {processingReports.length} rapport(s) en cours de génération
+                {processingReports.length} report(s) being generated
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -111,7 +116,7 @@ export default async function GenerateReportPage() {
                         {report.assetSymbol}
                       </Badge>
                     </div>
-                    <Badge variant="outline">En cours...</Badge>
+                    <Badge variant="outline">Processing...</Badge>
                   </div>
                 ))}
               </div>
@@ -122,9 +127,9 @@ export default async function GenerateReportPage() {
         {/* Formulaire de génération */}
         <Card>
           <CardHeader>
-            <CardTitle>Nouveau rapport</CardTitle>
+            <CardTitle>New Report</CardTitle>
             <CardDescription>
-              Configurez votre analyse financière personnalisée
+              Configure your personalized financial analysis
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -138,30 +143,30 @@ export default async function GenerateReportPage() {
         {/* Tarification */}
         <Card>
           <CardHeader>
-            <CardTitle>Tarification</CardTitle>
+            <CardTitle>Pricing</CardTitle>
             <CardDescription>
-              Coût en crédits des différentes options
+              Credit cost for different options
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center p-4 border rounded">
                 <div className="text-lg font-semibold">20 crédits</div>
-                <p className="text-sm text-muted-foreground">Rapport de base</p>
+                <p className="text-sm text-muted-foreground">Basic Report</p>
               </div>
               <div className="text-center p-4 border rounded">
                 <div className="text-lg font-semibold">+12 crédits</div>
-                <p className="text-sm text-muted-foreground">Module benchmark</p>
+                <p className="text-sm text-muted-foreground">Benchmark Module</p>
               </div>
               <div className="text-center p-4 border rounded">
                 <div className="text-lg font-semibold">+5 crédits</div>
-                <p className="text-sm text-muted-foreground">Export API (CSV)</p>
+                <p className="text-sm text-muted-foreground">API Export (CSV)</p>
               </div>
             </div>
             <div className="mt-4 text-center">
-              <div className="text-xl font-bold">37 crédits maximum</div>
+              <div className="text-xl font-bold">37 credits maximum</div>
               <p className="text-sm text-muted-foreground">
-                Pour un rapport complet avec toutes les options
+                For a complete report with all options
               </p>
             </div>
           </CardContent>

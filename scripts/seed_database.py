@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script pour peupler la base de données FinAnalytics avec des données de test.
+Script to populate FinAnalytics database with realistic test data.
 Usage: python scripts/seed_database.py
 """
 
@@ -11,36 +11,33 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import uuid
 from typing import List, Dict, Any
+import string
 
-# Configuration de la base de données
+# Database configuration
 DATABASE_URL = "postgresql://admin:@localhost:5433/finance"
 
-# Données de test
+def generate_better_auth_id():
+    """Generate ID similar to Better Auth format (24-character string)"""
+    chars = string.ascii_letters + string.digits
+    return ''.join(random.choice(chars) for _ in range(24))
+
+def generate_cuid():
+    """Generate CUID-like ID for other entities"""
+    chars = string.ascii_lowercase + string.digits
+    return 'c' + ''.join(random.choice(chars) for _ in range(24))
+
+# Realistic test users data
 USERS_DATA = [
-    {
-        "id": "user_001",
-        "name": "Alice Dupont", 
-        "email": "alice@example.com",
-        "role": "USER"
-    },
-    {
-        "id": "user_002", 
-        "name": "Bob Martin",
-        "email": "bob@example.com", 
-        "role": "USER"
-    },
-    {
-        "id": "user_003",
-        "name": "Claire Bernard", 
-        "email": "claire@example.com",
-        "role": "USER"
-    },
-    {
-        "id": "user_004",
-        "name": "David Leroy",
-        "email": "david@example.com", 
-        "role": "USER"
-    }
+    {"name": "John Smith", "email": "john.smith@example.com", "role": "USER"},
+    {"name": "Sarah Johnson", "email": "sarah.j@example.com", "role": "USER"},
+    {"name": "Michael Brown", "email": "m.brown@example.com", "role": "USER"},
+    {"name": "Emily Davis", "email": "emily.davis@example.com", "role": "USER"},
+    {"name": "David Wilson", "email": "d.wilson@example.com", "role": "USER"},
+    {"name": "Lisa Garcia", "email": "lisa.garcia@example.com", "role": "USER"},
+    {"name": "Robert Miller", "email": "r.miller@example.com", "role": "USER"},
+    {"name": "Jennifer Taylor", "email": "jen.taylor@example.com", "role": "USER"},
+    {"name": "Christopher Lee", "email": "chris.lee@example.com", "role": "USER"},
+    {"name": "Amanda White", "email": "amanda.w@example.com", "role": "USER"},
 ]
 
 SUBSCRIPTION_PLANS = ["FREE", "STARTER", "PROFESSIONAL", "ENTERPRISE"]
@@ -50,30 +47,22 @@ REPORT_STATUSES = ["PENDING", "PROCESSING", "COMPLETED", "FAILED"]
 
 SYMBOLS = [
     "AAPL", "MSFT", "GOOGL", "AMZN", "TSLA", "META", "NVDA", "NFLX",
-    "SPY", "QQQ", "VTI", "IVV", 
-    "CAC40", "DAX", "FTSE", "NIKKEI",
-    "EUR/USD", "GBP/USD", "BTC/USD"
+    "SPY", "QQQ", "VTI", "IVV", "VOO", "VEA", "VWO",
+    "CAC40", "DAX", "FTSE", "NIKKEI", "S&P500",
+    "BTC", "ETH", "EUR/USD", "GBP/USD"
 ]
 
 def connect_db():
-    """Connexion à la base de données PostgreSQL"""
+    """Connect to PostgreSQL database"""
     try:
         conn = psycopg2.connect(DATABASE_URL)
         return conn
     except Exception as e:
-        print(f"Erreur de connexion à la base de données: {e}")
+        print(f"Database connection error: {e}")
         return None
 
-def generate_user_id():
-    """Génère un ID utilisateur unique"""
-    return f"user_{uuid.uuid4().hex[:8]}"
-
-def generate_report_id():
-    """Génère un ID de rapport unique"""
-    return f"rpt_{uuid.uuid4().hex[:8]}"
-
-def seed_users(conn, count: int = 10):
-    """Peuple la table users avec des utilisateurs de test"""
+def seed_users(conn, count: int = 15):
+    """Populate users table with test users"""
     cursor = conn.cursor()
     
     users = []
@@ -82,52 +71,53 @@ def seed_users(conn, count: int = 10):
             user_data = USERS_DATA[i].copy()
         else:
             user_data = {
-                "id": generate_user_id(),
-                "name": f"User {i+1}",
-                "email": f"user{i+1}@test.com",
+                "name": f"Test User {i+1}",
+                "email": f"testuser{i+1}@finanalytics.com",
                 "role": "USER"
             }
         
+        user_id = generate_better_auth_id()
         user_data.update({
+            "id": user_id,
             "emailVerified": random.choice([True, False]),
-            "image": f"https://i.pravatar.cc/150?u={user_data['email']}",
+            "image": f"https://api.dicebear.com/9.x/bottts-neutral/svg?seed={user_data['email']}",
             "createdAt": datetime.now() - timedelta(days=random.randint(1, 365)),
             "updatedAt": datetime.now()
         })
         users.append(user_data)
     
-    # Insérer les utilisateurs
+    # Insert users
     for user in users:
         try:
             cursor.execute("""
                 INSERT INTO "user" (id, name, email, "emailVerified", image, role, "createdAt", "updatedAt")
                 VALUES (%(id)s, %(name)s, %(email)s, %(emailVerified)s, %(image)s, %(role)s, %(createdAt)s, %(updatedAt)s)
-                ON CONFLICT (id) DO NOTHING
+                ON CONFLICT (email) DO NOTHING
             """, user)
         except Exception as e:
-            print(f"Erreur lors de l'insertion de l'utilisateur {user['id']}: {e}")
+            print(f"Error inserting user {user['email']}: {e}")
     
     conn.commit()
-    print(f"✅ {len(users)} utilisateurs créés")
+    print(f"✅ {len(users)} users created")
     return [user["id"] for user in users]
 
 def seed_subscriptions(conn, user_ids: List[str]):
-    """Peuple la table subscriptions"""
+    """Populate subscriptions table"""
     cursor = conn.cursor()
     
     for user_id in user_ids:
-        # 70% des utilisateurs ont un abonnement
-        if random.random() < 0.7:
+        # 60% of users have a subscription
+        if random.random() < 0.6:
             plan = random.choice(["STARTER", "PROFESSIONAL", "ENTERPRISE"])
             api_access = plan in ["PROFESSIONAL", "ENTERPRISE"]
             
             subscription = {
-                "id": f"sub_{uuid.uuid4().hex[:8]}",
+                "id": generate_cuid(),
                 "userId": user_id,
                 "plan": plan,
                 "billingCycle": "MONTHLY",
                 "apiAccess": api_access,
-                "isActive": random.choice([True, True, True, False]),  # 75% actifs
+                "isActive": random.choice([True, True, True, False]),  # 75% active
                 "startedAt": datetime.now() - timedelta(days=random.randint(1, 90)),
                 "renewsAt": datetime.now() + timedelta(days=30),
                 "createdAt": datetime.now(),
@@ -144,22 +134,52 @@ def seed_subscriptions(conn, user_ids: List[str]):
                     ON CONFLICT ("userId") DO NOTHING
                 """, subscription)
             except Exception as e:
-                print(f"Erreur lors de l'insertion de l'abonnement pour {user_id}: {e}")
+                print(f"Error inserting subscription for {user_id}: {e}")
     
     conn.commit()
-    print("✅ Abonnements créés")
+    print("✅ Subscriptions created")
 
 def seed_credits(conn, user_ids: List[str]):
-    """Peuple la table credits"""
+    """Populate credits table - ENSURES ALL users have a credits entry"""
     cursor = conn.cursor()
     
+    # Get subscription info to determine appropriate credit amounts
+    cursor.execute("""
+        SELECT "userId", plan, "isActive" FROM subscriptions 
+        WHERE "userId" = ANY(%s)
+    """, (user_ids,))
+    
+    subscriptions = {row[0]: {"plan": row[1], "isActive": row[2]} for row in cursor.fetchall()}
+    
     for user_id in user_ids:
+        # Determine credits based on subscription
+        subscription = subscriptions.get(user_id)
+        
+        if subscription and subscription["isActive"]:
+            plan = subscription["plan"]
+            if plan == "STARTER":
+                balance = random.randint(50, 150)
+                monthly_credits = 100
+            elif plan == "PROFESSIONAL":
+                balance = random.randint(200, 600)
+                monthly_credits = 500
+            elif plan == "ENTERPRISE":
+                balance = random.randint(800, 2500)
+                monthly_credits = 2000
+            else:
+                balance = random.randint(0, 50)
+                monthly_credits = 0
+        else:
+            # Free users or inactive subscriptions
+            balance = random.randint(0, 100)
+            monthly_credits = 0
+        
         credits = {
-            "id": f"crd_{uuid.uuid4().hex[:8]}",
+            "id": generate_cuid(),
             "userId": user_id,
-            "balance": random.randint(0, 500),
-            "monthlyCredits": random.choice([0, 100, 500, 2000]),
-            "lastRecharge": datetime.now() - timedelta(days=random.randint(1, 30)) if random.random() < 0.8 else None,
+            "balance": balance,
+            "monthlyCredits": monthly_credits,
+            "lastRecharge": datetime.now() - timedelta(days=random.randint(1, 30)) if monthly_credits > 0 else None,
             "createdAt": datetime.now(),
             "updatedAt": datetime.now()
         }
@@ -169,16 +189,20 @@ def seed_credits(conn, user_ids: List[str]):
                 INSERT INTO credits 
                 (id, "userId", balance, "monthlyCredits", "lastRecharge", "createdAt", "updatedAt")
                 VALUES (%(id)s, %(userId)s, %(balance)s, %(monthlyCredits)s, %(lastRecharge)s, %(createdAt)s, %(updatedAt)s)
-                ON CONFLICT ("userId") DO NOTHING
+                ON CONFLICT ("userId") DO UPDATE SET
+                    balance = EXCLUDED.balance,
+                    "monthlyCredits" = EXCLUDED."monthlyCredits",
+                    "lastRecharge" = EXCLUDED."lastRecharge",
+                    "updatedAt" = EXCLUDED."updatedAt"
             """, credits)
         except Exception as e:
-            print(f"Erreur lors de l'insertion des crédits pour {user_id}: {e}")
+            print(f"Error inserting credits for {user_id}: {e}")
     
     conn.commit()
-    print("✅ Crédits créés")
+    print(f"✅ Credits created for ALL {len(user_ids)} users")
 
 def seed_credit_transactions(conn, user_ids: List[str], count: int = 50):
-    """Peuple la table credit_transactions"""
+    """Populate credit_transactions table"""
     cursor = conn.cursor()
     
     transaction_types = ["SUBSCRIPTION_RECHARGE", "PACK_PURCHASE", "REPORT_USAGE", "BONUS"]
@@ -189,16 +213,18 @@ def seed_credit_transactions(conn, user_ids: List[str], count: int = 50):
         
         if transaction_type in ["SUBSCRIPTION_RECHARGE", "PACK_PURCHASE", "BONUS"]:
             amount = random.choice([100, 500, 2000])
+            description = f"{transaction_type.replace('_', ' ').title()} - {amount} credits"
         else:  # REPORT_USAGE
-            amount = -random.choice([20, 32, 37])  # Coût des rapports
+            amount = -random.choice([20, 32, 37])  # Cost of reports
+            description = f"Report generation cost - {abs(amount)} credits"
         
         transaction = {
-            "id": f"txn_{uuid.uuid4().hex[:8]}",
+            "id": generate_cuid(),
             "userId": user_id,
             "type": transaction_type,
             "amount": amount,
-            "description": f"{transaction_type.replace('_', ' ').title()} - {abs(amount)} crédits",
-            "balanceAfter": random.randint(0, 500),
+            "description": description,
+            "balanceAfter": random.randint(0, 1000),
             "createdAt": datetime.now() - timedelta(days=random.randint(1, 90))
         }
         
@@ -209,13 +235,13 @@ def seed_credit_transactions(conn, user_ids: List[str], count: int = 50):
                 VALUES (%(id)s, %(userId)s, %(type)s, %(amount)s, %(description)s, %(balanceAfter)s, %(createdAt)s)
             """, transaction)
         except Exception as e:
-            print(f"Erreur lors de l'insertion de la transaction: {e}")
+            print(f"Error inserting transaction: {e}")
     
     conn.commit()
-    print(f"✅ {count} transactions de crédits créées")
+    print(f"✅ {count} credit transactions created")
 
 def seed_reports(conn, user_ids: List[str], count: int = 30):
-    """Peuple la table reports"""
+    """Populate reports table"""
     cursor = conn.cursor()
     
     for _ in range(count):
@@ -224,32 +250,42 @@ def seed_reports(conn, user_ids: List[str], count: int = 30):
         asset_type = random.choice(ASSET_TYPES)
         status = random.choice(REPORT_STATUSES)
         
+        include_benchmark = random.choice([True, False])
+        include_api_export = random.choice([True, False])
+        
+        # Calculate realistic cost
+        cost = 20  # Base cost
+        if include_benchmark:
+            cost += 12
+        if include_api_export:
+            cost += 5
+        
         report = {
-            "id": generate_report_id(),
+            "id": generate_cuid(),
             "userId": user_id,
-            "title": f"Analyse {symbol} - {datetime.now().strftime('%B %Y')}",
+            "title": f"{symbol} Financial Analysis - {datetime.now().strftime('%B %Y')}",
             "assetType": asset_type,
             "assetSymbol": symbol,
             "reportType": random.choice(REPORT_TYPES),
-            "includeBenchmark": random.choice([True, False]),
-            "includeApiExport": random.choice([True, False]),
-            "creditsCost": random.choice([20, 32, 37]),
+            "includeBenchmark": include_benchmark,
+            "includeApiExport": include_api_export,
+            "creditsCost": cost,
             "status": status,
             "createdAt": datetime.now() - timedelta(days=random.randint(1, 30)),
             "updatedAt": datetime.now()
         }
         
-        # Ajouter des dates selon le statut
+        # Add dates based on status
         if status in ["COMPLETED", "FAILED"]:
             report["processingStartedAt"] = report["createdAt"] + timedelta(minutes=random.randint(1, 5))
             report["completedAt"] = report["processingStartedAt"] + timedelta(minutes=random.randint(3, 15))
             
             if status == "COMPLETED":
-                report["pdfPath"] = f"/reports/{report['id']}-{symbol.lower()}.pdf"
+                report["pdfPath"] = f"/reports/{report['id']}-{symbol.lower()}-analysis.pdf"
                 if report["includeApiExport"]:
-                    report["csvPath"] = f"/reports/{report['id']}-{symbol.lower()}.csv"
+                    report["csvPath"] = f"/reports/{report['id']}-{symbol.lower()}-data.csv"
             else:
-                report["failureReason"] = "Erreur lors de l'analyse des données"
+                report["failureReason"] = "Failed to fetch market data for analysis"
         
         elif status == "PROCESSING":
             report["processingStartedAt"] = report["createdAt"] + timedelta(minutes=random.randint(1, 5))
@@ -267,47 +303,105 @@ def seed_reports(conn, user_ids: List[str], count: int = 30):
                         %(createdAt)s, %(updatedAt)s)
             """, report)
         except Exception as e:
-            print(f"Erreur lors de l'insertion du rapport: {e}")
+            print(f"Error inserting report: {e}")
     
     conn.commit()
-    print(f"✅ {count} rapports créés")
+    print(f"✅ {count} reports created")
+
+def create_admin_user(conn):
+    """Create or update admin user with the ID from environment"""
+    admin_id = os.getenv("ADMIN_USER_ID")
+    if not admin_id:
+        print("⚠️  ADMIN_USER_ID not found in environment, skipping admin user creation")
+        return
+    
+    cursor = conn.cursor()
+    
+    admin_user = {
+        "id": admin_id,
+        "name": "Admin User",
+        "email": "admin@finanalytics.com",
+        "emailVerified": True,
+        "image": "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=admin",
+        "role": "ADMIN",
+        "createdAt": datetime.now(),
+        "updatedAt": datetime.now()
+    }
+    
+    try:
+        cursor.execute("""
+            INSERT INTO "user" (id, name, email, "emailVerified", image, role, "createdAt", "updatedAt")
+            VALUES (%(id)s, %(name)s, %(email)s, %(emailVerified)s, %(image)s, %(role)s, %(createdAt)s, %(updatedAt)s)
+            ON CONFLICT (id) DO UPDATE SET
+                role = EXCLUDED.role,
+                "updatedAt" = EXCLUDED."updatedAt"
+        """, admin_user)
+        
+        # Ensure admin has credits
+        cursor.execute("""
+            INSERT INTO credits (id, "userId", balance, "monthlyCredits", "createdAt", "updatedAt")
+            VALUES (%(id)s, %(userId)s, %(balance)s, %(monthlyCredits)s, %(createdAt)s, %(updatedAt)s)
+            ON CONFLICT ("userId") DO UPDATE SET
+                balance = GREATEST(credits.balance, 1000),
+                "updatedAt" = EXCLUDED."updatedAt"
+        """, {
+            "id": generate_cuid(),
+            "userId": admin_id,
+            "balance": 1000,
+            "monthlyCredits": 0,
+            "createdAt": datetime.now(),
+            "updatedAt": datetime.now()
+        })
+        
+        conn.commit()
+        print(f"✅ Admin user created/updated with ID: {admin_id}")
+        
+    except Exception as e:
+        print(f"Error creating admin user: {e}")
+        conn.rollback()
 
 def main():
-    """Fonction principale"""
-    print("🚀 Début du peuplement de la base de données FinAnalytics")
+    """Main function"""
+    print("🚀 Starting FinAnalytics database seeding")
     
     conn = connect_db()
     if not conn:
-        print("❌ Impossible de se connecter à la base de données")
+        print("❌ Unable to connect to database")
         return
     
     try:
-        # Seeder les utilisateurs
+        # Create admin user first
+        create_admin_user(conn)
+        
+        # Seed test users
         user_ids = seed_users(conn, count=15)
         
-        # Seeder les abonnements
+        # Seed subscriptions
         seed_subscriptions(conn, user_ids)
         
-        # Seeder les crédits
+        # Seed credits (ENSURES ALL users have credits)
         seed_credits(conn, user_ids)
         
-        # Seeder les transactions de crédits
-        seed_credit_transactions(conn, user_ids, count=100)
+        # Seed credit transactions
+        seed_credit_transactions(conn, user_ids, count=80)
         
-        # Seeder les rapports
-        seed_reports(conn, user_ids, count=50)
+        # Seed reports
+        seed_reports(conn, user_ids, count=40)
         
-        print("\n✅ Peuplement de la base de données terminé avec succès!")
-        print(f"📊 Données créées:")
-        print(f"   - {len(user_ids)} utilisateurs")
-        print(f"   - ~10 abonnements")
-        print(f"   - {len(user_ids)} comptes crédits")
-        print(f"   - 100 transactions")
-        print(f"   - 50 rapports")
+        print("\n✅ Database seeding completed successfully!")
+        print(f"📊 Data created:")
+        print(f"   - 1 admin user")
+        print(f"   - {len(user_ids)} test users")
+        print(f"   - ~9 subscriptions")
+        print(f"   - {len(user_ids) + 1} credit accounts (ALL users)")
+        print(f"   - 80 credit transactions")
+        print(f"   - 40 reports")
+        print(f"\n🔑 Admin ID: {os.getenv('ADMIN_USER_ID', 'Not set')}")
         
     except Exception as e:
-        print(f"❌ Erreur lors du peuplement: {e}")
+        print(f"❌ Error during seeding: {e}")
         conn.rollback()
+        raise
     
     finally:
         conn.close()

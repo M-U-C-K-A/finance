@@ -27,11 +27,11 @@ interface StatsCardsProps {
 
 const getPlanColor = (plan: string) => {
   switch (plan) {
-    case 'FREE': return 'bg-gray-100 text-gray-800';
-    case 'STARTER': return 'bg-blue-100 text-blue-800';
-    case 'PROFESSIONAL': return 'bg-purple-100 text-purple-800';
-    case 'ENTERPRISE': return 'bg-amber-100 text-amber-800';
-    default: return 'bg-gray-100 text-gray-800';
+    case 'FREE': return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
+    case 'STARTER': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+    case 'PROFESSIONAL': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
+    case 'ENTERPRISE': return 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200';
+    default: return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
   }
 };
 
@@ -63,7 +63,7 @@ export function StatsCards({ creditsInfo, completedReports }: StatsCardsProps) {
               {creditsInfo.isActiveSubscription ? 'Actif' : 'Inactif'}
             </Badge>
             {creditsInfo.apiAccess && (
-              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800">
                 <Zap className="h-3 w-3 mr-1" />
                 API
               </Badge>

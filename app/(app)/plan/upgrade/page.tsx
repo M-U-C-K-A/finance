@@ -2,6 +2,7 @@
 "use client"
 
 import { useState } from "react"
+import { toast } from "sonner"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -54,6 +55,37 @@ export default function SubscriptionsPage() {
 }
 
 function SubscriptionPlans() {
+  const [isLoading, setIsLoading] = useState<string | null>(null);
+
+  const handleSubscribe = async (planName: string) => {
+    if (planName === "Enterprise") {
+      // For enterprise, just show a message or redirect to contact
+      toast.info("Please contact sales for Enterprise plan pricing and setup.");
+      return;
+    }
+
+    setIsLoading(planName);
+    try {
+      const response = await fetch('/api/checkout/subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: planName.toUpperCase() })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        window.location.href = data.checkout_url;
+      } else {
+        const error = await response.json();
+        toast.error(error.message || 'Failed to create checkout');
+      }
+    } catch (error) {
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(null);
+    }
+  };
+
   const tiers = [
     {
       name: "Starter",
@@ -148,8 +180,10 @@ function SubscriptionPlans() {
               <Button
                 className="gap-4 mt-4"
                 variant={tier.highlighted ? "default" : "outline"}
+                onClick={() => handleSubscribe(tier.name)}
+                disabled={isLoading === tier.name}
               >
-                {tier.cta}
+                {isLoading === tier.name ? 'Processing...' : tier.cta}
                 {tier.name === "Enterprise" ? (
                   <PhoneCall className="w-4 h-4" />
                 ) : (
@@ -165,6 +199,33 @@ function SubscriptionPlans() {
 }
 
 function CreditPacks() {
+  const [isLoading, setIsLoading] = useState<string | null>(null);
+
+  const handlePurchase = async (packName: string) => {
+    const credits = parseInt(packName.split(' ')[0]); // Extract credits number from pack name
+    
+    setIsLoading(packName);
+    try {
+      const response = await fetch('/api/checkout/credits', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credits })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        window.location.href = data.checkout_url;
+      } else {
+        const error = await response.json();
+        toast.error(error.message || 'Failed to create checkout');
+      }
+    } catch (error) {
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(null);
+    }
+  };
+
   const packs = [
     {
       name: "100 credits",
@@ -246,8 +307,14 @@ function CreditPacks() {
                   </div>
                 ))}
               </div>
-              <Button className="gap-4 mt-4" variant={pack.highlighted ? "default" : "outline"}>
-                Buy now <MoveRight className="w-4 h-4" />
+              <Button 
+                className="gap-4 mt-4" 
+                variant={pack.highlighted ? "default" : "outline"}
+                onClick={() => handlePurchase(pack.name)}
+                disabled={isLoading === pack.name}
+              >
+                {isLoading === pack.name ? 'Processing...' : 'Buy now'} 
+                <MoveRight className="w-4 h-4" />
               </Button>
             </div>
           </CardContent>

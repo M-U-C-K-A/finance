@@ -2,11 +2,13 @@
 // 6. Page historique - reports/history/page.tsx
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import { ReportsHistorySkeleton } from "@/components/reports/reports-history-skeleton";
 import {
   Table,
   TableBody,
@@ -36,36 +38,69 @@ import {
   Crown
 } from "lucide-react";
 
-const mockReportHistory: ReportRequest[] = [
-  {
-    id: '1',
-    assetId: '1',
-    frequency: 'monthly',
-    type: 'one-time',
-    status: 'completed',
-    paymentMethod: 'subscription',
-    createdAt: '2024-08-10T10:00:00Z',
-    completedAt: '2024-08-10T10:15:00Z',
-    downloadUrl: '/reports/apple-monthly-aug2024.pdf',
-    config: {}
-  },
-  {
-    id: '2',
-    assetId: '2',
-    frequency: 'weekly',
-    type: 'recurring',
-    status: 'processing',
-    paymentMethod: 'credits',
-    creditsUsed: 25,
-    createdAt: '2024-08-13T08:30:00Z',
-    config: {}
-  }
-];
+interface ReportRequest {
+  id: string;
+  assetId: string;
+  frequency: string;
+  type: string;
+  assetName?: string;
+  assetSymbol?: string;
+  assetType?: string;
+  reportType?: string;
+  date?: string;
+  status: string;
+  creditsUsed?: number;
+  paymentMethod: string;
+  createdAt: string;
+  completedAt?: string;
+  downloadUrl?: string;
+  config: Record<string, unknown>;
+}
+
+
+// Function to map asset symbols to company domains
+const getCompanyDomain = (symbol: string): string => {
+  const domains: Record<string, string> = {
+    'AAPL': 'apple.com',
+    'MSFT': 'microsoft.com',
+    'GOOGL': 'google.com',
+    'AMZN': 'amazon.com',
+    'TSLA': 'tesla.com',
+    'META': 'meta.com',
+    'NFLX': 'netflix.com',
+    'NVDA': 'nvidia.com',
+    'CRM': 'salesforce.com',
+    'ORCL': 'oracle.com',
+  };
+  return domains[symbol] || `${symbol.toLowerCase()}.com`;
+};
 
 export default function ReportHistoryPage() {
+  const [reports, setReports] = useState<ReportRequest[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [paymentFilter, setPaymentFilter] = useState<string>('all');
+
+  useEffect(() => {
+    fetchReports();
+  }, []);
+
+  const fetchReports = async () => {
+    try {
+      const response = await fetch('/api/reports/history');
+      if (response.ok) {
+        const data = await response.json();
+        setReports(data.reports || []);
+      } else {
+        toast.error("Failed to fetch reports");
+      }
+    } catch {
+      toast.error("Error fetching reports");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -76,6 +111,10 @@ export default function ReportHistoryPage() {
       default: return null;
     }
   };
+
+  if (loading) {
+    return <ReportsHistorySkeleton />;
+  }
 
   return (
     <div className="space-y-6 p-8">
@@ -90,14 +129,14 @@ export default function ReportHistoryPage() {
       <div className="grid md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold">{mockReportHistory.length}</div>
+            <div className="text-2xl font-bold">{reports.length}</div>
             <p className="text-sm text-muted-foreground">Total Reports</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-green-600">
-              {mockReportHistory.filter(r => r.status === 'completed').length}
+              {reports.filter(r => r.status === 'completed').length}
             </div>
             <p className="text-sm text-muted-foreground">Completed</p>
           </CardContent>
@@ -105,7 +144,7 @@ export default function ReportHistoryPage() {
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-blue-600">
-              {mockReportHistory.filter(r => r.status === 'processing').length}
+              {reports.filter(r => r.status === 'processing').length}
             </div>
             <p className="text-sm text-muted-foreground">Processing</p>
           </CardContent>
@@ -113,7 +152,7 @@ export default function ReportHistoryPage() {
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-orange-600">
-              {mockReportHistory.filter(r => r.paymentMethod === 'credits').reduce((sum, r) => sum + (r.creditsUsed || 0), 0)}
+              {reports.filter(r => r.paymentMethod === 'credits').reduce((sum, r) => sum + (r.creditsUsed || 0), 0)}
             </div>
             <p className="text-sm text-muted-foreground">Credits Used</p>
           </CardContent>
@@ -184,19 +223,23 @@ export default function ReportHistoryPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockReportHistory.map((report) => (
+              {reports.map((report) => (
                 <TableRow key={report.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <img 
-                        src={`https://logo.clearbit.com/${report.assetId === '1' ? 'apple.com' : 'tesla.com'}`}
-                        alt="Asset"
-                        className="w-8 h-8 rounded"
+                        src={`https://logo.clearbit.com/${getCompanyDomain(report.assetSymbol || '')}`}
+                        alt={report.assetSymbol}
+                        className="w-8 h-8 rounded object-contain bg-white dark:bg-gray-800 p-1 border dark:border-gray-700"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://ui-avatars.com/api/?name=${report.assetSymbol}&background=3b82f6&color=fff&size=32`;
+                        }}
                       />
                       <div>
-                        <div className="font-medium">{report.assetId === '1' ? 'AAPL' : 'TSLA'}</div>
+                        <div className="font-medium">{report.assetSymbol || 'N/A'}</div>
                         <div className="text-sm text-muted-foreground">
-                          {report.assetId === '1' ? 'Apple Inc.' : 'Tesla Inc.'}
+                          {report.assetName || report.title}
                         </div>
                       </div>
                     </div>

@@ -22,7 +22,7 @@ export const POST = createApiHandler(
       // Validation des données
       if (!body.title || !body.assetType || !body.assetSymbol) {
         return Response.json(
-          { error: "Données manquantes", message: "Titre, type d'actif et symbole requis" },
+          { error: "Missing data", message: "Title, asset type and symbol are required" },
           { status: 400 }
         );
       }
@@ -32,6 +32,24 @@ export const POST = createApiHandler(
         includeBenchmark: body.includeBenchmark,
         includeApiExport: body.includeApiExport
       });
+
+      // Vérifier si l'utilisateur a assez de crédits
+      const userCredits = await prisma.credits.findUnique({
+        where: { userId: user.id }
+      });
+
+      if (!userCredits || userCredits.balance < creditsCost) {
+        return Response.json(
+          { 
+            error: "Insufficient credits", 
+            message: `You need ${creditsCost} credits but only have ${userCredits?.balance || 0}`,
+            requiredCredits: creditsCost,
+            currentCredits: userCredits?.balance || 0,
+            buyCreditsUrl: "/plan/buy-credits"
+          },
+          { status: 402 }
+        );
+      }
 
       // Création du rapport dans la base
       const report = await prisma.$transaction(async (tx) => {
@@ -104,7 +122,7 @@ export const POST = createApiHandler(
       return Response.json({
         success: true,
         reportId: report.id,
-        message: "Rapport mis en file de génération",
+        message: "Report queued for generation",
         estimatedTime: "3-10 minutes",
         creditsCost
       });
@@ -116,7 +134,7 @@ export const POST = createApiHandler(
         return Response.json(
           { 
             error: "Payment Required", 
-            message: "Crédits insuffisants",
+            message: "Insufficient credits",
             buyCreditsUrl: "/plan/buy-credits"
           },
           { status: 402 }
@@ -124,13 +142,9 @@ export const POST = createApiHandler(
       }
 
       return Response.json(
-        { error: "Internal Server Error", message: "Erreur lors de la génération" },
+        { error: "Internal Server Error", message: "Error during generation" },
         { status: 500 }
       );
     }
-  },
-  {
-    requireCredits: true,
-    reportOptions: {} // Sera calculé dynamiquement dans le handler
   }
 );

@@ -26,6 +26,25 @@ import {
   Trash2
 } from "lucide-react";
 
+interface RecurringReport {
+  id: string;
+  assetId: string;
+  frequency: string;
+  isActive: boolean;
+  assetName?: string;
+  assetSymbol?: string;
+  assetType?: string;
+  reportType?: string;
+  nextRun?: string;
+  nextRunAt?: string;
+  lastRun?: string;
+  creditsPerRun?: number;
+  totalReports?: number;
+  createdAt: string;
+  config?: Record<string, unknown>;
+  paymentMethod?: string;
+}
+
 const mockRecurringReports: RecurringReport[] = [
   {
     id: '1',
@@ -169,12 +188,12 @@ export default function RecurringReportsPage() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      {new Date(report.nextRunAt).toLocaleDateString('fr-FR', {
+                      {report.nextRunAt ? new Date(report.nextRunAt).toLocaleDateString('fr-FR', {
                         day: '2-digit',
                         month: '2-digit',
                         hour: '2-digit',
                         minute: '2-digit'
-                      })}
+                      }) : 'N/A'}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">

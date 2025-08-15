@@ -4,6 +4,7 @@
 
 import { prisma } from "./prisma";
 import { SubscriptionPlan, TransactionType } from "@prisma/client";
+import { ensureUserHasCredits } from "./user-utils";
 
 // Coûts selon AGENT.md
 export const CREDIT_COSTS = {
@@ -70,9 +71,11 @@ export async function hasApiAccess(userId: string): Promise<boolean> {
 }
 
 /**
- * Récupérer le nombre de crédits actuels d'un utilisateur
+ * Get current user credits count
  */
 export async function getUserCredits(userId: string): Promise<number> {
+  await ensureUserHasCredits(userId); // Ensure credits entry exists
+  
   const credits = await prisma.credits.findUnique({
     where: { userId }
   });
@@ -194,9 +197,11 @@ export async function rechargeMonthlyCredits(userId: string): Promise<void> {
 }
 
 /**
- * Récupère les informations complètes de crédits et abonnement
+ * Get complete credits and subscription information
  */
 export async function getUserCreditsInfo(userId: string) {
+  await ensureUserHasCredits(userId); // Ensure credits entry exists
+  
   const [credits, subscription] = await Promise.all([
     prisma.credits.findUnique({
       where: { userId }

@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -68,8 +69,34 @@ const creditPacks = [
 export default function BuyCreditsPage() {
   const [selectedPack, setSelectedPack] = useState('medium');
   const [currentBalance] = useState(45);
+  const [isLoading, setIsLoading] = useState(false);
 
   const selectedPackData = creditPacks.find(pack => pack.id === selectedPack);
+
+  const handlePurchase = async () => {
+    if (!selectedPackData) return;
+    
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/checkout/credits', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credits: selectedPackData.credits })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        window.location.href = data.checkout_url;
+      } else {
+        const error = await response.json();
+        toast.error(error.message || 'Failed to create checkout');
+      }
+    } catch (error) {
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
 	<div className="space-y-6 p-8">
@@ -207,12 +234,17 @@ export default function BuyCreditsPage() {
 				</span>
 			  </div>
 			</div>
-			<Button className="w-full" size="lg">
+			<Button 
+			  className="w-full" 
+			  size="lg" 
+			  onClick={handlePurchase}
+			  disabled={isLoading}
+			>
 			  <Zap className="h-4 w-4 mr-2" />
-			  Purchase {selectedPackData.name}
+			  {isLoading ? 'Processing...' : `Purchase ${selectedPackData.name}`}
 			</Button>
 			<p className="text-xs text-center text-muted-foreground">
-			  Secure payment via Stripe • Credits valid for 12 months
+			  Secure payment via Polar • Credits valid for 12 months
 			</p>
 		  </CardContent>
 		</Card>

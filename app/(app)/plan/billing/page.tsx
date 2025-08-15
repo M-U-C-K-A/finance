@@ -115,15 +115,15 @@ export default function BillingPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                 <div className="text-2xl font-bold">{billingData.subscription.plan}</div>
                 <div className="text-sm text-muted-foreground">Plan actuel</div>
               </div>
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                 <div className="text-2xl font-bold">{billingData.subscription.amount}€</div>
                 <div className="text-sm text-muted-foreground">par mois</div>
               </div>
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                 <div className="text-2xl font-bold">
                   {billingData.subscription.nextBilling ? 
                     new Date(billingData.subscription.nextBilling).toLocaleDateString("fr-FR") 
@@ -161,7 +161,7 @@ export default function BillingPage() {
         <CardContent>
           <div className="space-y-4">
             {billingData?.invoices.map((invoice) => (
-              <div key={invoice.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+              <div key={invoice.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
                     <FileText className="h-5 w-5 text-primary" />

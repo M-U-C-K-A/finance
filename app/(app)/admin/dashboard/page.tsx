@@ -1,4 +1,4 @@
-// Dashboard Admin principal avec métriques globales
+// Main Admin Dashboard with global metrics
 import { isAdmin } from "@/lib/admin";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -9,12 +9,16 @@ import {
   Users, 
   FileText, 
   CreditCard, 
-  TrendingUp, 
   AlertTriangle,
   CheckCircle,
   Clock,
   DollarSign
 } from "lucide-react";
+
+export const metadata = {
+  title: 'Admin Dashboard - FinAnalytics',
+  description: 'Administrative dashboard with platform metrics and management tools.',
+};
 
 async function getAdminStats() {
   const [
@@ -46,7 +50,7 @@ async function getAdminStats() {
       _count: { plan: true },
       where: { isActive: true }
     }),
-    // Simulation des revenus (normalement calculé à partir des transactions)
+    // Revenue simulation (normally calculated from transactions)
     Promise.resolve({ monthly: 2840, total: 18650 })
   ]);
 
@@ -63,7 +67,7 @@ async function getAdminStats() {
 }
 
 export default async function AdminDashboard() {
-  // Vérification admin avec ID spécifique depuis .env
+  // Admin verification with specific ID from .env
   const adminAccess = await isAdmin();
   if (!adminAccess) {
     redirect("/dashboard");
@@ -77,54 +81,54 @@ export default async function AdminDashboard() {
     return (
       <div className="space-y-8 p-8">
         <div>
-          <h1 className="text-3xl font-bold">Panel Administrateur</h1>
-          <p className="text-muted-foreground">Vue d'ensemble de la plateforme FinAnalytics</p>
+          <h1 className="text-3xl font-bold">Admin Panel</h1>
+          <p className="text-muted-foreground">FinAnalytics platform overview</p>
         </div>
 
-        {/* Métriques principales */}
+        {/* Main metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Utilisateurs</CardTitle>
+              <CardTitle className="text-sm font-medium">Users</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.totalUsers}</div>
               <p className="text-xs text-muted-foreground">
-                {stats.recentUsers.length} nouveaux cette semaine
+                {stats.recentUsers.length} new this week
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Abonnements</CardTitle>
+              <CardTitle className="text-sm font-medium">Subscriptions</CardTitle>
               <CreditCard className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.activeSubscriptions}</div>
               <p className="text-xs text-muted-foreground">
-                {conversionRate}% taux de conversion
+                {conversionRate}% conversion rate
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Rapports</CardTitle>
+              <CardTitle className="text-sm font-medium">Reports</CardTitle>
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.totalReports}</div>
               <p className="text-xs text-muted-foreground">
-                {stats.pendingReports} en attente
+                {stats.pendingReports} pending
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Revenus (MRR)</CardTitle>
+              <CardTitle className="text-sm font-medium">Revenue (MRR)</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -137,11 +141,11 @@ export default async function AdminDashboard() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Répartition des abonnements */}
+          {/* Subscription distribution */}
           <Card>
             <CardHeader>
-              <CardTitle>Répartition des Abonnements</CardTitle>
-              <CardDescription>Distribution par plan</CardDescription>
+              <CardTitle>Subscription Distribution</CardTitle>
+              <CardDescription>Distribution by plan</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {stats.subscriptionStats.map((stat) => {
@@ -165,7 +169,6 @@ export default async function AdminDashboard() {
                     <Progress 
                       value={parseFloat(percentage)} 
                       className="h-2"
-                      style={{ '--progress-background': planColors[stat.plan as keyof typeof planColors] } as any}
                     />
                   </div>
                 );
@@ -173,11 +176,11 @@ export default async function AdminDashboard() {
             </CardContent>
           </Card>
 
-          {/* Activité récente */}
+          {/* Recent activity */}
           <Card>
             <CardHeader>
-              <CardTitle>Utilisateurs Récents</CardTitle>
-              <CardDescription>Dernières inscriptions</CardDescription>
+              <CardTitle>Recent Users</CardTitle>
+              <CardDescription>Latest registrations</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -202,11 +205,11 @@ export default async function AdminDashboard() {
           </Card>
         </div>
 
-        {/* Rapports récents */}
+        {/* Recent reports */}
         <Card>
           <CardHeader>
-            <CardTitle>Rapports Récents</CardTitle>
-            <CardDescription>Dernière activité de génération</CardDescription>
+            <CardTitle>Recent Reports</CardTitle>
+            <CardDescription>Latest generation activity</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -219,7 +222,7 @@ export default async function AdminDashboard() {
                     <div>
                       <div className="font-medium">{report.title}</div>
                       <div className="text-sm text-muted-foreground">
-                        par {report.user.name} • {report.assetSymbol}
+                        by {report.user.name} • {report.assetSymbol}
                       </div>
                     </div>
                   </div>
@@ -235,7 +238,7 @@ export default async function AdminDashboard() {
                       {report.status}
                     </Badge>
                     <div className="text-sm text-muted-foreground">
-                      {report.creditsCost} crédits
+                      {report.creditsCost} credits
                     </div>
                   </div>
                 </div>
@@ -246,15 +249,15 @@ export default async function AdminDashboard() {
       </div>
     );
     
-  } catch (error) {
+  } catch {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Card className="max-w-md">
           <CardContent className="pt-6 text-center">
             <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Accès refusé</h3>
+            <h3 className="text-lg font-semibold mb-2">Access Denied</h3>
             <p className="text-muted-foreground">
-              Vous devez avoir les droits administrateur pour accéder à cette page.
+              You must have administrator rights to access this page.
             </p>
           </CardContent>
         </Card>

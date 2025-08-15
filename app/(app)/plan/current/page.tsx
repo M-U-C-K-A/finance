@@ -137,7 +137,7 @@ export default function CurrentPlanPage() {
           </div>
 
           {/* Renouvellement */}
-          <div className="bg-gray-50 p-4 rounded-lg">
+          <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <Calendar className="h-4 w-4" />
               <span className="font-medium">Prochain renouvellement</span>

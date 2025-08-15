@@ -155,5 +155,5 @@ export const auth = betterAuth({
             enabled: true,
             maxAge: 60 * 5, // 5 minutes
         }
-    },
+    }
 });

@@ -24,10 +24,10 @@ interface AssetCardProps {
 export function AssetCard({ asset, frequency, isEnabled, onToggle, onConfigure }: AssetCardProps) {
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'stock': return 'bg-blue-100 text-blue-800';
-      case 'etf': return 'bg-green-100 text-green-800';
-      case 'index': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'stock': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+      case 'etf': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      case 'index': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
     }
   };
 
@@ -52,7 +52,7 @@ export function AssetCard({ asset, frequency, isEnabled, onToggle, onConfigure }
             <img 
               src={asset.logo} 
               alt={asset.title}
-              className="w-10 h-10 rounded-lg object-contain bg-white p-1 border"
+              className="w-10 h-10 rounded-lg object-contain bg-white dark:bg-gray-800 p-1 border dark:border-gray-700"
             />
             <div>
               <CardTitle className="text-lg">{asset.title}</CardTitle>

@@ -72,11 +72,11 @@ export default function ApiDocumentationPage() {
           <section id="quickstart" className="pt-12">
             <H2>Démarrage Rapide</H2>
             <P>Commencez en 3 étapes :</P>
-            <List type="ordered">
+            <ol>
               <li>Obtenez votre clé API dans le dashboard</li>
               <li>Configurez l'en-tête d'authentification</li>
               <li>Envoyez votre première requête</li>
-            </List>
+            </ol>
 
             <MultilineCode><Code>{`curl -X GET "https://api.finanalytics.com/v2/credits" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}</Code></MultilineCode>
