@@ -1,0 +1,80 @@
+#!/bin/bash
+# FinAnalytics PDF - Démarrage simplifié et robuste
+
+set -e
+
+# Couleurs
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo -e "${BLUE}🚀 FinAnalytics PDF System${NC}"
+echo ""
+
+# Aller dans le dossier pdf
+cd "$(dirname "$0")"
+
+# Vérifier Python
+if ! command -v python3 &> /dev/null; then
+    echo -e "${RED}❌ Python3 requis${NC}"
+    exit 1
+fi
+
+# Créer venv si nécessaire
+if [ ! -d "venv" ]; then
+    echo -e "${YELLOW}📦 Création environnement Python...${NC}"
+    python3 -m venv venv
+fi
+
+# Installer dépendances si nécessaire
+if [ ! -f "venv/.installed" ]; then
+    echo -e "${YELLOW}📦 Installation dépendances...${NC}"
+    venv/bin/pip install -q yfinance pandas psycopg2-binary reportlab matplotlib pillow requests
+    touch venv/.installed
+fi
+
+# Menu simple
+echo -e "${YELLOW}Que voulez-vous faire ?${NC}"
+echo "1) 🧪 Tester le système"
+echo "2) 📊 Scraper les données"
+echo "3) 🔄 Traiter les rapports"
+echo "4) 🚀 Lancer le daemon complet"
+echo "5) 📋 Voir le statut"
+echo "6) ❌ Quitter"
+echo ""
+
+read -p "Votre choix (1-6): " choice
+
+case $choice in
+    1)
+        echo -e "${BLUE}🧪 Tests système...${NC}"
+        venv/bin/python run.py test
+        ;;
+    2)
+        echo -e "${BLUE}📊 Scraping données...${NC}"
+        venv/bin/python run.py scrape
+        ;;
+    3)
+        echo -e "${BLUE}🔄 Traitement rapports...${NC}"
+        venv/bin/python run.py process
+        ;;
+    4)
+        echo -e "${BLUE}🚀 Daemon complet...${NC}"
+        echo -e "${YELLOW}Appuyez sur Ctrl+C pour arrêter${NC}"
+        venv/bin/python run.py daemon
+        ;;
+    5)
+        echo -e "${BLUE}📋 Statut système...${NC}"
+        venv/bin/python run.py status
+        ;;
+    6)
+        echo -e "${GREEN}👋 Au revoir !${NC}"
+        exit 0
+        ;;
+    *)
+        echo -e "${RED}❌ Choix invalide${NC}"
+        exit 1
+        ;;
+esac

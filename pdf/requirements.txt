@@ -1,0 +1,9 @@
+# FinAnalytics PDF - Dépendances Simplifiées
+yfinance>=0.2.18
+pandas>=2.0.0
+numpy>=1.24.0
+psycopg2-binary>=2.9.0
+matplotlib>=3.7.0
+Pillow>=10.0.0
+reportlab>=4.0.0
+requests>=2.31.0

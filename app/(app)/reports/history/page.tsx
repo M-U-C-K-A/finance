@@ -33,7 +33,6 @@ import {
   Clock,
   AlertCircle,
   Loader2,
-  Calendar,
   CreditCard,
   Crown
 } from "lucide-react";
@@ -54,6 +53,7 @@ interface ReportRequest {
   createdAt: string;
   completedAt?: string;
   downloadUrl?: string;
+  pdfPath?: string;
   config: Record<string, unknown>;
 }
 
@@ -79,6 +79,7 @@ export default function ReportHistoryPage() {
   const [reports, setReports] = useState<ReportRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [downloading, setDownloading] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [paymentFilter, setPaymentFilter] = useState<string>('all');
 
@@ -99,6 +100,43 @@ export default function ReportHistoryPage() {
       toast.error("Error fetching reports");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDownload = async (reportId: string) => {
+    try {
+      setDownloading(reportId);
+      
+      const response = await fetch(`/api/reports/${reportId}/download`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to download report');
+      }
+      
+      // Récupérer le blob du PDF
+      const blob = await response.blob();
+      
+      // Créer une URL temporaire pour le blob
+      const url = window.URL.createObjectURL(blob);
+      
+      // Créer un lien temporaire et le cliquer pour déclencher le téléchargement
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `rapport_${reportId}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      
+      // Nettoyer
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('Report downloaded successfully');
+      
+    } catch (error) {
+      console.error('Download error:', error);
+      toast.error('Failed to download report');
+    } finally {
+      setDownloading(null);
     }
   };
 
@@ -239,7 +277,7 @@ export default function ReportHistoryPage() {
                       <div>
                         <div className="font-medium">{report.assetSymbol || 'N/A'}</div>
                         <div className="text-sm text-muted-foreground">
-                          {report.assetName || report.title}
+                          {report.assetName || 'Financial Asset'}
                         </div>
                       </div>
                     </div>
@@ -281,10 +319,19 @@ export default function ReportHistoryPage() {
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-2">
-                      {report.status === 'completed' && report.downloadUrl ? (
-                        <Button size="sm" variant="outline">
-                          <Download className="h-3 w-3 mr-1" />
-                          Download
+                      {report.status === 'completed' && report.pdfPath ? (
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleDownload(report.id)}
+                          disabled={downloading === report.id}
+                        >
+                          {downloading === report.id ? (
+                            <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                          ) : (
+                            <Download className="h-3 w-3 mr-1" />
+                          )}
+                          {downloading === report.id ? 'Downloading...' : 'Download'}
                         </Button>
                       ) : (
                         <Button size="sm" variant="outline" disabled>

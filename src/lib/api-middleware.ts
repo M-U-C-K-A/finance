@@ -84,10 +84,10 @@ export async function withApiMiddleware(
  * Helper pour créer des handlers API avec middleware
  */
 export function createApiHandler(
-  handler: (request: NextRequest, context: { user: any }) => Promise<NextResponse>,
+  handler: (request: NextRequest, context: { user: any; params?: any }) => Promise<NextResponse>,
   options: ApiMiddlewareOptions = {}
 ) {
-  return async (request: NextRequest) => {
+  return async (request: NextRequest, { params }: { params?: any } = {}) => {
     // Appliquer le middleware
     const middlewareResult = await withApiMiddleware(request, options);
     if (middlewareResult) {
@@ -98,7 +98,7 @@ export function createApiHandler(
     const user = await getUser();
     
     // Appeler le handler principal
-    return handler(request, { user });
+    return handler(request, { user, params });
   };
 }
 

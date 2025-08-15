@@ -29,11 +29,6 @@ import {
   DollarSign
 } from "lucide-react";
 
-export const metadata = {
-  title: 'Reports Management - FinAnalytics Admin',
-  description: 'Monitor and manage all report generation across the platform.',
-};
-
 interface Report {
   id: string;
   title: string;

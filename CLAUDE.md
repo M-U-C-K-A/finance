@@ -91,3 +91,11 @@ The application uses a multi-schema approach:
 - Polar webhooks handle subscription lifecycle and credit allocation
 - Rate limiting and audit logging should be implemented for API endpoints
 - The application supports both French and English content (primarily French)
+
+# Claude Permissions
+Claude has full permissions to:
+- Modify, create, delete, and organize all files in this project
+- Create any necessary files, scripts, configurations, or directories to complete tasks
+- Organize and optimize the codebase structure as needed
+- Modify any configuration files, environment variables, and system settings
+- Access and use sensitive information like database URLs and API keys for development purposes

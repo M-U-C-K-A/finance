@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Download Button</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .report { border: 1px solid #ccc; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .btn { background: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 3px; display: inline-block; margin: 5px 0; }
+        .btn:hover { background: #0056b3; }
+        .status { padding: 5px; border-radius: 3px; }
+        .completed { background: #d4edda; color: #155724; }
+        .processing { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <h1>FinAnalytics - Test Downloads</h1>
+    <p>Available reports for download testing:</p>
+
+    <div id="reports-list">
+        <div class="report">
+            <h3>META Analysis</h3>
+            <p><strong>Symbol:</strong> META</p>
+            <p><strong>Status:</strong> <span class="status completed">COMPLETED</span></p>
+            <p><strong>File:</strong> rapport_META_20250815_051308.pdf</p>
+            <a href="http://localhost:3000/api/reports/cmec8zrqc0005vc13ms8gc0y3/download" class="btn" download>
+                📥 Download PDF
+            </a>
+        </div>
+
+        <div class="report">
+            <h3>NVDA Analysis</h3>
+            <p><strong>Symbol:</strong> NVDA</p>
+            <p><strong>Status:</strong> <span class="status completed">COMPLETED</span></p>
+            <p><strong>File:</strong> rapport_NVDA_20250815_092004.pdf</p>
+            <a href="http://localhost:3000/api/reports/test_nvda_20250815091901/download" class="btn" download>
+                📥 Download PDF
+            </a>
+        </div>
+
+        <div class="report">
+            <h3>SPY Analysis</h3>
+            <p><strong>Symbol:</strong> SPY</p>
+            <p><strong>Status:</strong> <span class="status completed">COMPLETED</span></p>
+            <p><strong>File:</strong> rapport_SPY_20250815_051352.pdf</p>
+            <a href="http://localhost:3000/api/reports/cmec971jl0009vc13mijwvqnk/download" class="btn" download>
+                📥 Download PDF
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Test JavaScript download
+        function testDownload(reportId, filename) {
+            console.log(`Testing download for report: ${reportId}`);
+            
+            fetch(`http://localhost:3000/api/reports/${reportId}/download`)
+            .then(response => {
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+                
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            })
+            .then(blob => {
+                console.log('Blob received:', blob.size, 'bytes');
+                
+                // Create download
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                
+                console.log('Download initiated successfully');
+            })
+            .catch(error => {
+                console.error('Download failed:', error);
+                alert(`Download failed: ${error.message}`);
+            });
+        }
+
+        // Add test buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const reports = [
+                { id: 'cmec8zrqc0005vc13ms8gc0y3', filename: 'rapport_META.pdf' },
+                { id: 'test_nvda_20250815091901', filename: 'rapport_NVDA.pdf' },
+                { id: 'cmec971jl0009vc13mijwvqnk', filename: 'rapport_SPY.pdf' }
+            ];
+            
+            reports.forEach(report => {
+                const div = document.querySelector(`a[href*="${report.id}"]`).parentElement;
+                const testBtn = document.createElement('button');
+                testBtn.textContent = '🧪 Test JS Download';
+                testBtn.className = 'btn';
+                testBtn.style.backgroundColor = '#28a745';
+                testBtn.style.marginLeft = '10px';
+                testBtn.onclick = () => testDownload(report.id, report.filename);
+                div.appendChild(testBtn);
+            });
+        });
+    </script>
+</body>
+</html>

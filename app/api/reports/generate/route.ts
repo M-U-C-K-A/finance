@@ -78,53 +78,17 @@ export const POST = createApiHandler(
         return newReport;
       });
 
-      // TODO: Ici on enverrait le rapport à générer au worker Python
-      // Pour le moment on simule avec un délai
-      setTimeout(async () => {
-        try {
-          await prisma.report.update({
-            where: { id: report.id },
-            data: {
-              status: ReportStatus.PROCESSING,
-              processingStartedAt: new Date()
-            }
-          });
-
-          // Simule la génération (3-10 secondes)
-          setTimeout(async () => {
-            try {
-              await prisma.report.update({
-                where: { id: report.id },
-                data: {
-                  status: ReportStatus.COMPLETED,
-                  completedAt: new Date(),
-                  pdfPath: `/reports/${report.id}-${body.assetSymbol.toLowerCase()}.pdf`,
-                  csvPath: body.includeApiExport ? `/reports/${report.id}-${body.assetSymbol.toLowerCase()}.csv` : undefined
-                }
-              });
-            } catch (error) {
-              console.error("Error completing report:", error);
-              await prisma.report.update({
-                where: { id: report.id },
-                data: {
-                  status: ReportStatus.FAILED,
-                  failureReason: "Erreur lors de la génération"
-                }
-              });
-            }
-          }, Math.random() * 7000 + 3000); // 3-10 secondes
-
-        } catch (error) {
-          console.error("Error processing report:", error);
-        }
-      }, 1000);
+      // Le rapport reste en statut PENDING
+      // Il sera traité par le script report_processor.py qui tourne en arrière-plan
+      console.log(`Rapport ${report.id} créé et ajouté à la queue de traitement`);
 
       return Response.json({
         success: true,
         reportId: report.id,
         message: "Report queued for generation",
-        estimatedTime: "3-10 minutes",
-        creditsCost
+        estimatedTime: "5-15 minutes",
+        creditsCost,
+        status: "PENDING"
       });
 
     } catch (error: any) {

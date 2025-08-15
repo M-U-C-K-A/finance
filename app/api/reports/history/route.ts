@@ -20,6 +20,7 @@ export async function GET(request: NextRequest) {
         reportType: true,
         status: true,
         creditsCost: true,
+        pdfPath: true,
         createdAt: true,
         completedAt: true,
       }
@@ -40,7 +41,8 @@ export async function GET(request: NextRequest) {
       paymentMethod: 'credits', // Default to credits for now
       createdAt: report.createdAt.toISOString(),
       completedAt: report.completedAt?.toISOString(),
-      downloadUrl: report.status === 'COMPLETED' ? `/reports/${report.id}/download` : undefined,
+      pdfPath: report.pdfPath,
+      downloadUrl: report.status === 'COMPLETED' ? `/api/reports/${report.id}/download` : undefined,
       config: {}
     }));
 

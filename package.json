@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
-    "@polar-sh/better-auth": "^1.1.0",
     "@polar-sh/sdk": "^0.34.11",
     "@prisma/client": "^6.13.0",
     "@radix-ui/react-accordion": "^1.2.11",
@@ -45,6 +44,7 @@
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
+    "gsap": "^3.13.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.539.0",
     "next": "15.4.6",

@@ -1,37 +1,40 @@
-// Polar API integration for subscriptions and credit packs
+// Polar API integration for subscriptions and credit packs using official SDK
+import { Polar } from "@polar-sh/sdk";
 import { SubscriptionPlan } from "@prisma/client";
 
-const POLAR_BASE_URL = "https://api.polar.sh";
 const POLAR_ACCESS_TOKEN = process.env.POLAR_ACCESS_TOKEN;
 
 if (!POLAR_ACCESS_TOKEN) {
   throw new Error("POLAR_ACCESS_TOKEN environment variable is required");
 }
 
-interface PolarCheckoutRequest {
-  product_id: string;
-  success_url: string;
-  customer_email?: string;
-  metadata?: Record<string, string>;
-}
+// Initialize Polar SDK
+export const polar = new Polar({
+  security: {
+    bearerAuth: POLAR_ACCESS_TOKEN,
+  },
+});
 
-interface PolarCheckoutResponse {
+// Types from Polar SDK
+export type PolarCheckoutResponse = {
   id: string;
   url: string;
   expires_at: string;
-}
+};
 
 // Product IDs for different plans and credit packs
+// TODO: Replace these placeholder IDs with actual Polar product UUIDs
+// You need to create these products in your Polar dashboard first
 export const POLAR_PRODUCTS = {
-  // Subscription plans
-  STARTER: "starter-plan-id", // Replace with actual Polar product ID
-  PROFESSIONAL: "professional-plan-id", // Replace with actual Polar product ID
-  ENTERPRISE: "enterprise-plan-id", // Replace with actual Polar product ID
+  // Subscription plans - Replace with actual UUIDs from Polar dashboard
+  STARTER: "00000000-0000-0000-0000-000000000001", // Replace with actual Polar product UUID
+  PROFESSIONAL: "00000000-0000-0000-0000-000000000002", // Replace with actual Polar product UUID
+  ENTERPRISE: "00000000-0000-0000-0000-000000000003", // Replace with actual Polar product UUID
   
-  // Credit packs
-  CREDITS_100: "100-credits-id", // Replace with actual Polar product ID
-  CREDITS_500: "500-credits-id", // Replace with actual Polar product ID
-  CREDITS_2000: "2000-credits-id", // Replace with actual Polar product ID
+  // Credit packs - Replace with actual UUIDs from Polar dashboard
+  CREDITS_100: "00000000-0000-0000-0000-000000000004", // Replace with actual Polar product UUID
+  CREDITS_500: "00000000-0000-0000-0000-000000000005", // Replace with actual Polar product UUID
+  CREDITS_2000: "00000000-0000-0000-0000-000000000006", // Replace with actual Polar product UUID
 } as const;
 
 /**
@@ -56,18 +59,16 @@ export async function createSubscriptionCheckout(
 
   const successUrl = process.env.POLAR_SUCCESS_URL || `${process.env.BETTER_AUTH_URL}/plan/success`;
 
-  const checkoutData: PolarCheckoutRequest = {
-    product_id: productId,
-    success_url: successUrl,
-    customer_email: userEmail,
-    metadata: {
+  return await createCheckout(
+    productId,
+    successUrl,
+    userEmail,
+    {
       user_id: userId,
       plan: plan,
       type: "subscription",
-    },
-  };
-
-  return await createCheckout(checkoutData);
+    }
+  );
 }
 
 /**
@@ -91,90 +92,126 @@ export async function createCreditPackCheckout(
 
   const successUrl = process.env.POLAR_SUCCESS_URL || `${process.env.BETTER_AUTH_URL}/plan/success`;
 
-  const checkoutData: PolarCheckoutRequest = {
-    product_id: productId,
-    success_url: successUrl,
-    customer_email: userEmail,
-    metadata: {
+  return await createCheckout(
+    productId,
+    successUrl,
+    userEmail,
+    {
       user_id: userId,
       credits: creditAmount.toString(),
       type: "credit_pack",
-    },
-  };
-
-  return await createCheckout(checkoutData);
+    }
+  );
 }
 
 /**
- * Generic function to create a Polar checkout session
+ * Generic function to create a Polar checkout session using SDK
  */
-async function createCheckout(data: PolarCheckoutRequest): Promise<PolarCheckoutResponse> {
-  const response = await fetch(`${POLAR_BASE_URL}/v1/checkouts/`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${POLAR_ACCESS_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+async function createCheckout(productId: string, successUrl: string, customerEmail?: string, metadata?: Record<string, string>): Promise<PolarCheckoutResponse> {
+  try {
+    // Validate product ID format (should be UUID)
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(productId)) {
+      throw new Error(`Invalid product ID format: ${productId}. Must be a valid UUID. Check your POLAR_PRODUCTS configuration and ensure you're using real product IDs from your Polar dashboard.`);
+    }
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error("Polar checkout creation failed:", errorText);
-    throw new Error(`Failed to create Polar checkout: ${response.status} ${errorText}`);
+    console.log("Creating Polar checkout with:", {
+      productId,
+      successUrl,
+      customerEmail,
+      metadata
+    });
+
+    const response = await polar.checkouts.create({
+      products: [productId], // API expects array of product IDs
+      successUrl,
+      customerEmail,
+      metadata,
+    });
+
+    return {
+      id: response.id,
+      url: response.url,
+      expires_at: response.expiresAt,
+    };
+  } catch (error) {
+    console.error("Polar checkout creation failed:", error);
+    
+    // Provide more helpful error messages
+    if (error && typeof error === 'object' && 'statusCode' in error && error.statusCode === 422) {
+      throw new Error(`Polar API validation error: The product ID "${productId}" is invalid or doesn't exist. Please check your Polar dashboard and update the POLAR_PRODUCTS configuration with real product UUIDs. You can use GET /api/debug/polar-products to see available products.`);
+    }
+    
+    throw new Error(`Failed to create Polar checkout: ${error}`);
   }
-
-  return await response.json();
 }
 
 /**
- * Get customer information from Polar
+ * Get customer information from Polar using SDK
  */
 export async function getPolarCustomer(customerId: string) {
-  const response = await fetch(`${POLAR_BASE_URL}/v1/customers/${customerId}`, {
-    headers: {
-      "Authorization": `Bearer ${POLAR_ACCESS_TOKEN}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to get Polar customer: ${response.status}`);
+  try {
+    const response = await polar.customers.get({ id: customerId });
+    return response;
+  } catch (error) {
+    console.error("Failed to get Polar customer:", error);
+    throw new Error(`Failed to get Polar customer: ${error}`);
   }
-
-  return await response.json();
 }
 
 /**
- * Get subscription information from Polar
+ * Get subscription information from Polar using SDK
  */
 export async function getPolarSubscription(subscriptionId: string) {
-  const response = await fetch(`${POLAR_BASE_URL}/v1/subscriptions/${subscriptionId}`, {
-    headers: {
-      "Authorization": `Bearer ${POLAR_ACCESS_TOKEN}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to get Polar subscription: ${response.status}`);
+  try {
+    const response = await polar.subscriptions.get({ id: subscriptionId });
+    return response;
+  } catch (error) {
+    console.error("Failed to get Polar subscription:", error);
+    throw new Error(`Failed to get Polar subscription: ${error}`);
   }
-
-  return await response.json();
 }
 
 /**
- * Cancel a subscription in Polar
+ * Cancel a subscription in Polar using SDK
  */
 export async function cancelPolarSubscription(subscriptionId: string) {
-  const response = await fetch(`${POLAR_BASE_URL}/v1/subscriptions/${subscriptionId}/cancel`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${POLAR_ACCESS_TOKEN}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to cancel Polar subscription: ${response.status}`);
+  try {
+    const response = await polar.subscriptions.update({ 
+      id: subscriptionId,
+      subscriptionUpdate: {
+        cancel: true
+      }
+    });
+    return response;
+  } catch (error) {
+    console.error("Failed to cancel Polar subscription:", error);
+    throw new Error(`Failed to cancel Polar subscription: ${error}`);
   }
+}
 
-  return await response.json();
+/**
+ * Get all products from Polar - useful for debugging and getting real product IDs
+ */
+export async function listPolarProducts() {
+  try {
+    const response = await polar.products.list({});
+    return response;
+  } catch (error) {
+    console.error("Failed to list Polar products:", error);
+    throw new Error(`Failed to list Polar products: ${error}`);
+  }
+}
+
+/**
+ * Validate that a product ID exists in Polar
+ */
+export async function validateProductId(productId: string): Promise<boolean> {
+  try {
+    await polar.products.get({ id: productId });
+    return true;
+  } catch (error) {
+    console.error(`Product ID ${productId} not found in Polar:`, error);
+    return false;
+  }
 }
