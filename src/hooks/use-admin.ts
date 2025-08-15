@@ -19,9 +19,14 @@ export function useIsAdmin() {
       }
 
       try {
-        // Vérifier en appelant une API protégée admin
-        const response = await fetch("/api/admin/check");
-        setIsAdmin(response.status === 200);
+        // Vérifier directement le rôle utilisateur dans la DB
+        const response = await fetch(`/api/user/role`);
+        if (response.ok) {
+          const { role } = await response.json();
+          setIsAdmin(role === 'ADMIN');
+        } else {
+          setIsAdmin(false);
+        }
       } catch (error) {
         setIsAdmin(false);
       } finally {

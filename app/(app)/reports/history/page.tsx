@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { ReportsHistorySkeleton } from "@/components/reports/reports-history-skeleton";
+import { PDFViewerModal } from "@/components/reports/pdf-viewer-modal";
 import {
   Table,
   TableBody,
@@ -82,10 +83,25 @@ export default function ReportHistoryPage() {
   const [downloading, setDownloading] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [paymentFilter, setPaymentFilter] = useState<string>('all');
+  const [pdfViewerOpen, setPdfViewerOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState<{ id: string; title: string } | null>(null);
 
   useEffect(() => {
     fetchReports();
   }, []);
+
+  // Auto-refresh pour les rapports pending
+  useEffect(() => {
+    const hasPendingReports = reports.some(report => report.status === 'PENDING');
+    
+    if (hasPendingReports) {
+      const interval = setInterval(() => {
+        fetchReports();
+      }, 5000); // Refresh toutes les 5 secondes
+
+      return () => clearInterval(interval);
+    }
+  }, [reports]);
 
   const fetchReports = async () => {
     try {
@@ -138,6 +154,16 @@ export default function ReportHistoryPage() {
     } finally {
       setDownloading(null);
     }
+  };
+
+  const handleViewPDF = (reportId: string, title: string) => {
+    setSelectedReport({ id: reportId, title });
+    setPdfViewerOpen(true);
+  };
+
+  const closePDFViewer = () => {
+    setPdfViewerOpen(false);
+    setSelectedReport(null);
   };
 
   const getStatusIcon = (status: string) => {
@@ -320,23 +346,35 @@ export default function ReportHistoryPage() {
                   <TableCell>
                     <div className="flex gap-2">
                       {report.status === 'completed' && report.pdfPath ? (
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => handleDownload(report.id)}
-                          disabled={downloading === report.id}
-                        >
-                          {downloading === report.id ? (
-                            <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-                          ) : (
-                            <Download className="h-3 w-3 mr-1" />
-                          )}
-                          {downloading === report.id ? 'Downloading...' : 'Download'}
-                        </Button>
+                        <>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleViewPDF(report.id, `${report.assetSymbol} - ${report.reportType}`)}
+                            title="Voir le PDF"
+                          >
+                            <Eye className="h-3 w-3 mr-1" />
+                            Voir
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleDownload(report.id)}
+                            disabled={downloading === report.id}
+                            title="Télécharger le PDF"
+                          >
+                            {downloading === report.id ? (
+                              <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                            ) : (
+                              <Download className="h-3 w-3 mr-1" />
+                            )}
+                            {downloading === report.id ? 'En cours...' : 'Télécharger'}
+                          </Button>
+                        </>
                       ) : (
                         <Button size="sm" variant="outline" disabled>
                           <Eye className="h-3 w-3 mr-1" />
-                          View
+                          Non disponible
                         </Button>
                       )}
                     </div>
@@ -347,6 +385,16 @@ export default function ReportHistoryPage() {
           </Table>
         </CardContent>
       </Card>
+
+      {/* PDF Viewer Modal */}
+      {selectedReport && (
+        <PDFViewerModal
+          isOpen={pdfViewerOpen}
+          onClose={closePDFViewer}
+          reportId={selectedReport.id}
+          reportTitle={selectedReport.title}
+        />
+      )}
     </div>
   );
 }

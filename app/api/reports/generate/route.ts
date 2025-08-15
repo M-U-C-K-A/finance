@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { createApiHandler } from "@/lib/api-middleware";
 import { prisma } from "@/lib/prisma";
 import { debitCredits, calculateReportCost } from "@/lib/credits";
-import { ReportStatus, AssetType, ReportType } from "@prisma/client";
+import { ReportStatus, AssetType, ReportType, PricingModel, ChartType, BenchmarkType } from "@prisma/client";
 
 interface GenerateReportBody {
   title: string;
@@ -12,6 +12,13 @@ interface GenerateReportBody {
   reportType: ReportType;
   includeBenchmark: boolean;
   includeApiExport: boolean;
+  selectedBenchmarks?: string[];
+  // Nouveaux paramètres de configuration
+  pricingModel?: PricingModel;
+  customPricingParams?: any;
+  selectedCharts?: ChartType[];
+  benchmarkTypes?: BenchmarkType[];
+  customBenchmarks?: string[];
 }
 
 export const POST = createApiHandler(
@@ -27,11 +34,24 @@ export const POST = createApiHandler(
         );
       }
 
-      // Calcul du coût
-      const creditsCost = calculateReportCost({
-        includeBenchmark: body.includeBenchmark,
-        includeApiExport: body.includeApiExport
-      });
+      // Calcul du coût basé sur le type de rapport
+      const getReportCost = () => {
+        const baseCosts = {
+          "SIMPLE": 15,
+          "COMPLETE": 25,
+          "BENCHMARK": 20,
+          "PRICER": 30
+        };
+        
+        let cost = baseCosts[body.reportType as keyof typeof baseCosts] || 15;
+        
+        if (body.includeBenchmark) cost += 12;
+        if (body.includeApiExport) cost += 5;
+        
+        return cost;
+      };
+
+      const creditsCost = getReportCost();
 
       // Vérifier si l'utilisateur a assez de crédits
       const userCredits = await prisma.credits.findUnique({
@@ -72,6 +92,13 @@ export const POST = createApiHandler(
             includeApiExport: body.includeApiExport,
             creditsCost,
             status: ReportStatus.PENDING,
+            // Nouveaux paramètres de configuration
+            pricingModel: body.pricingModel,
+            customPricingParams: body.customPricingParams || {},
+            selectedCharts: body.selectedCharts || [],
+            benchmarkTypes: body.benchmarkTypes || [],
+            customBenchmarks: body.customBenchmarks || [],
+            selectedBenchmarks: body.selectedBenchmarks || [],
           }
         });
 

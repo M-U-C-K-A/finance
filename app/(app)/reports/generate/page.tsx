@@ -44,8 +44,8 @@ export default async function GenerateReportPage() {
   const processingReports = userInfo.reports;
 
   return (
-    <div className="w-full max-w-none py-8 px-6">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="w-full max-w-none py-8 px-6 overflow-hidden">
+      <div className="max-w-6xl mx-auto space-y-6 overflow-auto">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">

@@ -253,14 +253,82 @@ class FinAnalyticsSystem:
                 time.sleep(60)  # Attendre avant de retry
     
     def generate_real_pdf(self, report):
-        """Génère un PDF réel en utilisant les modules existants"""
+        """Génère un PDF selon le type de rapport demandé"""
+        try:
+            # Déterminer le type de rapport
+            report_type = report.get('reportType', 'SIMPLE')
+            symbol = report['assetSymbol']
+            
+            logger.info(f"📄 Génération PDF type {report_type} pour {symbol}")
+            
+            # Générer le timestamp et nom de fichier
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            
+            # Nom de fichier selon le type
+            type_prefix = {
+                'SIMPLE': 'SIMPLE_RAPPORT',
+                'COMPLETE': 'ULTRA_RAPPORT', 
+                'BENCHMARK': 'BENCHMARK_RAPPORT',
+                'PRICER': 'PRICER_RAPPORT'
+            }
+            
+            pdf_filename = f"{type_prefix.get(report_type, 'RAPPORT')}_{symbol}_{timestamp}.pdf"
+            
+            # Créer dans le dossier public pour que l'API puisse le servir
+            public_reports_dir = Path("../public/reports")
+            public_reports_dir.mkdir(parents=True, exist_ok=True)
+            
+            pdf_path = public_reports_dir / pdf_filename
+            
+            # Sélectionner le générateur approprié
+            if report_type == 'SIMPLE':
+                success = self.generate_simple_pdf(report, str(pdf_path))
+            elif report_type == 'COMPLETE':
+                from ultra_premium_pdf_generator import UltraPremiumPDFGenerator
+                generator = UltraPremiumPDFGenerator(symbol, str(pdf_path))
+                success = generator.run_complete_analysis()
+            elif report_type == 'BENCHMARK':
+                success = self.generate_benchmark_pdf(report, str(pdf_path))
+            elif report_type == 'PRICER':
+                success = self.generate_pricer_pdf(report, str(pdf_path))
+            else:
+                # Fallback au générateur complet
+                from ultra_premium_pdf_generator import UltraPremiumPDFGenerator
+                generator = UltraPremiumPDFGenerator(symbol, str(pdf_path))
+                success = generator.run_complete_analysis()
+            
+            if not success:
+                raise Exception(f"Échec de l'analyse {report_type}")
+            
+            # Vérifier que le fichier a été créé
+            if not pdf_path.exists():
+                raise Exception("Le fichier PDF n'a pas été créé")
+            
+            logger.info(f"✅ PDF {report_type} généré: {pdf_filename}")
+            logger.info(f"📊 Taille du fichier: {pdf_path.stat().st_size / 1024 / 1024:.2f} MB")
+            
+            # Retourner le nom du fichier (pas le chemin complet)
+            return pdf_filename
+            
+        except Exception as e:
+            logger.error(f"❌ Erreur génération PDF ultra-complet: {e}")
+            
+            # Fallback vers l'ancien système si nécessaire
+            try:
+                logger.info("🔄 Fallback vers l'ancien générateur...")
+                return self.generate_fallback_pdf(report)
+            except:
+                return None
+
+    def generate_fallback_pdf(self, report):
+        """Générateur PDF de secours (ancien système)"""
         try:
             import yfinance as yf
             from simple_charts import create_charts
             from simple_pdf import generate_pdf_report
             
             symbol = report['assetSymbol']
-            logger.info(f"📄 Génération PDF pour {symbol}")
+            logger.info(f"📄 Génération PDF fallback pour {symbol}")
             
             # Récupérer les données
             stock = yf.Ticker(symbol)
@@ -293,7 +361,7 @@ class FinAnalyticsSystem:
             
             # Générer le PDF
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            pdf_filename = f"rapport_{symbol}_{timestamp}.pdf"
+            pdf_filename = f"rapport_fallback_{symbol}_{timestamp}.pdf"
             
             # Créer dans le dossier public pour que l'API puisse le servir
             public_reports_dir = Path("../public/reports")
@@ -313,14 +381,66 @@ class FinAnalyticsSystem:
             
             generate_pdf_report(report_data, str(pdf_path))
             
-            logger.info(f"✅ PDF généré: {pdf_filename}")
+            logger.info(f"✅ PDF fallback généré: {pdf_filename}")
             
             # Retourner le nom du fichier (pas le chemin complet)
             return pdf_filename
             
         except Exception as e:
-            logger.error(f"❌ Erreur génération PDF: {e}")
+            logger.error(f"❌ Erreur génération PDF fallback: {e}")
             return None
+    
+    def generate_simple_pdf(self, report, pdf_path):
+        """Génère un rapport simple (8-10 pages)"""
+        try:
+            from premium_pdf_generator import PremiumPDFGenerator
+            
+            symbol = report['assetSymbol']
+            logger.info(f"📄 Génération PDF SIMPLE pour {symbol}")
+            
+            # Utiliser le générateur premium mais en mode simple
+            generator = PremiumPDFGenerator(symbol, pdf_path)
+            return generator.run_simple_analysis()
+            
+        except Exception as e:
+            logger.error(f"❌ Erreur génération PDF simple: {e}")
+            return False
+    
+    def generate_benchmark_pdf(self, report, pdf_path):
+        """Génère un rapport avec comparaisons benchmark"""
+        try:
+            from ultra_premium_pdf_generator import UltraPremiumPDFGenerator
+            
+            symbol = report['assetSymbol']
+            selected_benchmarks = report.get('selectedBenchmarks', [])
+            
+            logger.info(f"📄 Génération PDF BENCHMARK pour {symbol} vs {selected_benchmarks}")
+            
+            # Créer le générateur avec benchmarks
+            generator = UltraPremiumPDFGenerator(symbol, pdf_path)
+            return generator.run_benchmark_analysis(selected_benchmarks)
+            
+        except Exception as e:
+            logger.error(f"❌ Erreur génération PDF benchmark: {e}")
+            return False
+    
+    def generate_pricer_pdf(self, report, pdf_path):
+        """Génère un rapport avec modèles de pricing avancés"""
+        try:
+            from ultra_premium_pdf_generator import UltraPremiumPDFGenerator
+            
+            symbol = report['assetSymbol']
+            pricing_params = report.get('customPricingParams', {})
+            
+            logger.info(f"📄 Génération PDF PRICER pour {symbol}")
+            
+            # Créer le générateur avec paramètres de pricing
+            generator = UltraPremiumPDFGenerator(symbol, pdf_path)
+            return generator.run_pricer_analysis(pricing_params)
+            
+        except Exception as e:
+            logger.error(f"❌ Erreur génération PDF pricer: {e}")
+            return False
     
     def show_status(self):
         """Affiche le statut du système"""

@@ -43,6 +43,7 @@ model User {
   creditTransactions CreditTransaction[]
   reports       Report[]
   reportSchedules ReportSchedule[]
+  reportConfigurations ReportConfiguration[]
   apiKeys       ApiKey[]
 
   @@unique([email])
@@ -215,12 +216,49 @@ enum AssetType {
 }
 
 enum ReportType {
-  BASELINE     // Rapport simple
+  BASELINE      // Rapport simple
+  DETAILED      // Analyse détaillée
   DEEP_ANALYSIS // Analyse approfondie
-  PRICER       // Pricer custom ou générique
-  BENCHMARK    // Comparaisons
+  CUSTOM        // Type custom défini par l'utilisateur
+  PRICER        // Pricer custom ou générique
+  BENCHMARK     // Comparaisons
 
   @@map("report_types")
+}
+
+enum PricingModel {
+  BLACK_SCHOLES     // Modèle Black-Scholes
+  MONTE_CARLO       // Simulation Monte Carlo
+  BINOMIAL_TREE     // Arbre binomial
+  HESTON            // Modèle de Heston
+  CUSTOM            // Modèle personnalisé
+
+  @@map("pricing_models")
+}
+
+enum ChartType {
+  PRICE_EVOLUTION      // Évolution des prix
+  VOLUME_ANALYSIS      // Analyse du volume
+  TECHNICAL_INDICATORS // Indicateurs techniques
+  RISK_METRICS         // Métriques de risque
+  CORRELATION_MATRIX   // Matrice de corrélation
+  VOLATILITY_SURFACE   // Surface de volatilité
+  CANDLESTICK          // Graphique chandelier
+  BOLLINGER_BANDS      // Bandes de Bollinger
+  FIBONACCI_RETRACEMENT // Retracements Fibonacci
+  ICHIMOKU_CLOUD       // Nuage d'Ichimoku
+
+  @@map("chart_types")
+}
+
+enum BenchmarkType {
+  MARKET_INDEX      // Indice de marché (S&P500, CAC40)
+  SECTOR_COMPARISON // Comparaison sectorielle
+  PEER_COMPARISON   // Comparaison avec pairs
+  RISK_FREE_RATE    // Taux sans risque
+  CUSTOM_BENCHMARK  // Benchmark personnalisé
+
+  @@map("benchmark_types")
 }
 
 model Report {
@@ -234,9 +272,42 @@ model Report {
   assetSymbol     String       // Ex: AAPL, CAC40, etc.
   reportType      ReportType   @default(BASELINE)
   
-  // Options de rapport
+  // Options de rapport étendues
   includeBenchmark Boolean     @default(false)
   includeApiExport Boolean     @default(false)
+  
+  // Configuration du pricing (pour PRICER reports)
+  pricingModel    PricingModel? // Modèle de pricing sélectionné
+  customPricingParams Json?     // Paramètres custom du modèle
+  
+  // Configuration des graphiques
+  selectedCharts  ChartType[]  // Types de graphiques à inclure
+  
+  // Configuration des benchmarks
+  benchmarkTypes  BenchmarkType[] // Types de comparaisons
+  customBenchmarks String[]    // Symboles de benchmarks personnalisés
+  
+  // Périodes d'analyse
+  analysisStartDate DateTime?  // Date de début d'analyse
+  analysisEndDate   DateTime?  // Date de fin d'analyse
+  timeframe        String?     // Période (1D, 1W, 1M, 3M, 1Y, etc.)
+  
+  // Options techniques avancées
+  riskMetrics      Boolean     @default(true)   // Inclure métriques de risque
+  correlationAnalysis Boolean  @default(false)  // Analyse de corrélation
+  volatilityAnalysis Boolean   @default(false)  // Analyse de volatilité
+  fundamentalAnalysis Boolean  @default(true)   // Analyse fondamentale
+  technicalAnalysis Boolean    @default(true)   // Analyse technique
+  sentimentAnalysis Boolean    @default(false)  // Analyse de sentiment
+  
+  // Indicateurs techniques spécifiques
+  movingAverages   Json?       // Configuration des moyennes mobiles
+  oscillators      Json?       // Configuration des oscillateurs
+  trendIndicators  Json?       // Configuration des indicateurs de tendance
+  
+  // Configuration de l'export
+  exportFormats    String[]    @default(["PDF"]) // PDF, CSV, JSON, Excel
+  includeRawData   Boolean     @default(false)   // Inclure données brutes
   
   // Coût et statut
   creditsCost     Int
@@ -245,11 +316,16 @@ model Report {
   // Fichiers générés
   pdfPath         String?
   csvPath         String?
+  jsonPath        String?
+  excelPath       String?
   
   // Métadonnées de traitement
   processingStartedAt DateTime?
   completedAt         DateTime?
   failureReason       String?
+  
+  // Configuration sauvegardée pour réutilisation
+  configurationName String?    // Nom de la configuration pour la sauver
   
   // Relations
   transactions    CreditTransaction[]
@@ -259,6 +335,29 @@ model Report {
   updatedAt       DateTime     @updatedAt
 
   @@map("reports")
+}
+
+// Modèle pour sauvegarder les configurations de rapports
+model ReportConfiguration {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name            String    // Nom de la configuration
+  description     String?   // Description optionnelle
+  
+  // Configuration du rapport (JSON pour flexibilité)
+  config          Json      // Toute la configuration du rapport
+  
+  // Usage statistics
+  usageCount      Int       @default(0)
+  lastUsedAt      DateTime?
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@unique([userId, name])
+  @@map("report_configurations")
 }
 
 enum ScheduleFrequency {
