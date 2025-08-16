@@ -253,26 +253,28 @@ class FinAnalyticsSystem:
                 time.sleep(60)  # Attendre avant de retry
     
     def generate_real_pdf(self, report):
-        """Génère un PDF selon le type de rapport demandé"""
+        """Génère un PDF selon le type de rapport demandé avec le Smart Generator"""
         try:
             # Déterminer le type de rapport
-            report_type = report.get('reportType', 'SIMPLE')
+            report_type = report.get('reportType', 'BASELINE')
             symbol = report['assetSymbol']
             
-            logger.info(f"📄 Génération PDF type {report_type} pour {symbol}")
+            logger.info(f"📄 Génération PDF SMART type {report_type} pour {symbol}")
             
             # Générer le timestamp et nom de fichier
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             
             # Nom de fichier selon le type
             type_prefix = {
-                'SIMPLE': 'SIMPLE_RAPPORT',
-                'COMPLETE': 'ULTRA_RAPPORT', 
-                'BENCHMARK': 'BENCHMARK_RAPPORT',
-                'PRICER': 'PRICER_RAPPORT'
+                'BASELINE': 'BASELINE',
+                'DETAILED': 'DETAILED', 
+                'DEEP_ANALYSIS': 'DEEP_ANALYSIS',
+                'CUSTOM': 'CUSTOM',
+                'BENCHMARK': 'BENCHMARK',
+                'PRICER': 'PRICER'
             }
             
-            pdf_filename = f"{type_prefix.get(report_type, 'RAPPORT')}_{symbol}_{timestamp}.pdf"
+            pdf_filename = f"{type_prefix.get(report_type, 'REPORT')}_{symbol}_{timestamp}.pdf"
             
             # Créer dans le dossier public pour que l'API puisse le servir
             public_reports_dir = Path("../public/reports")
@@ -280,38 +282,27 @@ class FinAnalyticsSystem:
             
             pdf_path = public_reports_dir / pdf_filename
             
-            # Sélectionner le générateur approprié
-            if report_type == 'SIMPLE':
-                success = self.generate_simple_pdf(report, str(pdf_path))
-            elif report_type == 'COMPLETE':
-                from ultra_premium_pdf_generator import UltraPremiumPDFGenerator
-                generator = UltraPremiumPDFGenerator(symbol, str(pdf_path))
-                success = generator.run_complete_analysis()
-            elif report_type == 'BENCHMARK':
-                success = self.generate_benchmark_pdf(report, str(pdf_path))
-            elif report_type == 'PRICER':
-                success = self.generate_pricer_pdf(report, str(pdf_path))
-            else:
-                # Fallback au générateur complet
-                from ultra_premium_pdf_generator import UltraPremiumPDFGenerator
-                generator = UltraPremiumPDFGenerator(symbol, str(pdf_path))
-                success = generator.run_complete_analysis()
+            # Utiliser le nouveau SmartReportGenerator
+            from smart_report_generator import generate_smart_report
+            
+            success = generate_smart_report(symbol, report_type, str(pdf_path))
             
             if not success:
-                raise Exception(f"Échec de l'analyse {report_type}")
+                raise Exception(f"Échec de la génération SMART {report_type}")
             
             # Vérifier que le fichier a été créé
             if not pdf_path.exists():
                 raise Exception("Le fichier PDF n'a pas été créé")
             
-            logger.info(f"✅ PDF {report_type} généré: {pdf_filename}")
-            logger.info(f"📊 Taille du fichier: {pdf_path.stat().st_size / 1024 / 1024:.2f} MB")
+            file_size_mb = pdf_path.stat().st_size / 1024 / 1024
+            logger.info(f"✅ PDF SMART {report_type} généré: {pdf_filename}")
+            logger.info(f"📊 Taille du fichier: {file_size_mb:.2f} MB")
             
             # Retourner le nom du fichier (pas le chemin complet)
             return pdf_filename
             
         except Exception as e:
-            logger.error(f"❌ Erreur génération PDF ultra-complet: {e}")
+            logger.error(f"❌ Erreur génération PDF SMART: {e}")
             
             # Fallback vers l'ancien système si nécessaire
             try:
@@ -390,20 +381,69 @@ class FinAnalyticsSystem:
             logger.error(f"❌ Erreur génération PDF fallback: {e}")
             return None
     
-    def generate_simple_pdf(self, report, pdf_path):
-        """Génère un rapport simple (8-10 pages)"""
+    def generate_baseline_pdf(self, report, pdf_path):
+        """Génère un rapport baseline (8-10 pages) - Analyse fondamentale de base"""
         try:
             from premium_pdf_generator import PremiumPDFGenerator
             
             symbol = report['assetSymbol']
-            logger.info(f"📄 Génération PDF SIMPLE pour {symbol}")
+            logger.info(f"📄 Génération PDF BASELINE pour {symbol}")
             
-            # Utiliser le générateur premium mais en mode simple
+            # Utiliser le générateur premium en mode baseline
             generator = PremiumPDFGenerator(symbol, pdf_path)
-            return generator.run_simple_analysis()
+            return generator.run_baseline_analysis()
             
         except Exception as e:
-            logger.error(f"❌ Erreur génération PDF simple: {e}")
+            logger.error(f"❌ Erreur génération PDF baseline: {e}")
+            return False
+    
+    def generate_detailed_pdf(self, report, pdf_path):
+        """Génère un rapport détaillé (15-20 pages) - Modèles financiers avancés"""
+        try:
+            from premium_pdf_generator import PremiumPDFGenerator
+            
+            symbol = report['assetSymbol']
+            logger.info(f"📄 Génération PDF DETAILED pour {symbol}")
+            
+            # Utiliser le générateur premium en mode détaillé
+            generator = PremiumPDFGenerator(symbol, pdf_path)
+            return generator.run_detailed_analysis()
+            
+        except Exception as e:
+            logger.error(f"❌ Erreur génération PDF detailed: {e}")
+            return False
+    
+    def generate_deep_analysis_pdf(self, report, pdf_path):
+        """Génère un rapport d'analyse approfondie (25-30 pages) - Recherche exhaustive"""
+        try:
+            from ultra_premium_pdf_generator import UltraPremiumPDFGenerator
+            
+            symbol = report['assetSymbol']
+            logger.info(f"📄 Génération PDF DEEP_ANALYSIS pour {symbol}")
+            
+            # Utiliser le générateur ultra premium
+            generator = UltraPremiumPDFGenerator(symbol, pdf_path)
+            return generator.run_deep_analysis()
+            
+        except Exception as e:
+            logger.error(f"❌ Erreur génération PDF deep analysis: {e}")
+            return False
+    
+    def generate_custom_pdf(self, report, pdf_path):
+        """Génère un rapport personnalisé (variable) - Configuration sur mesure"""
+        try:
+            from ultra_premium_pdf_generator import UltraPremiumPDFGenerator
+            
+            symbol = report['assetSymbol']
+            custom_params = report.get('customPricingParams', {})
+            logger.info(f"📄 Génération PDF CUSTOM pour {symbol}")
+            
+            # Utiliser le générateur ultra premium avec paramètres personnalisés
+            generator = UltraPremiumPDFGenerator(symbol, pdf_path)
+            return generator.run_custom_analysis(custom_params)
+            
+        except Exception as e:
+            logger.error(f"❌ Erreur génération PDF custom: {e}")
             return False
     
     def generate_benchmark_pdf(self, report, pdf_path):

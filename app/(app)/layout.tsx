@@ -17,7 +17,7 @@ export default async function AppLayout({
     return  (
 
       <SidebarProvider>
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1">
           <AppSidebar />
           <div className="flex-1 h-screen flex flex-col overflow-auto">
             <Header />
@@ -33,7 +33,7 @@ export default async function AppLayout({
 
   return (
     <SidebarProvider>
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1">
         <AppSidebar />
         <div className="flex-1 h-screen flex flex-col overflow-auto">
           <Header />

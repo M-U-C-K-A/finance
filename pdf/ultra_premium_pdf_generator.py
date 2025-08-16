@@ -1603,6 +1603,305 @@ class UltraPremiumPDFGenerator:
         except Exception as e:
             logging.error(f"Erreur lors de l'analyse: {e}")
             return False
+    
+    def run_deep_analysis(self):
+        """Génère un rapport DEEP_ANALYSIS (25-30 pages) - Recherche exhaustive"""
+        try:
+            logging.info(f"🔬 DEEP ANALYSIS pour {self.symbol}")
+            
+            # Charger toutes les données
+            if not self.fetch_comprehensive_data():
+                return False
+            
+            # Générer le rapport ultra complet mais optimisé
+            self.add_cover_page()
+            self.add_table_of_contents()
+            self.add_executive_summary()
+            self.add_investment_thesis() 
+            self.add_company_overview()
+            self.add_financial_performance()
+            self.add_technical_analysis()
+            self.add_risk_assessment()
+            self.add_sector_analysis()
+            self.add_macroeconomic_analysis()
+            self.add_esg_analysis()
+            self.add_stress_testing()
+            self.add_recommendations()
+            self.add_appendices()
+            
+            # Construire le PDF
+            self.doc.build(self.story)
+            logging.info(f"✅ DEEP ANALYSIS généré: {self.output_path}")
+            return True
+            
+        except Exception as e:
+            logging.error(f"❌ Erreur DEEP ANALYSIS: {e}")
+            return False
+    
+    def run_custom_analysis(self, custom_params=None):
+        """Génère un rapport CUSTOM (variable) - Configuration sur mesure"""
+        try:
+            logging.info(f"⚙️ CUSTOM ANALYSIS pour {self.symbol}")
+            
+            if not custom_params:
+                custom_params = {}
+            
+            # Charger les données
+            if not self.fetch_comprehensive_data():
+                return False
+            
+            # Configuration personnalisée basée sur les paramètres
+            self.add_cover_page()
+            
+            # Sections conditionnelles selon les paramètres
+            if custom_params.get('include_executive_summary', True):
+                self.add_executive_summary()
+            
+            if custom_params.get('include_company_overview', True):
+                self.add_company_overview()
+            
+            if custom_params.get('include_financial_analysis', True):
+                self.add_financial_performance()
+            
+            if custom_params.get('include_technical_analysis', False):
+                self.add_technical_analysis()
+            
+            if custom_params.get('include_risk_analysis', True):
+                self.add_risk_assessment()
+            
+            if custom_params.get('include_sector_analysis', False):
+                self.add_sector_analysis()
+            
+            if custom_params.get('include_recommendations', True):
+                self.add_recommendations()
+            
+            # Construire le PDF
+            self.doc.build(self.story)
+            logging.info(f"✅ CUSTOM ANALYSIS généré: {self.output_path}")
+            return True
+            
+        except Exception as e:
+            logging.error(f"❌ Erreur CUSTOM ANALYSIS: {e}")
+            return False
+    
+    def run_benchmark_analysis(self, benchmarks=None):
+        """Génère un rapport BENCHMARK - Comparaison avec indices"""
+        try:
+            logging.info(f"📈 BENCHMARK ANALYSIS pour {self.symbol}")
+            
+            if not benchmarks:
+                benchmarks = ['^GSPC', '^DJI', '^IXIC']  # S&P500, Dow Jones, Nasdaq
+            
+            # Charger les données
+            if not self.fetch_comprehensive_data():
+                return False
+            
+            # Rapport orienté comparaison
+            self.add_cover_page()
+            self.add_executive_summary()
+            self.add_company_overview()
+            self.add_benchmark_comparison(benchmarks)
+            self.add_relative_performance_analysis(benchmarks)
+            self.add_correlation_analysis(benchmarks)
+            self.add_risk_comparison(benchmarks)
+            self.add_recommendations()
+            
+            # Construire le PDF
+            self.doc.build(self.story)
+            logging.info(f"✅ BENCHMARK ANALYSIS généré: {self.output_path}")
+            return True
+            
+        except Exception as e:
+            logging.error(f"❌ Erreur BENCHMARK ANALYSIS: {e}")
+            return False
+    
+    def run_pricer_analysis(self, pricing_params=None):
+        """Génère un rapport PRICER - Modèles de valorisation"""
+        try:
+            logging.info(f"🧮 PRICER ANALYSIS pour {self.symbol}")
+            
+            if not pricing_params:
+                pricing_params = {}
+            
+            # Charger les données
+            if not self.fetch_comprehensive_data():
+                return False
+            
+            # Rapport orienté valorisation
+            self.add_cover_page()
+            self.add_executive_summary()
+            self.add_company_overview()
+            self.add_dcf_model()
+            self.add_comparable_analysis()
+            self.add_monte_carlo_simulation()
+            self.add_sensitivity_analysis()
+            self.add_valuation_summary()
+            self.add_recommendations()
+            
+            # Construire le PDF
+            self.doc.build(self.story)
+            logging.info(f"✅ PRICER ANALYSIS généré: {self.output_path}")
+            return True
+            
+        except Exception as e:
+            logging.error(f"❌ Erreur PRICER ANALYSIS: {e}")
+            return False
+    
+    def add_benchmark_comparison(self, benchmarks):
+        """Ajoute une section de comparaison avec les benchmarks"""
+        try:
+            self.story.append(PageBreak())
+            title = ParagraphStyle('CustomTitle', parent=self.styles['Heading1'], 
+                                 fontSize=18, spaceAfter=20, textColor=colors.HexColor('#2E4057'))
+            self.story.append(Paragraph("Benchmark Comparison", title))
+            
+            # Comparaison des performances
+            comparison_text = f"""
+            Cette section compare les performances de {self.symbol} avec les principaux indices de référence.
+            L'analyse inclut les rendements relatifs, la volatilité, et la corrélation avec les marchés.
+            """
+            self.story.append(Paragraph(comparison_text, self.styles['Normal']))
+            self.story.append(Spacer(1, 20))
+            
+        except Exception as e:
+            logging.error(f"Erreur benchmark_comparison: {e}")
+    
+    def add_relative_performance_analysis(self, benchmarks):
+        """Analyse de performance relative"""
+        try:
+            subtitle = ParagraphStyle('Subtitle', parent=self.styles['Heading2'], 
+                                    fontSize=14, spaceAfter=15)
+            self.story.append(Paragraph("Relative Performance Analysis", subtitle))
+            
+            # Ici on ajouterait l'analyse réelle des performances relatives
+            analysis_text = f"""
+            L'analyse de performance relative de {self.symbol} montre sa capacité à surperformer 
+            ou sous-performer les indices de référence sur différentes périodes.
+            """
+            self.story.append(Paragraph(analysis_text, self.styles['Normal']))
+            self.story.append(Spacer(1, 15))
+            
+        except Exception as e:
+            logging.error(f"Erreur relative_performance: {e}")
+    
+    def add_correlation_analysis(self, benchmarks):
+        """Analyse de corrélation"""
+        try:
+            subtitle = ParagraphStyle('Subtitle', parent=self.styles['Heading2'], 
+                                    fontSize=14, spaceAfter=15)
+            self.story.append(Paragraph("Correlation Analysis", subtitle))
+            
+            correlation_text = f"""
+            L'analyse de corrélation examine la relation statistique entre {self.symbol} 
+            et les indices de marché pour comprendre sa sensibilité aux mouvements du marché global.
+            """
+            self.story.append(Paragraph(correlation_text, self.styles['Normal']))
+            self.story.append(Spacer(1, 15))
+            
+        except Exception as e:
+            logging.error(f"Erreur correlation_analysis: {e}")
+    
+    def add_risk_comparison(self, benchmarks):
+        """Comparaison des risques"""
+        try:
+            subtitle = ParagraphStyle('Subtitle', parent=self.styles['Heading2'], 
+                                    fontSize=14, spaceAfter=15)
+            self.story.append(Paragraph("Risk Comparison", subtitle))
+            
+            risk_text = f"""
+            Cette section compare les métriques de risque de {self.symbol} avec celles des benchmarks,
+            incluant la volatilité, le ratio de Sharpe, et les mesures de risque de queue.
+            """
+            self.story.append(Paragraph(risk_text, self.styles['Normal']))
+            self.story.append(Spacer(1, 15))
+            
+        except Exception as e:
+            logging.error(f"Erreur risk_comparison: {e}")
+    
+    def add_dcf_model(self):
+        """Modèle DCF"""
+        try:
+            subtitle = ParagraphStyle('Subtitle', parent=self.styles['Heading2'], 
+                                    fontSize=14, spaceAfter=15)
+            self.story.append(Paragraph("Discounted Cash Flow Model", subtitle))
+            
+            dcf_text = f"""
+            Le modèle DCF évalue la valeur intrinsèque de {self.symbol} en actualisant 
+            les flux de trésorerie futurs projetés au coût moyen pondéré du capital (WACC).
+            """
+            self.story.append(Paragraph(dcf_text, self.styles['Normal']))
+            self.story.append(Spacer(1, 15))
+            
+        except Exception as e:
+            logging.error(f"Erreur dcf_model: {e}")
+    
+    def add_comparable_analysis(self):
+        """Analyse par comparables"""
+        try:
+            subtitle = ParagraphStyle('Subtitle', parent=self.styles['Heading2'], 
+                                    fontSize=14, spaceAfter=15)
+            self.story.append(Paragraph("Comparable Company Analysis", subtitle))
+            
+            comp_text = f"""
+            L'analyse par comparables évalue {self.symbol} en utilisant les multiples 
+            de valorisation d'entreprises similaires du même secteur.
+            """
+            self.story.append(Paragraph(comp_text, self.styles['Normal']))
+            self.story.append(Spacer(1, 15))
+            
+        except Exception as e:
+            logging.error(f"Erreur comparable_analysis: {e}")
+    
+    def add_monte_carlo_simulation(self):
+        """Simulation Monte Carlo"""
+        try:
+            subtitle = ParagraphStyle('Subtitle', parent=self.styles['Heading2'], 
+                                    fontSize=14, spaceAfter=15)
+            self.story.append(Paragraph("Monte Carlo Simulation", subtitle))
+            
+            mc_text = f"""
+            La simulation Monte Carlo modélise l'incertitude dans les projections financières 
+            de {self.symbol} en générant de multiples scénarios possibles.
+            """
+            self.story.append(Paragraph(mc_text, self.styles['Normal']))
+            self.story.append(Spacer(1, 15))
+            
+        except Exception as e:
+            logging.error(f"Erreur monte_carlo: {e}")
+    
+    def add_sensitivity_analysis(self):
+        """Analyse de sensibilité"""
+        try:
+            subtitle = ParagraphStyle('Subtitle', parent=self.styles['Heading2'], 
+                                    fontSize=14, spaceAfter=15)
+            self.story.append(Paragraph("Sensitivity Analysis", subtitle))
+            
+            sens_text = f"""
+            L'analyse de sensibilité examine comment les variations des hypothèses clés 
+            affectent la valorisation de {self.symbol}.
+            """
+            self.story.append(Paragraph(sens_text, self.styles['Normal']))
+            self.story.append(Spacer(1, 15))
+            
+        except Exception as e:
+            logging.error(f"Erreur sensitivity_analysis: {e}")
+    
+    def add_valuation_summary(self):
+        """Résumé de valorisation"""
+        try:
+            subtitle = ParagraphStyle('Subtitle', parent=self.styles['Heading2'], 
+                                    fontSize=14, spaceAfter=15)
+            self.story.append(Paragraph("Valuation Summary", subtitle))
+            
+            val_text = f"""
+            Cette section synthétise les résultats des différentes méthodes de valorisation 
+            appliquées à {self.symbol} pour déterminer une fourchette de prix objectif.
+            """
+            self.story.append(Paragraph(val_text, self.styles['Normal']))
+            self.story.append(Spacer(1, 15))
+            
+        except Exception as e:
+            logging.error(f"Erreur valuation_summary: {e}")
 
 def main():
     """Fonction principale"""

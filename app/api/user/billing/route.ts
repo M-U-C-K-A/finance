@@ -15,19 +15,29 @@ export async function GET(request: NextRequest) {
       where: { userId: user.id }
     });
 
-    // Récupérer les transactions de crédits (simule les factures)
-    const transactions = await prisma.creditTransaction.findMany({
+    // Récupérer les transactions de crédits (achats et rechargements)
+    const creditTransactions = await prisma.creditTransaction.findMany({
       where: { 
         userId: user.id,
         type: { in: ['PACK_PURCHASE', 'SUBSCRIPTION_RECHARGE'] }
       },
       orderBy: { createdAt: 'desc' },
-      take: 10
+      take: 20
     });
 
-    // Simuler des factures basées sur les transactions
-    const invoices = transactions.map((transaction, index) => ({
-      id: `INV-2024-${String(index + 1).padStart(3, '0')}`,
+    // Récupérer les rapports générés (qui consomment des crédits)
+    const reports = await prisma.report.findMany({
+      where: { 
+        userId: user.id,
+        status: { in: ['COMPLETED', 'PENDING', 'PROCESSING'] }
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 20
+    });
+
+    // Créer les factures pour les achats de crédits
+    const creditInvoices = creditTransactions.map((transaction, index) => ({
+      id: `INV-CREDIT-${String(Date.now() + index).slice(-6)}`,
       date: transaction.createdAt.toISOString(),
       amount: transaction.type === 'SUBSCRIPTION_RECHARGE' ? 
         (subscription?.plan === 'STARTER' ? 29 :
@@ -37,8 +47,44 @@ export async function GET(request: NextRequest) {
       status: 'paid',
       description: transaction.description,
       type: transaction.type,
+      category: 'CREDIT_PURCHASE',
+      transactionId: transaction.id,
       downloadUrl: `/api/invoices/${transaction.id}.pdf`
     }));
+
+    // Créer les factures pour les rapports générés
+    const reportInvoices = reports.map((report, index) => {
+      const reportTypeNames = {
+        'BASELINE': 'Rapport Baseline',
+        'DETAILED': 'Analyse Détaillée',
+        'DEEP_ANALYSIS': 'Analyse Approfondie',
+        'CUSTOM': 'Rapport Personnalisé',
+        'PRICER': 'Modèle de Pricing',
+        'BENCHMARK': 'Analyse Comparative'
+      };
+
+      const baseAmount = report.creditsCost * 0.69; // Prix estimé par crédit
+      
+      return {
+        id: `INV-REPORT-${String(Date.now() + index + 1000).slice(-6)}`,
+        date: report.createdAt.toISOString(),
+        amount: Math.ceil(baseAmount),
+        status: 'paid',
+        description: `${reportTypeNames[report.reportType as keyof typeof reportTypeNames] || report.reportType} - ${report.assetSymbol}`,
+        type: 'REPORT_GENERATION',
+        category: 'REPORT',
+        reportType: report.reportType,
+        assetSymbol: report.assetSymbol,
+        creditsCost: report.creditsCost,
+        transactionId: report.id,
+        downloadUrl: `/api/invoices/report-${report.id}.pdf`
+      };
+    });
+
+    // Combiner toutes les factures et les trier par date
+    const allInvoices = [...creditInvoices, ...reportInvoices].sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
 
     return Response.json({
       subscription: subscription ? {
@@ -50,7 +96,7 @@ export async function GET(request: NextRequest) {
         isActive: subscription.isActive,
         paymentMethod: "**** **** **** 4242" // Simulé
       } : null,
-      invoices
+      invoices: allInvoices
     });
 
   } catch (error) {

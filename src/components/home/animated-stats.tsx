@@ -54,7 +54,7 @@ export const AnimatedStats = () => {
       const targetNumber = parseInt(stats[index].number.replace(/\D/g, ''));
       const suffix = stats[index].suffix;
       
-      let currentNumber = { value: 0 };
+      const currentNumber = { value: 0 };
       
       gsap.to(currentNumber, {
         value: targetNumber,

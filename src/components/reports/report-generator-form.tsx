@@ -470,7 +470,7 @@ export function ReportGeneratorForm({ userCredits, hasApiAccess }: ReportGenerat
   const [selectedCategory, setSelectedCategory] = useState<string>("US_TECH");
   const [formData, setFormData] = useState({
     title: "",
-    reportType: "SIMPLE",
+    reportType: "BASELINE",
     includeBenchmark: false,
     includeApiExport: false,
     pricerDCF: false,
@@ -482,16 +482,18 @@ export function ReportGeneratorForm({ userCredits, hasApiAccess }: ReportGenerat
     selectedCharts: [] as string[],
     benchmarkTypes: [] as string[],
     customBenchmarks: [] as string[],
-    selectedBenchmarks: [] as string[]
+    customBenchmarks: [] as string[]
   });
 
   // Calcul du coût en temps réel basé sur le type de rapport
   const getReportCost = () => {
     const baseCosts = {
-      "SIMPLE": 15,
-      "COMPLETE": 25,
-      "BENCHMARK": 20,
-      "PRICER": 30
+      "BASELINE": 15,
+      "DETAILED": 25,
+      "DEEP_ANALYSIS": 35,
+      "CUSTOM": 20,
+      "PRICER": 30,
+      "BENCHMARK": 20
     };
     
     let cost = baseCosts[formData.reportType as keyof typeof baseCosts] || 15;
@@ -516,7 +518,7 @@ export function ReportGeneratorForm({ userCredits, hasApiAccess }: ReportGenerat
     }
 
     // Vérification des benchmarks si type BENCHMARK
-    if (formData.reportType === "BENCHMARK" && formData.selectedBenchmarks.length === 0) {
+    if (formData.reportType === "BENCHMARK" && formData.customBenchmarks.length === 0) {
       toast.error("Please select at least one benchmark for comparison");
       return;
     }
@@ -538,7 +540,7 @@ export function ReportGeneratorForm({ userCredits, hasApiAccess }: ReportGenerat
           reportType: formData.reportType,
           includeBenchmark: formData.includeBenchmark,
           includeApiExport: formData.includeApiExport && hasApiAccess,
-          selectedBenchmarks: formData.selectedBenchmarks,
+          customBenchmarks: formData.customBenchmarks,
           // Paramètres de pricing
           pricingModel: formData.pricerCustom ? "CUSTOM" : 
                       formData.pricerDCF ? "BLACK_SCHOLES" :
@@ -559,7 +561,7 @@ export function ReportGeneratorForm({ userCredits, hasApiAccess }: ReportGenerat
         // Reset form
         setFormData({
           title: "",
-          reportType: "SIMPLE",
+          reportType: "BASELINE",
           includeBenchmark: false,
           includeApiExport: false,
           pricerDCF: false,
@@ -571,7 +573,7 @@ export function ReportGeneratorForm({ userCredits, hasApiAccess }: ReportGenerat
           selectedCharts: [],
           benchmarkTypes: [],
           customBenchmarks: [],
-          selectedBenchmarks: []
+          customBenchmarks: []
         });
         setSelectedAsset(null);
         setCustomAsset({ symbol: "", type: "" });
@@ -742,14 +744,14 @@ export function ReportGeneratorForm({ userCredits, hasApiAccess }: ReportGenerat
           <p className="text-sm text-muted-foreground">Choose the type and depth of analysis you need</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card 
             className={`cursor-pointer transition-colors duration-200 hover:shadow-md ${
-              formData.reportType === "SIMPLE" ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+              formData.reportType === "BASELINE" ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-gray-50 dark:hover:bg-gray-800'
             }`}
             onClick={(e) => {
               e.preventDefault();
-              setFormData(prev => ({ ...prev, reportType: "SIMPLE" }));
+              setFormData(prev => ({ ...prev, reportType: "BASELINE" }));
             }}
           >
             <CardContent className="p-4">
@@ -758,9 +760,12 @@ export function ReportGeneratorForm({ userCredits, hasApiAccess }: ReportGenerat
                   <FileText className="h-5 w-5 text-blue-600" />
                 </div>
                 <div>
-                  <h4 className="font-semibold">Simple Report</h4>
-                  <p className="text-sm text-muted-foreground">Basic financial analysis (8-10 pages)</p>
-                  <Badge variant="outline" className="text-xs mt-1">15 crédits</Badge>
+                  <h4 className="font-semibold">Rapport Baseline</h4>
+                  <p className="text-sm text-muted-foreground">Analyse financière de base avec métriques essentielles</p>
+                  <div className="flex gap-1 mt-1">
+                    <Badge variant="outline" className="text-xs">15 crédits</Badge>
+                    <Badge variant="secondary" className="text-xs">8-10 pages</Badge>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -768,22 +773,25 @@ export function ReportGeneratorForm({ userCredits, hasApiAccess }: ReportGenerat
           
           <Card 
             className={`cursor-pointer transition-colors duration-200 hover:shadow-md ${
-              formData.reportType === "COMPLETE" ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+              formData.reportType === "DETAILED" ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-gray-50 dark:hover:bg-gray-800'
             }`}
             onClick={(e) => {
               e.preventDefault();
-              setFormData(prev => ({ ...prev, reportType: "COMPLETE" }));
+              setFormData(prev => ({ ...prev, reportType: "DETAILED" }));
             }}
           >
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="h-5 w-5 text-purple-600" />
+                <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="h-5 w-5 text-purple-600 dark:text-purple-300" />
                 </div>
                 <div>
-                  <h4 className="font-semibold">Complete Analysis</h4>
-                  <p className="text-sm text-muted-foreground">Ultra-detailed analysis (15+ pages)</p>
-                  <Badge variant="outline" className="text-xs mt-1">25 crédits</Badge>
+                  <h4 className="font-semibold">Analyse Technique Avancée</h4>
+                  <p className="text-sm text-muted-foreground">Analyse technique poussée avec indicateurs complexes</p>
+                  <div className="flex gap-1 mt-1">
+                    <Badge variant="outline" className="text-xs">25 crédits</Badge>
+                    <Badge variant="secondary" className="text-xs">15-20 pages</Badge>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -804,9 +812,12 @@ export function ReportGeneratorForm({ userCredits, hasApiAccess }: ReportGenerat
                   <CheckCircle className="h-5 w-5 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="font-semibold">Benchmark Analysis</h4>
-                  <p className="text-sm text-muted-foreground">Comparison with selected benchmarks</p>
-                  <Badge variant="outline" className="text-xs mt-1">20 crédits</Badge>
+                  <h4 className="font-semibold">Analyse Comparative</h4>
+                  <p className="text-sm text-muted-foreground">Comparaison détaillée avec des indices de référence</p>
+                  <div className="flex gap-1 mt-1">
+                    <Badge variant="outline" className="text-xs">20 crédits</Badge>
+                    <Badge variant="secondary" className="text-xs">12-15 pages</Badge>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -827,36 +838,168 @@ export function ReportGeneratorForm({ userCredits, hasApiAccess }: ReportGenerat
                   <DollarSign className="h-5 w-5 text-orange-600" />
                 </div>
                 <div>
-                  <h4 className="font-semibold">Pricer Analysis</h4>
-                  <p className="text-sm text-muted-foreground">Advanced valuation models</p>
-                  <Badge variant="outline" className="text-xs mt-1">30 crédits</Badge>
+                  <h4 className="font-semibold">Modèle de Pricing</h4>
+                  <p className="text-sm text-muted-foreground">Évaluation avancée avec modèles quantitatifs</p>
+                  <div className="flex gap-1 mt-1">
+                    <Badge variant="outline" className="text-xs">30 crédits</Badge>
+                    <Badge variant="secondary" className="text-xs">20-25 pages</Badge>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card 
+            className={`cursor-pointer transition-colors duration-200 hover:shadow-md ${
+              formData.reportType === "DEEP_ANALYSIS" ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+            }`}
+            onClick={(e) => {
+              e.preventDefault();
+              setFormData(prev => ({ ...prev, reportType: "DEEP_ANALYSIS" }));
+            }}
+          >
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
+                  <FileText className="h-5 w-5 text-red-600 dark:text-red-300" />
+                </div>
+                <div>
+                  <h4 className="font-semibold">Recherche Exhaustive</h4>
+                  <p className="text-sm text-muted-foreground">Étude complète avec ESG, macro et secteur</p>
+                  <div className="flex gap-1 mt-1">
+                    <Badge variant="outline" className="text-xs">35 crédits</Badge>
+                    <Badge variant="secondary" className="text-xs">25-30 pages</Badge>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card 
+            className="opacity-60 cursor-not-allowed bg-gray-100 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-600"
+          >
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                  <FileText className="h-5 w-5 text-gray-400" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-500 dark:text-gray-400">Rapport Personnalisé</h4>
+                  <p className="text-sm text-gray-400 dark:text-gray-500">Configuration sur mesure selon vos besoins</p>
+                  <div className="flex gap-1 mt-1">
+                    <Badge className="text-xs bg-orange-500 text-white border-0">BIENTÔT</Badge>
+                    <Badge variant="secondary" className="text-xs opacity-50">Variable</Badge>
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
+
+        {/* Report Content Details */}
+        <Card className="bg-gray-50 border-gray-200">
+          <CardContent className="p-4">
+            <h5 className="font-semibold mb-3">Contenu du rapport sélectionné</h5>
+            {formData.reportType === "BASELINE" && (
+              <div className="text-sm text-gray-700 space-y-2">
+                <p className="font-medium">📊 Rapport Baseline - Analyse fondamentale</p>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li>Métriques financières clés (P/E, ROE, ROA, etc.)</li>
+                  <li>Analyse des revenus et de la rentabilité</li>
+                  <li>Positions concurrentielles et sectorielles</li>
+                  <li>Recommandations d'investissement de base</li>
+                </ul>
+              </div>
+            )}
+            {formData.reportType === "DETAILED" && (
+              <div className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                <p className="font-medium">📊 Analyse Technique Avancée - Indicateurs complexes</p>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li>Tous les éléments du rapport Baseline</li>
+                  <li>20+ indicateurs techniques avancés (Ichimoku, Elliott Wave, etc.)</li>
+                  <li>Analyse des patterns de chandeliers japonais</li>
+                  <li>Détection automatique de supports/résistances</li>
+                  <li>Analyse de volume et flux financiers</li>
+                  <li>Signaux d'entrée/sortie optimisés</li>
+                </ul>
+              </div>
+            )}
+            {formData.reportType === "BENCHMARK" && (
+              <div className="text-sm text-gray-700 space-y-2">
+                <p className="font-medium">📈 Analyse Comparative - Positionnement marché</p>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li>Comparaison avec indices de référence sélectionnés</li>
+                  <li>Performance relative sur différentes périodes</li>
+                  <li>Analyse de corrélation et volatilité</li>
+                  <li>Score de surperformance/sous-performance</li>
+                  <li>Recommandations d'allocation d'actifs</li>
+                </ul>
+              </div>
+            )}
+            {formData.reportType === "PRICER" && (
+              <div className="text-sm text-gray-700 space-y-2">
+                <p className="font-medium">🧮 Modèle de Pricing - Évaluation quantitative</p>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li>Modèles de valorisation avancés (DCF, Black-Scholes, etc.)</li>
+                  <li>Simulations Monte Carlo pour la gestion des risques</li>
+                  <li>Arbres binomiaux pour les options</li>
+                  <li>Modèles de volatilité stochastique</li>
+                  <li>Prix théorique et fourchettes de valorisation</li>
+                  <li>Recommandations de trading algorithmique</li>
+                </ul>
+              </div>
+            )}
+            {formData.reportType === "DEEP_ANALYSIS" && (
+              <div className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                <p className="font-medium">🔬 Recherche Exhaustive - Étude complète multi-dimensionnelle</p>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li>Analyse sectorielle complète et positionnement concurrentiel</li>
+                  <li>Évaluation ESG détaillée et score de durabilité</li>
+                  <li>Analyse macro-économique et impact géopolitique</li>
+                  <li>Modélisation de scénarios de stress-testing</li>
+                  <li>Simulation Monte Carlo et tests de sensibilité</li>
+                  <li>Recommandations stratégiques long terme (3-5 ans)</li>
+                  <li>Intelligence artificielle pour détection de patterns</li>
+                </ul>
+              </div>
+            )}
+            {formData.reportType === "CUSTOM" && (
+              <div className="text-sm text-gray-700 space-y-2">
+                <p className="font-medium">⚙️ Rapport Personnalisé - Sur mesure</p>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li>Configuration modulaire selon vos besoins spécifiques</li>
+                  <li>Choix des sections et profondeur d'analyse</li>
+                  <li>Métriques personnalisées et KPIs sur mesure</li>
+                  <li>Intégration de données propriétaires</li>
+                  <li>Format et présentation adaptés</li>
+                  <li>Livraison selon votre calendrier</li>
+                </ul>
+              </div>
+            )}
+          </CardContent>
+        </Card>
         
         {/* Benchmark Selection for BENCHMARK type */}
         {formData.reportType === "BENCHMARK" && (
-          <Card className="bg-green-50 border-green-200">
+          <Card className="bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800">
             <CardContent className="p-4">
-              <h5 className="font-semibold mb-3 text-green-800">Select Benchmarks to Compare</h5>
+              <h5 className="font-semibold mb-3 text-green-800 dark:text-green-200">Sélectionner les Indices de Comparaison</h5>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-60 overflow-y-auto">
                 {AVAILABLE_BENCHMARKS.map((benchmark) => (
                   <div key={benchmark.symbol} className="flex items-center space-x-2">
                     <Checkbox
                       id={`benchmark-${benchmark.symbol}`}
-                      checked={formData.selectedBenchmarks.includes(benchmark.symbol)}
+                      checked={formData.customBenchmarks.includes(benchmark.symbol)}
                       onCheckedChange={(checked) => {
                         if (checked) {
                           setFormData({
                             ...formData,
-                            selectedBenchmarks: [...formData.selectedBenchmarks, benchmark.symbol]
+                            customBenchmarks: [...formData.customBenchmarks, benchmark.symbol]
                           });
                         } else {
                           setFormData({
                             ...formData,
-                            selectedBenchmarks: formData.selectedBenchmarks.filter(b => b !== benchmark.symbol)
+                            customBenchmarks: formData.customBenchmarks.filter(b => b !== benchmark.symbol)
                           });
                         }
                       }}

@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
-  Download,
   CreditCard,
   Calendar,
   Receipt,
@@ -15,6 +14,7 @@ import {
   AlertTriangle
 } from "lucide-react";
 import { toast } from "sonner";
+import { InvoiceGenerator } from "@/components/billing/invoice-generator";
 
 interface BillingData {
   subscription: {
@@ -30,6 +30,12 @@ interface BillingData {
     amount: number;
     status: string;
     description: string;
+    type?: string;
+    category?: string;
+    reportType?: string;
+    assetSymbol?: string;
+    creditsCost?: number;
+    transactionId?: string;
     downloadUrl: string;
   }>;
 }
@@ -38,18 +44,30 @@ export default function BillingPage() {
   const [billingData, setBillingData] = useState<BillingData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<{name?: string; email: string} | null>(null);
 
   useEffect(() => {
     async function fetchBillingData() {
       try {
-        const response = await fetch('/api/user/billing');
-        if (!response.ok) {
+        const [billingResponse, userResponse] = await Promise.all([
+          fetch('/api/user/billing'),
+          fetch('/api/user/me')
+        ]);
+        
+        if (!billingResponse.ok) {
           throw new Error('Erreur lors du chargement des données');
         }
-        const data = await response.json();
-        setBillingData(data);
-      } catch (error: any) {
-        setError(error.message);
+        
+        const billingData = await billingResponse.json();
+        setBillingData(billingData);
+        
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          setCurrentUser(userData);
+        }
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Une erreur inconnue est survenue';
+        setError(errorMessage);
         toast.error('Impossible de charger les données de facturation');
       } finally {
         setIsLoading(false);
@@ -160,39 +178,70 @@ export default function BillingPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {billingData?.invoices.map((invoice) => (
-              <div key={invoice.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <div className="font-medium">{invoice.id}</div>
-                    <div className="text-sm text-muted-foreground">{invoice.description}</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <div className="font-medium">{invoice.amount}€</div>
-                    <div className="text-sm text-muted-foreground">
-                      {new Date(invoice.date).toLocaleDateString("fr-FR")}
+            {billingData?.invoices.map((invoice) => {
+              const isReport = invoice.category === 'REPORT';
+              const IconComponent = isReport ? FileText : CreditCard;
+              const iconBgColor = isReport ? 'bg-blue-50' : 'bg-green-50';
+              const iconColor = isReport ? 'text-blue-600' : 'text-green-600';
+              
+              return (
+                <div key={invoice.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-10 h-10 ${iconBgColor} rounded-lg flex items-center justify-center`}>
+                      <IconComponent className={`h-5 w-5 ${iconColor}`} />
+                    </div>
+                    <div>
+                      <div className="font-medium">{invoice.id}</div>
+                      <div className="text-sm text-muted-foreground">{invoice.description}</div>
+                      {isReport && (
+                        <div className="flex items-center gap-2 mt-1">
+                          <Badge variant="secondary" className="text-xs">
+                            {invoice.reportType}
+                          </Badge>
+                          {invoice.creditsCost && (
+                            <span className="text-xs text-muted-foreground">
+                              {invoice.creditsCost} crédits
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                   
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    Payée
-                  </Badge>
-                  
-                  <Button variant="outline" size="sm" asChild>
-                    <a href={invoice.downloadUrl} download>
-                      <Download className="h-4 w-4 mr-2" />
-                      PDF
-                    </a>
-                  </Button>
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <div className="font-medium">{invoice.amount}€</div>
+                      <div className="text-sm text-muted-foreground">
+                        {new Date(invoice.date).toLocaleDateString("fr-FR")}
+                      </div>
+                      {isReport && (
+                        <div className="text-xs text-muted-foreground">
+                          {invoice.assetSymbol}
+                        </div>
+                      )}
+                    </div>
+                    
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                      Payée
+                    </Badge>
+                    
+                    {currentUser && (
+                      <InvoiceGenerator 
+                        invoice={{
+                          id: invoice.id,
+                          date: invoice.date,
+                          amount: invoice.amount,
+                          status: invoice.status,
+                          description: invoice.description,
+                          type: invoice.type || 'PURCHASE'
+                        }}
+                        user={currentUser}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             
             {(!billingData?.invoices || billingData.invoices.length === 0) && (
               <div className="text-center py-8 text-muted-foreground">

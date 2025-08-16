@@ -1290,6 +1290,135 @@ class PremiumPDFGenerator:
                 except:
                     pass
 
+    def run_baseline_analysis(self) -> bool:
+        """Génère un rapport BASELINE (8-10 pages) - Analyse fondamentale de base"""
+        try:
+            logging.info(f"📊 Génération rapport BASELINE pour {self.symbol}")
+            
+            # Charger les données
+            if not self.fetch_comprehensive_data():
+                return False
+            
+            # Génération simplifiée pour rapport baseline
+            self.add_title_page()
+            self.add_executive_summary()
+            self.add_basic_financial_overview()
+            self.add_fundamental_analysis()  # Version simplifiée
+            self.add_basic_charts()
+            self.add_investment_recommendation()
+            
+            # Construire le PDF
+            self.doc.build(self.story)
+            logging.info(f"✅ Rapport BASELINE généré: {self.output_path}")
+            return True
+            
+        except Exception as e:
+            logging.error(f"❌ Erreur génération BASELINE: {e}")
+            return False
+    
+    def run_detailed_analysis(self) -> bool:
+        """Génère un rapport DETAILED (15-20 pages) - Modèles financiers avancés"""
+        try:
+            logging.info(f"📊 Génération rapport DETAILED pour {self.symbol}")
+            
+            # Charger les données
+            if not self.fetch_comprehensive_data():
+                return False
+            
+            # Génération détaillée
+            self.add_title_page()
+            self.add_executive_summary()
+            self.add_basic_financial_overview()
+            self.add_fundamental_analysis()
+            self.add_technical_analysis()
+            self.add_risk_analysis()
+            self.add_sector_analysis()
+            self.generate_advanced_charts()
+            self.add_investment_recommendation()
+            self.add_disclaimer()
+            
+            # Construire le PDF
+            self.doc.build(self.story)
+            logging.info(f"✅ Rapport DETAILED généré: {self.output_path}")
+            return True
+            
+        except Exception as e:
+            logging.error(f"❌ Erreur génération DETAILED: {e}")
+            return False
+    
+    def add_basic_financial_overview(self):
+        """Ajoute un aperçu financier de base"""
+        try:
+            title_style = ParagraphStyle(
+                'CustomTitle',
+                parent=self.styles['Heading1'],
+                fontSize=16,
+                spaceAfter=20,
+                textColor=colors.HexColor('#2E4057')
+            )
+            
+            self.story.append(Paragraph("Financial Overview", title_style))
+            
+            if self.data and 'info' in self.data:
+                info = self.data['info']
+                
+                # Métriques de base
+                basic_metrics = [
+                    ['Metric', 'Value'],
+                    ['Current Price', f"${info.get('currentPrice', 'N/A')}"],
+                    ['Market Cap', f"${info.get('marketCap', 'N/A'):,}" if info.get('marketCap') else 'N/A'],
+                    ['P/E Ratio', f"{info.get('trailingPE', 'N/A')}"],
+                    ['Revenue', f"${info.get('totalRevenue', 'N/A'):,}" if info.get('totalRevenue') else 'N/A'],
+                    ['Dividend Yield', f"{info.get('dividendYield', 0)*100:.2f}%" if info.get('dividendYield') else 'N/A']
+                ]
+                
+                table = Table(basic_metrics, colWidths=[3*inch, 2*inch])
+                table.setStyle(TableStyle([
+                    ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#3498db')),
+                    ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                    ('FONTSIZE', (0, 0), (-1, 0), 12),
+                    ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                    ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#ecf0f1')),
+                    ('GRID', (0, 0), (-1, -1), 1, colors.black)
+                ]))
+                
+                self.story.append(table)
+                self.story.append(Spacer(1, 20))
+                
+        except Exception as e:
+            logging.error(f"Erreur basic_financial_overview: {e}")
+    
+    def add_basic_charts(self):
+        """Ajoute des graphiques de base"""
+        try:
+            if self.data and 'history' in self.data and not self.data['history'].empty:
+                # Graphique de prix simple
+                plt.figure(figsize=(10, 6))
+                hist = self.data['history'].last('1Y')  # Dernière année
+                
+                plt.plot(hist.index, hist['Close'], linewidth=2, color='#3498db')
+                plt.title(f'{self.symbol} - Price Evolution (1 Year)', fontsize=14, fontweight='bold')
+                plt.xlabel('Date')
+                plt.ylabel('Price ($)')
+                plt.grid(True, alpha=0.3)
+                plt.tight_layout()
+                
+                # Sauvegarder le graphique
+                chart_path = f"temp_charts/basic_price_{self.symbol}.png"
+                os.makedirs("temp_charts", exist_ok=True)
+                plt.savefig(chart_path, dpi=150, bbox_inches='tight')
+                plt.close()
+                
+                # Ajouter au PDF
+                self.story.append(Paragraph("Price Chart", self.styles['Heading2']))
+                self.story.append(Image(chart_path, width=6*inch, height=3.6*inch))
+                self.story.append(Spacer(1, 20))
+                
+        except Exception as e:
+            logging.error(f"Erreur basic_charts: {e}")
+
 def generate_premium_report(symbol: str, output_path: str) -> bool:
     """Fonction principale de génération de rapport premium"""
     generator = PremiumPDFGenerator(symbol, output_path)

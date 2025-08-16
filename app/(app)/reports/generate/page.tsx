@@ -40,12 +40,12 @@ export default async function GenerateReportPage() {
     redirect("/auth");
   }
 
-  const hasLowCredits = creditsInfo.balance < 40; // Moins de 2 rapports possibles
+  const hasLowCredits = creditsInfo.balance < 52; // Moins qu'un rapport complet possible
   const processingReports = userInfo.reports;
 
   return (
-    <div className="w-full max-w-none py-8 px-6 overflow-hidden">
-      <div className="max-w-6xl mx-auto space-y-6 overflow-auto">
+    <div className="w-full max-w-none py-8 px-6">
+      <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
@@ -87,7 +87,7 @@ export default async function GenerateReportPage() {
               <Alert className="mt-4">
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  Warning: You have less than 40 credits remaining. 
+                  Warning: You have less than 52 credits remaining. 
                   <a href="/plan/buy-credits" className="font-medium underline ml-1">
                     Recharge your balance
                   </a> to continue generating reports.
@@ -149,11 +149,25 @@ export default async function GenerateReportPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center p-4 border rounded">
-                <div className="text-lg font-semibold">20 crédits</div>
-                <p className="text-sm text-muted-foreground">Basic Report</p>
+                <div className="text-lg font-semibold">15 crédits</div>
+                <p className="text-sm text-muted-foreground">Baseline Report</p>
               </div>
+              <div className="text-center p-4 border rounded">
+                <div className="text-lg font-semibold">25 crédits</div>
+                <p className="text-sm text-muted-foreground">Detailed Analysis</p>
+              </div>
+              <div className="text-center p-4 border rounded">
+                <div className="text-lg font-semibold">35 crédits</div>
+                <p className="text-sm text-muted-foreground">Deep Analysis</p>
+              </div>
+              <div className="text-center p-4 border rounded">
+                <div className="text-lg font-semibold">30 crédits</div>
+                <p className="text-sm text-muted-foreground">Custom Pricer</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <div className="text-center p-4 border rounded">
                 <div className="text-lg font-semibold">+12 crédits</div>
                 <p className="text-sm text-muted-foreground">Benchmark Module</p>
@@ -164,9 +178,9 @@ export default async function GenerateReportPage() {
               </div>
             </div>
             <div className="mt-4 text-center">
-              <div className="text-xl font-bold">37 credits maximum</div>
+              <div className="text-xl font-bold">52 credits maximum</div>
               <p className="text-sm text-muted-foreground">
-                For a complete report with all options
+                For a deep analysis with all options
               </p>
             </div>
           </CardContent>

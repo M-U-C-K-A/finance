@@ -12,10 +12,9 @@ interface GenerateReportBody {
   reportType: ReportType;
   includeBenchmark: boolean;
   includeApiExport: boolean;
-  selectedBenchmarks?: string[];
   // Nouveaux paramètres de configuration
   pricingModel?: PricingModel;
-  customPricingParams?: any;
+  customPricingParams?: Record<string, unknown>;
   selectedCharts?: ChartType[];
   benchmarkTypes?: BenchmarkType[];
   customBenchmarks?: string[];
@@ -37,10 +36,12 @@ export const POST = createApiHandler(
       // Calcul du coût basé sur le type de rapport
       const getReportCost = () => {
         const baseCosts = {
-          "SIMPLE": 15,
-          "COMPLETE": 25,
-          "BENCHMARK": 20,
-          "PRICER": 30
+          "BASELINE": 15,
+          "DETAILED": 25,
+          "DEEP_ANALYSIS": 35,
+          "CUSTOM": 20,
+          "PRICER": 30,
+          "BENCHMARK": 20
         };
         
         let cost = baseCosts[body.reportType as keyof typeof baseCosts] || 15;
@@ -98,7 +99,6 @@ export const POST = createApiHandler(
             selectedCharts: body.selectedCharts || [],
             benchmarkTypes: body.benchmarkTypes || [],
             customBenchmarks: body.customBenchmarks || [],
-            selectedBenchmarks: body.selectedBenchmarks || [],
           }
         });
 
@@ -108,6 +108,27 @@ export const POST = createApiHandler(
       // Le rapport reste en statut PENDING
       // Il sera traité par le script report_processor.py qui tourne en arrière-plan
       console.log(`Rapport ${report.id} créé et ajouté à la queue de traitement`);
+      
+      // Pour les tests, on peut déclencher la génération immédiatement
+      if (process.env.NODE_ENV === 'development') {
+        try {
+          const { spawn } = require('child_process');
+          const pythonProcess = spawn('python3', [
+            'pdf/smart_report_generator.py',
+            body.assetSymbol,
+            body.reportType,
+            `public/reports/${body.reportType}_${body.assetSymbol}_${new Date().toISOString().slice(0,19).replace(/:/g,'').replace(/-/g,'')}.pdf`
+          ], {
+            cwd: process.cwd()
+          });
+          
+          pythonProcess.on('close', (code) => {
+            console.log(`Process exited with code ${code}`);
+          });
+        } catch (error) {
+          console.log('Erreur déclenchement génération:', error);
+        }
+      }
 
       return Response.json({
         success: true,
@@ -118,10 +139,10 @@ export const POST = createApiHandler(
         status: "PENDING"
       });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Generate report error:", error);
       
-      if (error.message === "Insufficient credits") {
+      if (error instanceof Error && error.message === "Insufficient credits") {
         return Response.json(
           { 
             error: "Payment Required", 

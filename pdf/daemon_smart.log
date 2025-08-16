@@ -1,0 +1,803 @@
+2025-08-16 03:46:59,549 - INFO - 🚀 FinAnalytics PDF System initialisé
+2025-08-16 03:46:59,549 - INFO - 📊 Base de données: postgresql://admin:@localhost:5433/finance
+2025-08-16 03:46:59,549 - INFO - 🚀 Démarrage du daemon FinAnalytics
+2025-08-16 03:46:59,549 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:46:59,627 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:46:59,627 - INFO - 📊 Début du scraping...
+2025-08-16 03:47:01,179 - INFO - ✅ AAPL OK
+2025-08-16 03:47:02,784 - INFO - ✅ MSFT OK
+2025-08-16 03:47:04,272 - INFO - ✅ GOOGL OK
+2025-08-16 03:47:05,812 - INFO - ✅ ^GSPC OK
+2025-08-16 03:47:07,361 - INFO - ✅ ^DJI OK
+2025-08-16 03:47:08,847 - INFO - ✅ BTC-USD OK
+2025-08-16 03:47:10,325 - INFO - ✅ ETH-USD OK
+2025-08-16 03:47:11,331 - INFO - 📊 Scraping terminé: 7/7 OK
+2025-08-16 03:47:41,336 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:47:41,366 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:48:11,370 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:48:11,415 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:48:41,419 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:48:41,452 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:49:11,457 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:49:11,495 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:49:41,501 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:49:41,546 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:50:11,550 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:50:11,580 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:50:41,586 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:50:41,622 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:51:11,624 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:51:11,652 - INFO - 🔄 Traitement rapport RLjN1gIqSPBF5WZ6eYbuLP5AX (AAPL)
+2025-08-16 03:51:11,654 - INFO - 📄 Génération PDF SMART type BASELINE pour AAPL
+2025-08-16 03:51:12,853 - INFO - 🚀 SmartReportGenerator initialisé : BASELINE pour AAPL
+2025-08-16 03:51:12,853 - INFO - 📊 Récupération des données pour AAPL
+2025-08-16 03:51:17,103 - INFO - ✅ Données récupérées avec succès
+2025-08-16 03:51:17,104 - INFO - 📊 Génération rapport BASELINE
+2025-08-16 03:51:17,193 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:17,193 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:17,194 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp73lsy4t9.
+2025-08-16 03:51:17,194 - INFO - Opening browser.
+2025-08-16 03:51:17,194 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp1k7oaqga.
+2025-08-16 03:51:17,194 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp1k7oaqga
+2025-08-16 03:51:17,769 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp73lsy4t9/index.html
+2025-08-16 03:51:17,770 - INFO - Waiting on all navigates
+2025-08-16 03:51:18,270 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:18,271 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:18,271 - INFO - Got 4333
+2025-08-16 03:51:18,271 - INFO - Processing Analyse_Technique_Complte___AAPL.png
+2025-08-16 03:51:18,271 - INFO - Sending big command for Analyse_Technique_Complte___AAPL.png.
+2025-08-16 03:51:18,392 - INFO - Sent big command for Analyse_Technique_Complte___AAPL.png.
+2025-08-16 03:51:18,394 - INFO - Reloading tab 4333 before return.
+2025-08-16 03:51:18,444 - INFO - Putting tab 4333 back (queue size: 0).
+2025-08-16 03:51:18,444 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:18,444 - INFO - Exiting Kaleido
+2025-08-16 03:51:18,445 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:18,445 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:18,445 - INFO - Cancelling tasks.
+2025-08-16 03:51:18,445 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:18,445 - INFO - Closing browser.
+2025-08-16 03:51:18,446 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:18,446 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:18,446 - INFO - Cancelling tasks.
+2025-08-16 03:51:18,446 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:18,446 - INFO - Closing browser.
+2025-08-16 03:51:18,534 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:18,534 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:18,558 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:18,558 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:18,558 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:18,559 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:18,559 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpmsvnrfl3.
+2025-08-16 03:51:18,559 - INFO - Opening browser.
+2025-08-16 03:51:18,559 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpsi6l9w24.
+2025-08-16 03:51:18,559 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpsi6l9w24
+2025-08-16 03:51:18,825 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpmsvnrfl3/index.html
+2025-08-16 03:51:18,832 - INFO - Waiting on all navigates
+2025-08-16 03:51:19,290 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:19,291 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:19,291 - INFO - Got 9D59
+2025-08-16 03:51:19,291 - INFO - Processing Analyse_Avance_du_Volume___AAPL.png
+2025-08-16 03:51:19,291 - INFO - Sending big command for Analyse_Avance_du_Volume___AAPL.png.
+2025-08-16 03:51:19,372 - INFO - Sent big command for Analyse_Avance_du_Volume___AAPL.png.
+2025-08-16 03:51:19,373 - INFO - Reloading tab 9D59 before return.
+2025-08-16 03:51:19,595 - INFO - Putting tab 9D59 back (queue size: 0).
+2025-08-16 03:51:19,595 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:19,595 - INFO - Exiting Kaleido
+2025-08-16 03:51:19,595 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:19,595 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:19,595 - INFO - Cancelling tasks.
+2025-08-16 03:51:19,595 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:19,595 - INFO - Closing browser.
+2025-08-16 03:51:19,597 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:19,597 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:19,597 - INFO - Cancelling tasks.
+2025-08-16 03:51:19,597 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:19,597 - INFO - Closing browser.
+2025-08-16 03:51:19,680 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:19,680 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:19,927 - INFO - ✅ Rapport BASELINE généré: ../public/reports/BASELINE_AAPL_20250816_035111.pdf
+2025-08-16 03:51:19,927 - INFO - ✅ PDF SMART BASELINE généré: BASELINE_AAPL_20250816_035111.pdf
+2025-08-16 03:51:19,927 - INFO - 📊 Taille du fichier: 0.53 MB
+2025-08-16 03:51:19,928 - INFO - ✅ Rapport RLjN1gIqSPBF5WZ6eYbuLP5AX terminé
+2025-08-16 03:51:19,928 - INFO - 🔄 Traitement rapport WFMwoGVcatTZz6ILfF3eN2skg (AAPL)
+2025-08-16 03:51:19,929 - INFO - 📄 Génération PDF SMART type DETAILED pour AAPL
+2025-08-16 03:51:19,929 - INFO - 🚀 SmartReportGenerator initialisé : DETAILED pour AAPL
+2025-08-16 03:51:19,929 - INFO - 📊 Récupération des données pour AAPL
+2025-08-16 03:51:21,415 - INFO - ✅ Données récupérées avec succès
+2025-08-16 03:51:21,416 - INFO - 📊 Génération rapport DETAILED
+2025-08-16 03:51:21,416 - INFO - 📊 Génération rapport BASELINE
+2025-08-16 03:51:21,462 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:21,462 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:21,463 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp13xq684d.
+2025-08-16 03:51:21,463 - INFO - Opening browser.
+2025-08-16 03:51:21,463 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpqpbug538.
+2025-08-16 03:51:21,463 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpqpbug538
+2025-08-16 03:51:21,734 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp13xq684d/index.html
+2025-08-16 03:51:21,737 - INFO - Waiting on all navigates
+2025-08-16 03:51:22,174 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:22,175 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:22,175 - INFO - Got CD13
+2025-08-16 03:51:22,175 - INFO - Processing Analyse_Technique_Complte___AAPL.png
+2025-08-16 03:51:22,175 - INFO - Sending big command for Analyse_Technique_Complte___AAPL.png.
+2025-08-16 03:51:22,286 - INFO - Sent big command for Analyse_Technique_Complte___AAPL.png.
+2025-08-16 03:51:22,288 - INFO - Reloading tab CD13 before return.
+2025-08-16 03:51:22,512 - INFO - Putting tab CD13 back (queue size: 0).
+2025-08-16 03:51:22,512 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:22,512 - INFO - Exiting Kaleido
+2025-08-16 03:51:22,513 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:22,513 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:22,513 - INFO - Cancelling tasks.
+2025-08-16 03:51:22,513 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:22,513 - INFO - Closing browser.
+2025-08-16 03:51:22,514 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:22,514 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:22,514 - INFO - Cancelling tasks.
+2025-08-16 03:51:22,514 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:22,514 - INFO - Closing browser.
+2025-08-16 03:51:22,599 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:22,599 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:22,603 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:22,603 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:22,659 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:22,659 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:22,665 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:22,665 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:22,665 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp_zl98r0a.
+2025-08-16 03:51:22,666 - INFO - Opening browser.
+2025-08-16 03:51:22,666 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpzfp6imer.
+2025-08-16 03:51:22,666 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpzfp6imer
+2025-08-16 03:51:22,945 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp_zl98r0a/index.html
+2025-08-16 03:51:22,950 - INFO - Waiting on all navigates
+2025-08-16 03:51:23,389 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:23,390 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:23,390 - INFO - Got 4AF9
+2025-08-16 03:51:23,390 - INFO - Processing Analyse_Avance_du_Volume___AAPL.png
+2025-08-16 03:51:23,390 - INFO - Sending big command for Analyse_Avance_du_Volume___AAPL.png.
+2025-08-16 03:51:23,474 - INFO - Sent big command for Analyse_Avance_du_Volume___AAPL.png.
+2025-08-16 03:51:23,476 - INFO - Reloading tab 4AF9 before return.
+2025-08-16 03:51:23,703 - INFO - Putting tab 4AF9 back (queue size: 0).
+2025-08-16 03:51:23,703 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:23,703 - INFO - Exiting Kaleido
+2025-08-16 03:51:23,703 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:23,703 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:23,703 - INFO - Cancelling tasks.
+2025-08-16 03:51:23,703 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:23,703 - INFO - Closing browser.
+2025-08-16 03:51:23,704 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:23,704 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:23,704 - INFO - Cancelling tasks.
+2025-08-16 03:51:23,704 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:23,704 - INFO - Closing browser.
+2025-08-16 03:51:23,791 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:23,791 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:23,807 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:23,807 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:23,815 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:23,816 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:23,816 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpb0rmmsr9.
+2025-08-16 03:51:23,816 - INFO - Opening browser.
+2025-08-16 03:51:23,816 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpz67hwkot.
+2025-08-16 03:51:23,816 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpz67hwkot
+2025-08-16 03:51:24,098 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpb0rmmsr9/index.html
+2025-08-16 03:51:24,103 - INFO - Waiting on all navigates
+2025-08-16 03:51:24,558 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:24,558 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:24,558 - INFO - Got 6A2A
+2025-08-16 03:51:24,558 - INFO - Processing Indicateurs_Techniques_Avancs___AAPL.png
+2025-08-16 03:51:24,558 - INFO - Sending big command for Indicateurs_Techniques_Avancs___AAPL.png.
+2025-08-16 03:51:24,643 - INFO - Sent big command for Indicateurs_Techniques_Avancs___AAPL.png.
+2025-08-16 03:51:24,646 - INFO - Reloading tab 6A2A before return.
+2025-08-16 03:51:24,871 - INFO - Putting tab 6A2A back (queue size: 0).
+2025-08-16 03:51:24,871 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:24,871 - INFO - Exiting Kaleido
+2025-08-16 03:51:24,872 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:24,872 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:24,872 - INFO - Cancelling tasks.
+2025-08-16 03:51:24,872 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:24,872 - INFO - Closing browser.
+2025-08-16 03:51:24,873 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:24,873 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:24,873 - INFO - Cancelling tasks.
+2025-08-16 03:51:24,873 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:24,873 - INFO - Closing browser.
+2025-08-16 03:51:24,956 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:24,956 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:24,973 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:24,973 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:24,988 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:24,989 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:24,989 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpjbrqjz3y.
+2025-08-16 03:51:24,989 - INFO - Opening browser.
+2025-08-16 03:51:24,989 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp6w2jw2hy.
+2025-08-16 03:51:24,989 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp6w2jw2hy
+2025-08-16 03:51:25,245 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpjbrqjz3y/index.html
+2025-08-16 03:51:25,251 - INFO - Waiting on all navigates
+2025-08-16 03:51:26,968 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:26,968 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:26,968 - INFO - Got 384E
+2025-08-16 03:51:26,968 - INFO - Processing Analyse_des_Tendances___AAPL.png
+2025-08-16 03:51:26,968 - INFO - Sending big command for Analyse_des_Tendances___AAPL.png.
+2025-08-16 03:51:27,070 - INFO - Sent big command for Analyse_des_Tendances___AAPL.png.
+2025-08-16 03:51:27,071 - INFO - Reloading tab 384E before return.
+2025-08-16 03:51:27,295 - INFO - Putting tab 384E back (queue size: 0).
+2025-08-16 03:51:27,295 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:27,295 - INFO - Exiting Kaleido
+2025-08-16 03:51:27,295 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:27,295 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:27,295 - INFO - Cancelling tasks.
+2025-08-16 03:51:27,295 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:27,295 - INFO - Closing browser.
+2025-08-16 03:51:27,297 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:27,297 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:27,297 - INFO - Cancelling tasks.
+2025-08-16 03:51:27,297 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:27,297 - INFO - Closing browser.
+2025-08-16 03:51:27,386 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:27,386 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:27,391 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:27,391 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:27,404 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:27,404 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:27,404 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpe1pccq7z.
+2025-08-16 03:51:27,405 - INFO - Opening browser.
+2025-08-16 03:51:27,405 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpmmic6d7u.
+2025-08-16 03:51:27,405 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpmmic6d7u
+2025-08-16 03:51:27,670 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpe1pccq7z/index.html
+2025-08-16 03:51:27,678 - INFO - Waiting on all navigates
+2025-08-16 03:51:28,144 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:28,145 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:28,145 - INFO - Got 198D
+2025-08-16 03:51:28,145 - INFO - Processing Analyse_Complte_de_la_Volatilit___AAPL.png
+2025-08-16 03:51:28,145 - INFO - Sending big command for Analyse_Complte_de_la_Volatilit___AAPL.png.
+2025-08-16 03:51:28,218 - INFO - Sent big command for Analyse_Complte_de_la_Volatilit___AAPL.png.
+2025-08-16 03:51:28,219 - INFO - Reloading tab 198D before return.
+2025-08-16 03:51:28,441 - INFO - Putting tab 198D back (queue size: 0).
+2025-08-16 03:51:28,441 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:28,441 - INFO - Exiting Kaleido
+2025-08-16 03:51:28,442 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:28,442 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:28,442 - INFO - Cancelling tasks.
+2025-08-16 03:51:28,442 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:28,442 - INFO - Closing browser.
+2025-08-16 03:51:28,443 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:28,443 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:28,443 - INFO - Cancelling tasks.
+2025-08-16 03:51:28,443 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:28,443 - INFO - Closing browser.
+2025-08-16 03:51:28,528 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:28,528 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:28,534 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:28,534 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:28,539 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:28,540 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:28,540 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmphngg2gsv.
+2025-08-16 03:51:28,540 - INFO - Opening browser.
+2025-08-16 03:51:28,540 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpf4aosds9.
+2025-08-16 03:51:28,540 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpf4aosds9
+2025-08-16 03:51:28,805 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmphngg2gsv/index.html
+2025-08-16 03:51:28,812 - INFO - Waiting on all navigates
+2025-08-16 03:51:29,259 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:29,260 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:29,260 - INFO - Got 2709
+2025-08-16 03:51:29,260 - INFO - Processing Corrlations_avec_les_Indices_Majeurs___AAPL.png
+2025-08-16 03:51:29,260 - INFO - Sending big command for Corrlations_avec_les_Indices_Majeurs___AAPL.png.
+2025-08-16 03:51:29,299 - INFO - Sent big command for Corrlations_avec_les_Indices_Majeurs___AAPL.png.
+2025-08-16 03:51:29,300 - INFO - Reloading tab 2709 before return.
+2025-08-16 03:51:29,527 - INFO - Putting tab 2709 back (queue size: 0).
+2025-08-16 03:51:29,527 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:29,527 - INFO - Exiting Kaleido
+2025-08-16 03:51:29,527 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:29,528 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:29,528 - INFO - Cancelling tasks.
+2025-08-16 03:51:29,528 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:29,528 - INFO - Closing browser.
+2025-08-16 03:51:29,529 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:29,529 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:29,529 - INFO - Cancelling tasks.
+2025-08-16 03:51:29,529 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:29,529 - INFO - Closing browser.
+2025-08-16 03:51:29,615 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:29,615 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:30,226 - INFO - ✅ Rapport DETAILED généré: ../public/reports/DETAILED_AAPL_20250816_035119.pdf
+2025-08-16 03:51:30,227 - INFO - ✅ PDF SMART DETAILED généré: DETAILED_AAPL_20250816_035119.pdf
+2025-08-16 03:51:30,227 - INFO - 📊 Taille du fichier: 1.30 MB
+2025-08-16 03:51:30,227 - INFO - ✅ Rapport WFMwoGVcatTZz6ILfF3eN2skg terminé
+2025-08-16 03:51:30,227 - INFO - 🔄 Traitement rapport hx7LPzQkVqJ365GufCtoFtLZg (AAPL)
+2025-08-16 03:51:30,228 - INFO - 📄 Génération PDF SMART type DEEP_ANALYSIS pour AAPL
+2025-08-16 03:51:30,228 - INFO - 🚀 SmartReportGenerator initialisé : DEEP_ANALYSIS pour AAPL
+2025-08-16 03:51:30,228 - INFO - 📊 Récupération des données pour AAPL
+2025-08-16 03:51:30,710 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:30,710 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:31,965 - INFO - ✅ Données récupérées avec succès
+2025-08-16 03:51:31,967 - INFO - 🔬 Génération rapport DEEP_ANALYSIS
+2025-08-16 03:51:31,967 - INFO - 📊 Génération rapport DETAILED
+2025-08-16 03:51:31,967 - INFO - 📊 Génération rapport BASELINE
+2025-08-16 03:51:32,006 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:32,007 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:32,007 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp04g4dp2z.
+2025-08-16 03:51:32,007 - INFO - Opening browser.
+2025-08-16 03:51:32,007 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp6sfl0_fx.
+2025-08-16 03:51:32,008 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp6sfl0_fx
+2025-08-16 03:51:32,258 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp04g4dp2z/index.html
+2025-08-16 03:51:32,264 - INFO - Waiting on all navigates
+2025-08-16 03:51:32,740 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:32,742 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:32,744 - INFO - Got AA9E
+2025-08-16 03:51:32,744 - INFO - Processing Analyse_Technique_Complte___AAPL.png
+2025-08-16 03:51:32,745 - INFO - Sending big command for Analyse_Technique_Complte___AAPL.png.
+2025-08-16 03:51:32,859 - INFO - Sent big command for Analyse_Technique_Complte___AAPL.png.
+2025-08-16 03:51:32,862 - INFO - Reloading tab AA9E before return.
+2025-08-16 03:51:33,090 - INFO - Putting tab AA9E back (queue size: 0).
+2025-08-16 03:51:33,091 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:33,091 - INFO - Exiting Kaleido
+2025-08-16 03:51:33,091 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:33,091 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:33,091 - INFO - Cancelling tasks.
+2025-08-16 03:51:33,091 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:33,091 - INFO - Closing browser.
+2025-08-16 03:51:33,092 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:33,092 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:33,092 - INFO - Cancelling tasks.
+2025-08-16 03:51:33,092 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:33,092 - INFO - Closing browser.
+2025-08-16 03:51:33,178 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:33,178 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:33,182 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:33,182 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:33,201 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:33,202 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:33,202 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp3yinekqh.
+2025-08-16 03:51:33,202 - INFO - Opening browser.
+2025-08-16 03:51:33,202 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpmzw500sl.
+2025-08-16 03:51:33,202 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpmzw500sl
+2025-08-16 03:51:33,486 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp3yinekqh/index.html
+2025-08-16 03:51:33,492 - INFO - Waiting on all navigates
+2025-08-16 03:51:33,941 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:33,942 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:33,942 - INFO - Got 61A5
+2025-08-16 03:51:33,942 - INFO - Processing Analyse_Avance_du_Volume___AAPL.png
+2025-08-16 03:51:33,942 - INFO - Sending big command for Analyse_Avance_du_Volume___AAPL.png.
+2025-08-16 03:51:34,025 - INFO - Sent big command for Analyse_Avance_du_Volume___AAPL.png.
+2025-08-16 03:51:34,028 - INFO - Reloading tab 61A5 before return.
+2025-08-16 03:51:34,252 - INFO - Putting tab 61A5 back (queue size: 0).
+2025-08-16 03:51:34,252 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:34,252 - INFO - Exiting Kaleido
+2025-08-16 03:51:34,252 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:34,252 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:34,252 - INFO - Cancelling tasks.
+2025-08-16 03:51:34,252 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:34,252 - INFO - Closing browser.
+2025-08-16 03:51:34,253 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:34,253 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:34,253 - INFO - Cancelling tasks.
+2025-08-16 03:51:34,253 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:34,253 - INFO - Closing browser.
+2025-08-16 03:51:34,333 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:34,333 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:34,349 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:34,349 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:34,357 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:34,358 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:34,358 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp_206xh42.
+2025-08-16 03:51:34,358 - INFO - Opening browser.
+2025-08-16 03:51:34,359 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpi_8mshdj.
+2025-08-16 03:51:34,359 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpi_8mshdj
+2025-08-16 03:51:34,625 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp_206xh42/index.html
+2025-08-16 03:51:34,628 - INFO - Waiting on all navigates
+2025-08-16 03:51:35,107 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:35,107 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:35,107 - INFO - Got 0B0F
+2025-08-16 03:51:35,107 - INFO - Processing Indicateurs_Techniques_Avancs___AAPL.png
+2025-08-16 03:51:35,107 - INFO - Sending big command for Indicateurs_Techniques_Avancs___AAPL.png.
+2025-08-16 03:51:35,192 - INFO - Sent big command for Indicateurs_Techniques_Avancs___AAPL.png.
+2025-08-16 03:51:35,193 - INFO - Reloading tab 0B0F before return.
+2025-08-16 03:51:35,416 - INFO - Putting tab 0B0F back (queue size: 0).
+2025-08-16 03:51:35,416 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:35,417 - INFO - Exiting Kaleido
+2025-08-16 03:51:35,417 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:35,417 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:35,417 - INFO - Cancelling tasks.
+2025-08-16 03:51:35,417 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:35,417 - INFO - Closing browser.
+2025-08-16 03:51:35,418 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:35,418 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:35,418 - INFO - Cancelling tasks.
+2025-08-16 03:51:35,418 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:35,418 - INFO - Closing browser.
+2025-08-16 03:51:35,504 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:35,504 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:35,522 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:35,522 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:35,537 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:35,538 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:35,538 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpe2lscf2x.
+2025-08-16 03:51:35,538 - INFO - Opening browser.
+2025-08-16 03:51:35,539 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpct4t8dqm.
+2025-08-16 03:51:35,539 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpct4t8dqm
+2025-08-16 03:51:35,801 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpe2lscf2x/index.html
+2025-08-16 03:51:35,810 - INFO - Waiting on all navigates
+2025-08-16 03:51:36,274 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:36,274 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:36,274 - INFO - Got A860
+2025-08-16 03:51:36,274 - INFO - Processing Analyse_des_Tendances___AAPL.png
+2025-08-16 03:51:36,274 - INFO - Sending big command for Analyse_des_Tendances___AAPL.png.
+2025-08-16 03:51:36,373 - INFO - Sent big command for Analyse_des_Tendances___AAPL.png.
+2025-08-16 03:51:36,375 - INFO - Reloading tab A860 before return.
+2025-08-16 03:51:36,598 - INFO - Putting tab A860 back (queue size: 0).
+2025-08-16 03:51:36,598 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:36,598 - INFO - Exiting Kaleido
+2025-08-16 03:51:36,598 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:36,598 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:36,598 - INFO - Cancelling tasks.
+2025-08-16 03:51:36,598 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:36,598 - INFO - Closing browser.
+2025-08-16 03:51:36,599 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:36,599 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:36,599 - INFO - Cancelling tasks.
+2025-08-16 03:51:36,600 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:36,600 - INFO - Closing browser.
+2025-08-16 03:51:36,686 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:36,686 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:36,690 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:36,690 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:36,701 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:36,702 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:36,702 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp34x9c_by.
+2025-08-16 03:51:36,702 - INFO - Opening browser.
+2025-08-16 03:51:36,703 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpz0k6e2v1.
+2025-08-16 03:51:36,703 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpz0k6e2v1
+2025-08-16 03:51:36,974 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp34x9c_by/index.html
+2025-08-16 03:51:36,981 - INFO - Waiting on all navigates
+2025-08-16 03:51:37,465 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:37,465 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:37,465 - INFO - Got 5E53
+2025-08-16 03:51:37,465 - INFO - Processing Analyse_Complte_de_la_Volatilit___AAPL.png
+2025-08-16 03:51:37,465 - INFO - Sending big command for Analyse_Complte_de_la_Volatilit___AAPL.png.
+2025-08-16 03:51:37,539 - INFO - Sent big command for Analyse_Complte_de_la_Volatilit___AAPL.png.
+2025-08-16 03:51:37,540 - INFO - Reloading tab 5E53 before return.
+2025-08-16 03:51:37,765 - INFO - Putting tab 5E53 back (queue size: 0).
+2025-08-16 03:51:37,765 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:37,765 - INFO - Exiting Kaleido
+2025-08-16 03:51:37,765 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:37,765 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:37,765 - INFO - Cancelling tasks.
+2025-08-16 03:51:37,765 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:37,765 - INFO - Closing browser.
+2025-08-16 03:51:37,766 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:37,767 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:37,767 - INFO - Cancelling tasks.
+2025-08-16 03:51:37,767 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:37,767 - INFO - Closing browser.
+2025-08-16 03:51:37,853 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:37,853 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:37,863 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:51:37,863 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:51:37,863 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpslpejsly.
+2025-08-16 03:51:37,864 - INFO - Opening browser.
+2025-08-16 03:51:37,864 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp9wbh24gq.
+2025-08-16 03:51:37,864 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp9wbh24gq
+2025-08-16 03:51:38,138 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpslpejsly/index.html
+2025-08-16 03:51:38,143 - INFO - Waiting on all navigates
+2025-08-16 03:51:38,595 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:51:38,596 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:51:38,596 - INFO - Got 89AE
+2025-08-16 03:51:38,596 - INFO - Processing Corrlations_avec_les_Indices_Majeurs___AAPL.png
+2025-08-16 03:51:38,596 - INFO - Sending big command for Corrlations_avec_les_Indices_Majeurs___AAPL.png.
+2025-08-16 03:51:38,633 - INFO - Sent big command for Corrlations_avec_les_Indices_Majeurs___AAPL.png.
+2025-08-16 03:51:38,634 - INFO - Reloading tab 89AE before return.
+2025-08-16 03:51:38,860 - INFO - Putting tab 89AE back (queue size: 0).
+2025-08-16 03:51:38,860 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:51:38,860 - INFO - Exiting Kaleido
+2025-08-16 03:51:38,860 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:38,860 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:38,860 - INFO - Cancelling tasks.
+2025-08-16 03:51:38,861 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:38,861 - INFO - Closing browser.
+2025-08-16 03:51:38,862 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:38,862 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:38,862 - INFO - Cancelling tasks.
+2025-08-16 03:51:38,862 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:51:38,862 - INFO - Closing browser.
+2025-08-16 03:51:38,945 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:38,945 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:39,555 - INFO - ✅ Rapport DEEP_ANALYSIS généré: ../public/reports/DEEP_ANALYSIS_AAPL_20250816_035130.pdf
+2025-08-16 03:51:39,555 - INFO - ✅ PDF SMART DEEP_ANALYSIS généré: DEEP_ANALYSIS_AAPL_20250816_035130.pdf
+2025-08-16 03:51:39,556 - INFO - 📊 Taille du fichier: 1.30 MB
+2025-08-16 03:51:39,557 - INFO - ✅ Rapport hx7LPzQkVqJ365GufCtoFtLZg terminé
+2025-08-16 03:51:39,557 - INFO - 🔄 Traitement rapport QeHpB1SFIK6PFB9kgV1oQnH85 (AAPL)
+2025-08-16 03:51:39,557 - INFO - 📄 Génération PDF SMART type BENCHMARK pour AAPL
+2025-08-16 03:51:39,558 - INFO - 🚀 SmartReportGenerator initialisé : BENCHMARK pour AAPL
+2025-08-16 03:51:39,558 - INFO - 📊 Récupération des données pour AAPL
+2025-08-16 03:51:40,374 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:40,374 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:40,374 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:51:40,374 - INFO - shutil.rmtree worked.
+2025-08-16 03:51:41,653 - INFO - ✅ Données récupérées avec succès
+2025-08-16 03:51:41,654 - INFO - 📈 Génération rapport BENCHMARK
+2025-08-16 03:51:41,663 - INFO - ✅ Rapport BENCHMARK généré: ../public/reports/BENCHMARK_AAPL_20250816_035139.pdf
+2025-08-16 03:51:41,663 - INFO - ✅ PDF SMART BENCHMARK généré: BENCHMARK_AAPL_20250816_035139.pdf
+2025-08-16 03:51:41,663 - INFO - 📊 Taille du fichier: 0.00 MB
+2025-08-16 03:51:41,664 - INFO - ✅ Rapport QeHpB1SFIK6PFB9kgV1oQnH85 terminé
+2025-08-16 03:51:41,664 - INFO - 🔄 Traitement rapport R5GEPKkzAAhUSILQHGEgqvHKA (AAPL)
+2025-08-16 03:51:41,664 - INFO - 📄 Génération PDF SMART type PRICER pour AAPL
+2025-08-16 03:51:41,665 - INFO - 🚀 SmartReportGenerator initialisé : PRICER pour AAPL
+2025-08-16 03:51:41,665 - INFO - 📊 Récupération des données pour AAPL
+2025-08-16 03:51:43,457 - INFO - ✅ Données récupérées avec succès
+2025-08-16 03:51:43,458 - INFO - 🧮 Génération rapport PRICER
+2025-08-16 03:51:43,464 - INFO - ✅ Rapport PRICER généré: ../public/reports/PRICER_AAPL_20250816_035141.pdf
+2025-08-16 03:51:43,464 - INFO - ✅ PDF SMART PRICER généré: PRICER_AAPL_20250816_035141.pdf
+2025-08-16 03:51:43,464 - INFO - 📊 Taille du fichier: 0.00 MB
+2025-08-16 03:51:43,465 - INFO - ✅ Rapport R5GEPKkzAAhUSILQHGEgqvHKA terminé
+2025-08-16 03:51:43,465 - INFO - 🔄 Traitement terminé: 5 rapports traités
+2025-08-16 03:52:13,470 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:52:13,505 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:52:43,511 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:52:43,546 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:53:13,551 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:53:13,579 - INFO - 🔄 Traitement rapport cmedlrrta001rvcdpikc7mx1e (NFLX)
+2025-08-16 03:53:13,580 - INFO - 📄 Génération PDF SMART type DEEP_ANALYSIS pour NFLX
+2025-08-16 03:53:13,581 - INFO - 🚀 SmartReportGenerator initialisé : DEEP_ANALYSIS pour NFLX
+2025-08-16 03:53:13,581 - INFO - 📊 Récupération des données pour NFLX
+2025-08-16 03:53:17,314 - INFO - ✅ Données récupérées avec succès
+2025-08-16 03:53:17,317 - INFO - 🔬 Génération rapport DEEP_ANALYSIS
+2025-08-16 03:53:17,317 - INFO - 📊 Génération rapport DETAILED
+2025-08-16 03:53:17,317 - INFO - 📊 Génération rapport BASELINE
+2025-08-16 03:53:17,379 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:53:17,380 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:53:17,380 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpwl1nrdf2.
+2025-08-16 03:53:17,381 - INFO - Opening browser.
+2025-08-16 03:53:17,381 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp05o7xvyr.
+2025-08-16 03:53:17,381 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp05o7xvyr
+2025-08-16 03:53:18,048 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpwl1nrdf2/index.html
+2025-08-16 03:53:18,048 - INFO - Waiting on all navigates
+2025-08-16 03:53:18,563 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:53:18,564 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:53:18,564 - INFO - Got 6DE6
+2025-08-16 03:53:18,564 - INFO - Processing Analyse_Technique_Complte___NFLX.png
+2025-08-16 03:53:18,564 - INFO - Sending big command for Analyse_Technique_Complte___NFLX.png.
+2025-08-16 03:53:18,679 - INFO - Sent big command for Analyse_Technique_Complte___NFLX.png.
+2025-08-16 03:53:18,681 - INFO - Reloading tab 6DE6 before return.
+2025-08-16 03:53:18,731 - INFO - Putting tab 6DE6 back (queue size: 0).
+2025-08-16 03:53:18,731 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:53:18,731 - INFO - Exiting Kaleido
+2025-08-16 03:53:18,732 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:18,732 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:18,732 - INFO - Cancelling tasks.
+2025-08-16 03:53:18,732 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:53:18,732 - INFO - Closing browser.
+2025-08-16 03:53:18,733 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:18,733 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:18,733 - INFO - Cancelling tasks.
+2025-08-16 03:53:18,733 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:53:18,733 - INFO - Closing browser.
+2025-08-16 03:53:18,817 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:18,817 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:18,821 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:18,821 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:18,840 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:53:18,841 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:53:18,841 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpda446yq9.
+2025-08-16 03:53:18,841 - INFO - Opening browser.
+2025-08-16 03:53:18,842 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpfqrjmrqf.
+2025-08-16 03:53:18,842 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpfqrjmrqf
+2025-08-16 03:53:19,126 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpda446yq9/index.html
+2025-08-16 03:53:19,132 - INFO - Waiting on all navigates
+2025-08-16 03:53:19,605 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:53:19,606 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:53:19,606 - INFO - Got 08EC
+2025-08-16 03:53:19,606 - INFO - Processing Analyse_Avance_du_Volume___NFLX.png
+2025-08-16 03:53:19,606 - INFO - Sending big command for Analyse_Avance_du_Volume___NFLX.png.
+2025-08-16 03:53:19,689 - INFO - Sent big command for Analyse_Avance_du_Volume___NFLX.png.
+2025-08-16 03:53:19,691 - INFO - Reloading tab 08EC before return.
+2025-08-16 03:53:19,743 - INFO - Putting tab 08EC back (queue size: 0).
+2025-08-16 03:53:19,743 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:53:19,744 - INFO - Exiting Kaleido
+2025-08-16 03:53:19,744 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:19,744 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:19,744 - INFO - Cancelling tasks.
+2025-08-16 03:53:19,744 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:53:19,744 - INFO - Closing browser.
+2025-08-16 03:53:19,745 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:19,745 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:19,745 - INFO - Cancelling tasks.
+2025-08-16 03:53:19,745 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:53:19,745 - INFO - Closing browser.
+2025-08-16 03:53:19,830 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:19,830 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:19,834 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:19,834 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:19,855 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:53:19,856 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:53:19,856 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpqteast78.
+2025-08-16 03:53:19,857 - INFO - Opening browser.
+2025-08-16 03:53:19,857 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp8l85v_3k.
+2025-08-16 03:53:19,857 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp8l85v_3k
+2025-08-16 03:53:20,137 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpqteast78/index.html
+2025-08-16 03:53:20,144 - INFO - Waiting on all navigates
+2025-08-16 03:53:20,629 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:53:20,630 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:53:20,630 - INFO - Got 47E5
+2025-08-16 03:53:20,630 - INFO - Processing Indicateurs_Techniques_Avancs___NFLX.png
+2025-08-16 03:53:20,630 - INFO - Sending big command for Indicateurs_Techniques_Avancs___NFLX.png.
+2025-08-16 03:53:20,714 - INFO - Sent big command for Indicateurs_Techniques_Avancs___NFLX.png.
+2025-08-16 03:53:20,715 - INFO - Reloading tab 47E5 before return.
+2025-08-16 03:53:20,764 - INFO - Putting tab 47E5 back (queue size: 0).
+2025-08-16 03:53:20,764 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:53:20,764 - INFO - Exiting Kaleido
+2025-08-16 03:53:20,765 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:20,765 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:20,765 - INFO - Cancelling tasks.
+2025-08-16 03:53:20,765 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:53:20,765 - INFO - Closing browser.
+2025-08-16 03:53:20,766 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:20,766 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:20,766 - INFO - Cancelling tasks.
+2025-08-16 03:53:20,766 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:53:20,766 - INFO - Closing browser.
+2025-08-16 03:53:20,849 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:20,849 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:20,857 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:20,857 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:20,882 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:53:20,882 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:53:20,882 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpwa6cog7d.
+2025-08-16 03:53:20,883 - INFO - Opening browser.
+2025-08-16 03:53:20,883 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpanlef2zz.
+2025-08-16 03:53:20,883 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpanlef2zz
+2025-08-16 03:53:21,166 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpwa6cog7d/index.html
+2025-08-16 03:53:21,171 - INFO - Waiting on all navigates
+2025-08-16 03:53:21,623 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:53:21,624 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:53:21,624 - INFO - Got A3E9
+2025-08-16 03:53:21,624 - INFO - Processing Analyse_des_Tendances___NFLX.png
+2025-08-16 03:53:21,624 - INFO - Sending big command for Analyse_des_Tendances___NFLX.png.
+2025-08-16 03:53:21,722 - INFO - Sent big command for Analyse_des_Tendances___NFLX.png.
+2025-08-16 03:53:21,724 - INFO - Reloading tab A3E9 before return.
+2025-08-16 03:53:21,953 - INFO - Putting tab A3E9 back (queue size: 0).
+2025-08-16 03:53:21,953 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:53:21,953 - INFO - Exiting Kaleido
+2025-08-16 03:53:21,953 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:21,953 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:21,953 - INFO - Cancelling tasks.
+2025-08-16 03:53:21,953 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:53:21,953 - INFO - Closing browser.
+2025-08-16 03:53:21,955 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:21,955 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:21,955 - INFO - Cancelling tasks.
+2025-08-16 03:53:21,955 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:53:21,955 - INFO - Closing browser.
+2025-08-16 03:53:22,041 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:22,041 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:22,092 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:22,092 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:22,106 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:53:22,106 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:53:22,106 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp5cd4cv8t.
+2025-08-16 03:53:22,107 - INFO - Opening browser.
+2025-08-16 03:53:22,107 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp79w2s3ix.
+2025-08-16 03:53:22,107 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp79w2s3ix
+2025-08-16 03:53:22,383 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmp5cd4cv8t/index.html
+2025-08-16 03:53:22,393 - INFO - Waiting on all navigates
+2025-08-16 03:53:22,847 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:53:22,847 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:53:22,847 - INFO - Got DC1E
+2025-08-16 03:53:22,847 - INFO - Processing Analyse_Complte_de_la_Volatilit___NFLX.png
+2025-08-16 03:53:22,847 - INFO - Sending big command for Analyse_Complte_de_la_Volatilit___NFLX.png.
+2025-08-16 03:53:22,922 - INFO - Sent big command for Analyse_Complte_de_la_Volatilit___NFLX.png.
+2025-08-16 03:53:22,924 - INFO - Reloading tab DC1E before return.
+2025-08-16 03:53:23,155 - INFO - Putting tab DC1E back (queue size: 0).
+2025-08-16 03:53:23,155 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:53:23,155 - INFO - Exiting Kaleido
+2025-08-16 03:53:23,155 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:23,155 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:23,155 - INFO - Cancelling tasks.
+2025-08-16 03:53:23,155 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:53:23,156 - INFO - Closing browser.
+2025-08-16 03:53:23,157 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:23,157 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:23,158 - INFO - Cancelling tasks.
+2025-08-16 03:53:23,158 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:53:23,158 - INFO - Closing browser.
+2025-08-16 03:53:23,236 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:23,236 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:23,246 - INFO - Chromium init'ed with kwargs {}
+2025-08-16 03:53:23,247 - INFO - Found chromium path: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+2025-08-16 03:53:23,247 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpbcwjtf2d.
+2025-08-16 03:53:23,247 - INFO - Opening browser.
+2025-08-16 03:53:23,247 - INFO - Temp directory created: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmppwgzw363.
+2025-08-16 03:53:23,247 - INFO - Temporary directory at: /var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmppwgzw363
+2025-08-16 03:53:23,532 - INFO - Conforming 1 to file:///var/folders/2g/4677kq897d1c6wm_w0kfmndc0000gn/T/tmpbcwjtf2d/index.html
+2025-08-16 03:53:23,535 - INFO - Waiting on all navigates
+2025-08-16 03:53:24,019 - INFO - All navigates done, putting them all in queue.
+2025-08-16 03:53:24,020 - INFO - Getting tab from queue (has 1)
+2025-08-16 03:53:24,020 - INFO - Got C2C7
+2025-08-16 03:53:24,020 - INFO - Processing Corrlations_avec_les_Indices_Majeurs___NFLX.png
+2025-08-16 03:53:24,020 - INFO - Sending big command for Corrlations_avec_les_Indices_Majeurs___NFLX.png.
+2025-08-16 03:53:24,058 - INFO - Sent big command for Corrlations_avec_les_Indices_Majeurs___NFLX.png.
+2025-08-16 03:53:24,059 - INFO - Reloading tab C2C7 before return.
+2025-08-16 03:53:24,281 - INFO - Putting tab C2C7 back (queue size: 0).
+2025-08-16 03:53:24,282 - INFO - Waiting for all cleanups to finish.
+2025-08-16 03:53:24,282 - INFO - Exiting Kaleido
+2025-08-16 03:53:24,282 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:24,282 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:24,282 - INFO - Cancelling tasks.
+2025-08-16 03:53:24,282 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:53:24,282 - INFO - Closing browser.
+2025-08-16 03:53:24,283 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:24,283 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:24,283 - INFO - Cancelling tasks.
+2025-08-16 03:53:24,283 - INFO - Exiting Kaleido/Choreo
+2025-08-16 03:53:24,283 - INFO - Closing browser.
+2025-08-16 03:53:24,369 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:53:24,369 - INFO - shutil.rmtree worked.
+2025-08-16 03:53:24,959 - INFO - ✅ Rapport DEEP_ANALYSIS généré: ../public/reports/DEEP_ANALYSIS_NFLX_20250816_035313.pdf
+2025-08-16 03:53:24,960 - INFO - ✅ PDF SMART DEEP_ANALYSIS généré: DEEP_ANALYSIS_NFLX_20250816_035313.pdf
+2025-08-16 03:53:24,960 - INFO - 📊 Taille du fichier: 1.29 MB
+2025-08-16 03:53:24,962 - INFO - ✅ Rapport cmedlrrta001rvcdpikc7mx1e terminé
+2025-08-16 03:53:24,962 - INFO - 🔄 Traitement terminé: 1 rapports traités
+2025-08-16 03:53:54,968 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:53:55,003 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:54:25,005 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:54:25,042 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:54:55,044 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:54:55,083 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:55:25,088 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:55:25,117 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:55:55,121 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:55:55,150 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:56:25,154 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:56:25,185 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:56:55,189 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:56:55,224 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:57:25,226 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:57:25,253 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:57:55,258 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:57:55,296 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:58:25,298 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:58:25,329 - INFO - 🔄 Traitement rapport cmedlyayz001vvcdpsbaedj76 (MSFT)
+2025-08-16 03:58:25,330 - INFO - 📄 Génération PDF SMART type BENCHMARK pour MSFT
+2025-08-16 03:58:25,333 - INFO - 🚀 SmartReportGenerator initialisé : BENCHMARK pour MSFT
+2025-08-16 03:58:25,333 - INFO - 📊 Récupération des données pour MSFT
+2025-08-16 03:58:26,020 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:58:26,021 - INFO - shutil.rmtree worked.
+2025-08-16 03:58:26,021 - INFO - TemporaryDirectory.cleanup() worked.
+2025-08-16 03:58:26,021 - INFO - shutil.rmtree worked.
+2025-08-16 03:58:29,523 - INFO - ✅ Données récupérées avec succès
+2025-08-16 03:58:29,528 - INFO - 📈 Génération rapport BENCHMARK
+2025-08-16 03:58:29,537 - INFO - ✅ Rapport BENCHMARK généré: ../public/reports/BENCHMARK_MSFT_20250816_035825.pdf
+2025-08-16 03:58:29,538 - INFO - ✅ PDF SMART BENCHMARK généré: BENCHMARK_MSFT_20250816_035825.pdf
+2025-08-16 03:58:29,538 - INFO - 📊 Taille du fichier: 0.00 MB
+2025-08-16 03:58:29,539 - INFO - ✅ Rapport cmedlyayz001vvcdpsbaedj76 terminé
+2025-08-16 03:58:29,539 - INFO - 🔄 Traitement terminé: 1 rapports traités
+2025-08-16 03:58:59,544 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:58:59,588 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:59:29,590 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:59:29,622 - INFO - 📋 Aucun rapport en attente
+2025-08-16 03:59:59,631 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 03:59:59,668 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:00:29,675 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:00:29,707 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:00:59,708 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:00:59,741 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:01:29,746 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:01:29,788 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:01:59,793 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:01:59,819 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:02:29,823 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:02:29,856 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:02:59,861 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:02:59,895 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:03:29,900 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:03:29,937 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:03:59,938 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:03:59,975 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:04:29,976 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:04:30,012 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:05:00,018 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:05:00,049 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:05:30,055 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:05:30,082 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:06:00,087 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:06:00,119 - INFO - 📋 Aucun rapport en attente
+2025-08-16 04:06:30,122 - INFO - 🔄 Début du traitement des rapports...
+2025-08-16 04:06:30,149 - INFO - 📋 Aucun rapport en attente
