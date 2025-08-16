@@ -31,14 +31,13 @@ export default function RootLayout({
         className={cn(
           geistSans.variable,
           geistMono.variable,
-          "bg-background text-foreground antialiased"
+          "bg-background text-foreground antialiased h-screen w-screen overflow-x-hidden overflow-y-scroll"
         )}
       >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="min-h-screen flex flex-col">
+            <div className="h-full w-full">
               {children}
               <Toaster />
-
             </div>
           </ThemeProvider>
       </body>

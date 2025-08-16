@@ -44,8 +44,8 @@ export default async function GenerateReportPage() {
   const processingReports = userInfo.reports;
 
   return (
-    <div className="w-full max-w-none py-8 px-6">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="w-full">
+      <div className="max-w-6xl mx-auto py-8 px-6 space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
@@ -140,48 +140,56 @@ export default async function GenerateReportPage() {
           </CardContent>
         </Card>
 
-        {/* Tarification */}
+        {/* Coût en Crédits */}
         <Card>
           <CardHeader>
-            <CardTitle>Pricing</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Coins className="h-5 w-5" />
+              Coût en Crédits
+            </CardTitle>
             <CardDescription>
-              Credit cost for different options
+              Coût en crédits pour les différents types de rapports
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 border rounded">
-                <div className="text-lg font-semibold">15 crédits</div>
+              <div className="text-center p-4 border rounded bg-blue-50">
+                <div className="text-lg font-semibold text-blue-700">15 crédits</div>
                 <p className="text-sm text-muted-foreground">Baseline Report</p>
               </div>
-              <div className="text-center p-4 border rounded">
-                <div className="text-lg font-semibold">25 crédits</div>
+              <div className="text-center p-4 border rounded bg-green-50">
+                <div className="text-lg font-semibold text-green-700">25 crédits</div>
                 <p className="text-sm text-muted-foreground">Detailed Analysis</p>
               </div>
-              <div className="text-center p-4 border rounded">
-                <div className="text-lg font-semibold">35 crédits</div>
+              <div className="text-center p-4 border rounded bg-purple-50">
+                <div className="text-lg font-semibold text-purple-700">35 crédits</div>
                 <p className="text-sm text-muted-foreground">Deep Analysis</p>
               </div>
-              <div className="text-center p-4 border rounded">
-                <div className="text-lg font-semibold">30 crédits</div>
+              <div className="text-center p-4 border rounded bg-red-50">
+                <div className="text-lg font-semibold text-red-700">30 crédits</div>
                 <p className="text-sm text-muted-foreground">Custom Pricer</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              <div className="text-center p-4 border rounded">
-                <div className="text-lg font-semibold">+12 crédits</div>
+              <div className="text-center p-4 border rounded bg-orange-50">
+                <div className="text-lg font-semibold text-orange-700">+12 crédits</div>
                 <p className="text-sm text-muted-foreground">Benchmark Module</p>
               </div>
-              <div className="text-center p-4 border rounded">
-                <div className="text-lg font-semibold">+5 crédits</div>
+              <div className="text-center p-4 border rounded bg-indigo-50">
+                <div className="text-lg font-semibold text-indigo-700">+5 crédits</div>
                 <p className="text-sm text-muted-foreground">API Export (CSV)</p>
               </div>
             </div>
-            <div className="mt-4 text-center">
-              <div className="text-xl font-bold">52 credits maximum</div>
-              <p className="text-sm text-muted-foreground">
-                For a deep analysis with all options
-              </p>
+            <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg">
+              <div className="text-center">
+                <div className="text-xl font-bold text-blue-700">52 crédits maximum</div>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Pour une analyse complète avec toutes les options
+                </p>
+              </div>
+            </div>
+            <div className="mt-4 text-center text-sm text-muted-foreground">
+              <p>💡 <strong>Astuce :</strong> Les crédits sont déduits uniquement lors de la génération réussie du rapport</p>
             </div>
           </CardContent>
         </Card>

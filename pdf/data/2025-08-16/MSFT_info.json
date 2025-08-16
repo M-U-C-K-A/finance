@@ -227,8 +227,6 @@
   "quoteSourceName": "Nasdaq Real Time Price",
   "triggerable": true,
   "customPriceAlertConfidence": "HIGH",
-  "shortName": "Microsoft Corporation",
-  "longName": "Microsoft Corporation",
   "corporateActions": [
     {
       "header": "Dividend",
@@ -240,16 +238,15 @@
       }
     }
   ],
+  "marketState": "CLOSED",
   "postMarketTime": 1755302397,
   "regularMarketTime": 1755288001,
   "exchange": "NMS",
   "messageBoardId": "finmb_21835",
   "exchangeTimezoneName": "America/New_York",
-  "exchangeTimezoneShortName": "EDT",
-  "gmtOffSetMilliseconds": -14400000,
   "market": "us_market",
-  "esgPopulated": false,
-  "marketState": "CLOSED",
+  "regularMarketChangePercent": -0.442122,
+  "regularMarketPrice": 520.17,
   "hasPrePostMarketData": true,
   "firstTradeDateMilliseconds": 511108200000,
   "postMarketChangePercent": 0.0538342,
@@ -284,8 +281,11 @@
   "exchangeDataDelayedBy": 0,
   "averageAnalystRating": "1.3 - Strong Buy",
   "cryptoTradeable": false,
-  "regularMarketChangePercent": -0.442122,
-  "regularMarketPrice": 520.17,
+  "shortName": "Microsoft Corporation",
+  "longName": "Microsoft Corporation",
+  "exchangeTimezoneShortName": "EDT",
+  "gmtOffSetMilliseconds": -14400000,
+  "esgPopulated": false,
   "displayName": "Microsoft",
   "trailingPegRatio": 2.3405
 }

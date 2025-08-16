@@ -83,6 +83,7 @@ export default function ReportHistoryPage() {
   const [downloading, setDownloading] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [paymentFilter, setPaymentFilter] = useState<string>('all');
+  const [typeFilter, setTypeFilter] = useState<string>('all');
   const [pdfViewerOpen, setPdfViewerOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState<{ id: string; title: string } | null>(null);
 
@@ -264,6 +265,19 @@ export default function ReportHistoryPage() {
                 <SelectItem value="credits">Credits</SelectItem>
               </SelectContent>
             </Select>
+            <Select value={typeFilter} onValueChange={setTypeFilter}>
+              <SelectTrigger className="w-40">
+                <SelectValue placeholder="Analyse" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tous types</SelectItem>
+                <SelectItem value="BASELINE">Baseline</SelectItem>
+                <SelectItem value="DETAILED">Technique Avancée</SelectItem>
+                <SelectItem value="DEEP_ANALYSIS">Recherche Exhaustive</SelectItem>
+                <SelectItem value="BENCHMARK">Analyse Comparative</SelectItem>
+                <SelectItem value="PRICER">Modèle Valorisation</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
@@ -287,7 +301,17 @@ export default function ReportHistoryPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {reports.map((report) => (
+              {reports
+                .filter(report => {
+                  const matchesSearch = (report.assetSymbol?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+                                      (report.assetName?.toLowerCase() || '').includes(searchTerm.toLowerCase());
+                  const matchesStatus = statusFilter === 'all' || report.status === statusFilter;
+                  const matchesPayment = paymentFilter === 'all' || report.paymentMethod === paymentFilter;
+                  const matchesType = typeFilter === 'all' || report.reportType === typeFilter;
+                  
+                  return matchesSearch && matchesStatus && matchesPayment && matchesType;
+                })
+                .map((report) => (
                 <TableRow key={report.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">

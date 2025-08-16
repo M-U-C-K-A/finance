@@ -113,20 +113,79 @@ export const POST = createApiHandler(
       if (process.env.NODE_ENV === 'development') {
         try {
           const { spawn } = require('child_process');
+          const timestamp = new Date().toISOString().slice(0,19).replace(/:/g,'').replace(/-/g,'');
+          const outputPath = `public/reports/${body.reportType}_${body.assetSymbol}_${timestamp}.pdf`;
+          
+          console.log(`🚀 Lancement génération rapport: ${body.reportType} pour ${body.assetSymbol}`);
+          console.log(`📁 Chemin de sortie: ${outputPath}`);
+          console.log(`📂 Répertoire de travail: ${process.cwd()}`);
+          
+          console.log(`🔧 Arguments Python:`, [
+            'pdf/smart_report_generator.py',
+            body.assetSymbol,
+            body.reportType,
+            outputPath
+          ]);
+          
           const pythonProcess = spawn('python3', [
             'pdf/smart_report_generator.py',
             body.assetSymbol,
             body.reportType,
-            `public/reports/${body.reportType}_${body.assetSymbol}_${new Date().toISOString().slice(0,19).replace(/:/g,'').replace(/-/g,'')}.pdf`
+            outputPath,
+            user.id  // Ajout de l'user_id pour les logs
           ], {
-            cwd: process.cwd()
+            cwd: process.cwd(),
+            stdio: ['ignore', 'pipe', 'pipe']
+          });
+          
+          pythonProcess.stdout.on('data', (data) => {
+            console.log(`📊 Python stdout: ${data.toString()}`);
+          });
+          
+          pythonProcess.stderr.on('data', (data) => {
+            console.error(`❌ Python stderr: ${data.toString()}`);
           });
           
           pythonProcess.on('close', (code) => {
-            console.log(`Process exited with code ${code}`);
+            console.log(`✅ Processus Python terminé avec le code ${code}`);
+            if (code === 0) {
+              console.log(`📄 Rapport généré avec succès: ${outputPath}`);
+              // Mettre à jour le statut du rapport en base
+              prisma.report.update({
+                where: { id: report.id },
+                data: { 
+                  status: ReportStatus.COMPLETED,
+                  downloadUrl: `/${outputPath}`,
+                  completedAt: new Date()
+                }
+              }).catch(err => console.error('Erreur mise à jour statut:', err));
+            } else {
+              console.error(`❌ Échec génération rapport avec code ${code}`);
+              // Marquer le rapport comme échoué
+              prisma.report.update({
+                where: { id: report.id },
+                data: { 
+                  status: ReportStatus.FAILED,
+                  error: `Process exited with code ${code}`
+                }
+              }).catch(err => console.error('Erreur mise à jour statut échec:', err));
+            }
           });
+          
+          pythonProcess.on('error', (error) => {
+            console.error(`❌ Erreur processus Python:`, error);
+            // Marquer le rapport comme échoué
+            prisma.report.update({
+              where: { id: report.id },
+              data: { 
+                status: ReportStatus.FAILED,
+                error: error.message
+              }
+            }).catch(err => console.error('Erreur mise à jour statut erreur:', err));
+          });
+          
         } catch (error) {
-          console.log('Erreur déclenchement génération:', error);
+          console.error('❌ Erreur déclenchement génération:', error);
         }
       }
 

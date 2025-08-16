@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { getUser } from "@/lib/auth-server";
 import { prisma } from "@/lib/prisma";
 
-// Fonction pour générer le contenu HTML de la facture
+// Fonction pour générer le contenu HTML de la facture (achats de crédits uniquement)
 function generateInvoiceHTML(invoice: any, user: any, subscription: any) {
   const invoiceDate = new Date(invoice.createdAt).toLocaleDateString('fr-FR');
   const companyInfo = {
@@ -187,6 +187,209 @@ function generateInvoiceHTML(invoice: any, user: any, subscription: any) {
   `;
 }
 
+// Fonction pour générer le contenu HTML d'un reçu de service (rapports)
+function generateServiceReceiptHTML(report: any, user: any) {
+  const serviceDate = new Date(report.createdAt).toLocaleDateString('fr-FR');
+  const companyInfo = {
+    name: "FinAnalytics SAS",
+    address: "123 Avenue des Champs-Élysées",
+    postalCode: "75008",
+    city: "Paris",
+    country: "France",
+    vat: "FR12345678901",
+    siret: "12345678901234"
+  };
+
+  const reportTypeNames = {
+    'BASELINE': 'Rapport Baseline',
+    'DETAILED': 'Analyse Détaillée', 
+    'DEEP_ANALYSIS': 'Analyse Approfondie',
+    'CUSTOM': 'Rapport Personnalisé',
+    'PRICER': 'Modèle de Pricing',
+    'BENCHMARK': 'Analyse Comparative'
+  };
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Reçu de Service ${report.id}</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 20px;
+          color: #333;
+        }
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 40px;
+          border-bottom: 2px solid #e5e7eb;
+          padding-bottom: 20px;
+        }
+        .company-info {
+          flex: 1;
+        }
+        .company-info h1 {
+          color: #2563eb;
+          margin: 0 0 10px 0;
+          font-size: 24px;
+        }
+        .receipt-info {
+          text-align: right;
+          flex: 1;
+        }
+        .receipt-info h2 {
+          color: #374151;
+          margin: 0 0 10px 0;
+        }
+        .client-section {
+          margin: 30px 0;
+          padding: 20px;
+          background-color: #f9fafb;
+          border-radius: 8px;
+        }
+        .service-details {
+          margin: 30px 0;
+        }
+        .details-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .details-table th,
+        .details-table td {
+          padding: 12px;
+          text-align: left;
+          border-bottom: 1px solid #e5e7eb;
+        }
+        .details-table th {
+          background-color: #f3f4f6;
+          font-weight: 600;
+        }
+        .amount-section {
+          text-align: right;
+          margin: 30px 0;
+        }
+        .total-amount {
+          font-size: 18px;
+          font-weight: bold;
+          color: #059669;
+          background-color: #ecfdf5;
+          padding: 15px;
+          border-radius: 8px;
+          display: inline-block;
+          min-width: 200px;
+        }
+        .footer {
+          margin-top: 50px;
+          padding-top: 20px;
+          border-top: 1px solid #e5e7eb;
+          font-size: 12px;
+          color: #6b7280;
+        }
+        .service-info {
+          margin: 20px 0;
+          padding: 15px;
+          background-color: #f0f9ff;
+          border-radius: 8px;
+          border-left: 4px solid #2563eb;
+        }
+        .notice {
+          margin: 20px 0;
+          padding: 15px;
+          background-color: #fef3c7;
+          border-radius: 8px;
+          border-left: 4px solid #f59e0b;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div class="company-info">
+          <h1>${companyInfo.name}</h1>
+          <p>
+            ${companyInfo.address}<br>
+            ${companyInfo.postalCode} ${companyInfo.city}<br>
+            ${companyInfo.country}
+          </p>
+          <p>
+            <strong>SIRET:</strong> ${companyInfo.siret}<br>
+            <strong>TVA:</strong> ${companyInfo.vat}
+          </p>
+        </div>
+        <div class="receipt-info">
+          <h2>REÇU DE SERVICE</h2>
+          <p><strong>N°:</strong> ${report.id}</p>
+          <p><strong>Date:</strong> ${serviceDate}</p>
+        </div>
+      </div>
+
+      <div class="client-section">
+        <h3>Service fourni à:</h3>
+        <p>
+          <strong>${user.name || user.email}</strong><br>
+          ${user.email}
+        </p>
+      </div>
+
+      <div class="service-details">
+        <h3>Détails du service</h3>
+        <table class="details-table">
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>Actif analysé</th>
+              <th>Type de rapport</th>
+              <th>Crédits utilisés</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Génération de rapport financier</td>
+              <td>${report.assetSymbol}</td>
+              <td>${reportTypeNames[report.reportType as keyof typeof reportTypeNames] || report.reportType}</td>
+              <td>${report.creditsCost} crédits</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="amount-section">
+        <div class="total-amount">
+          <strong>Coût total: ${report.creditsCost} crédits</strong>
+        </div>
+      </div>
+
+      <div class="service-info">
+        <h4>ℹ️ Information sur le service</h4>
+        <p>Ce service a été payé avec des crédits préalablement achetés. Aucune facturation additionnelle en euros.</p>
+      </div>
+
+      <div class="notice">
+        <h4>⚠️ Note importante</h4>
+        <p>Ce reçu confirme la fourniture d'un service numérique payé en crédits. Pour les factures comptables en euros, consultez vos achats de crédits.</p>
+      </div>
+
+      <div class="footer">
+        <p>
+          <strong>Type de service:</strong> Analyse financière automatisée<br>
+          <strong>Délai de livraison:</strong> Immédiat (service numérique)<br>
+          <strong>Support:</strong> support@finanalytics.fr
+        </p>
+        <p style="margin-top: 15px;">
+          Merci d'utiliser FinAnalytics. Pour toute question concernant ce reçu, 
+          contactez notre service client à support@finanalytics.fr
+        </p>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -272,15 +475,24 @@ export async function GET(
       };
     }
 
-    // Générer le HTML de la facture
-    const htmlContent = generateInvoiceHTML(invoiceData, user, subscription);
+    // Générer le HTML approprié selon le type
+    let htmlContent: string;
+    let filename: string;
+    
+    if (report) {
+      // Reçu de service pour rapport
+      htmlContent = generateServiceReceiptHTML(report, user);
+      filename = `recu-service-${report.id}.html`;
+    } else {
+      // Facture pour achat de crédits
+      htmlContent = generateInvoiceHTML(invoiceData, user, subscription);
+      filename = `facture-${invoiceData.id}.html`;
+    }
 
-    // Pour une solution simple, on retourne le HTML
-    // Dans un environnement de production, on utiliserait Puppeteer ou une autre solution pour générer le PDF
     return new Response(htmlContent, {
       headers: {
         'Content-Type': 'text/html',
-        'Content-Disposition': `attachment; filename="facture-${invoiceData.id}.html"`
+        'Content-Disposition': `attachment; filename="${filename}"`
       }
     });
 

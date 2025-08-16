@@ -55,17 +55,17 @@ export async function GET(request: NextRequest) {
       renewsAt: subscription?.updatedAt || null
     };
 
-    // Format reports
+    // Format reports (matching interface structure)
     const formattedReports = recentReports.map(report => ({
       id: report.id,
       title: report.title,
-      type: 'one-time', // Default type
-      status: report.status.toLowerCase(),
+      assetSymbol: report.assetSymbol,
+      assetType: report.assetType,
+      reportType: report.reportType,
+      status: report.status, // Keep uppercase format
       createdAt: report.createdAt.toISOString(),
       completedAt: report.completedAt?.toISOString(),
-      downloadUrl: report.status === 'COMPLETED' ? `/reports/${report.id}/download` : undefined,
-      symbol: report.assetSymbol,
-      market: report.assetType === 'STOCK' ? 'NASDAQ' : 'INDEX', // Simplified market mapping
+      pdfPath: report.status === 'COMPLETED' ? `/reports/${report.id}.pdf` : undefined,
       creditsCost: report.creditsCost
     }));
 

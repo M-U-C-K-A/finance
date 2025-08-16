@@ -17,12 +17,11 @@ export default async function AppLayout({
     return  (
 
       <SidebarProvider>
-        <div className="flex flex-1">
+        <div className="flex h-full w-full">
           <AppSidebar />
-          <div className="flex-1 h-screen flex flex-col overflow-auto">
+          <div className="flex-1 flex flex-col min-h-0">
             <Header />
-            <main className="flex-1">
-
+            <main className="flex-1 overflow-auto">
               <Unauthorized />
             </main>
           </div>
@@ -33,11 +32,11 @@ export default async function AppLayout({
 
   return (
     <SidebarProvider>
-      <div className="flex flex-1">
+      <div className="flex h-full w-full">
         <AppSidebar />
-        <div className="flex-1 h-screen flex flex-col overflow-auto">
+        <div className="flex-1 flex flex-col min-h-0">
           <Header />
-          <main className="flex-1">
+          <main className="flex-1 overflow-auto">
             {children}
           </main>
         </div>

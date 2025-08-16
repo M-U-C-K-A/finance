@@ -72,6 +72,7 @@ const menuItems = [
       { title: "Buy Credits", url: "/plan/buy-credits" },
       { title: "Upgrade", url: "/plan/upgrade" },
       { title: "Billing", url: "/plan/billing" },
+      { title: "Invoices", url: "/billing/invoices" },
     ],
   },
   {
