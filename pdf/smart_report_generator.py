@@ -178,11 +178,12 @@ class SmartReportGenerator:
     def add_cover_page(self):
         """Ajoute la page de couverture"""
         info = self.data.get('info', {})
+        company_name = info.get('longName', self.symbol)
         
         # Titre principal
         title = f"Analyse Financière - {self.symbol}"
-        if info.get('longName'):
-            title += f"<br/>{info['longName']}"
+        if company_name != self.symbol:
+            title += f"<br/>{company_name}"
         
         self.story.append(Paragraph(title, self.title_style))
         self.story.append(Spacer(1, 40))
@@ -201,20 +202,32 @@ class SmartReportGenerator:
         self.story.append(Paragraph(type_name, self.section_style))
         self.story.append(Spacer(1, 20))
         
-        # Information sur le type demandé
-        requested_info = f"<b>Type de rapport demandé :</b> {self.report_type}"
-        requested_style = ParagraphStyle(
-            'RequestedInfo',
+        # Récapitulatif de la demande détaillé
+        request_details = {
+            'BASELINE': f"<b>RAPPORT BASELINE DEMANDÉ</b><br/>Analyse fondamentale complète de {company_name} ({self.symbol})<br/>• Métriques financières essentielles<br/>• Valorisation et recommandations<br/>• 8-10 pages d'analyse professionnelle",
+            'DETAILED': f"<b>ANALYSE TECHNIQUE AVANCÉE DEMANDÉE</b><br/>Étude technique poussée de {company_name} ({self.symbol})<br/>• 20+ indicateurs techniques complexes<br/>• Patterns et signaux d'entrée/sortie<br/>• 15-20 pages d'analyse spécialisée",
+            'DEEP_ANALYSIS': f"<b>RECHERCHE EXHAUSTIVE DEMANDÉE</b><br/>Étude multi-dimensionnelle complète de {company_name} ({self.symbol})<br/>• Analyse ESG et facteurs de durabilité<br/>• Modélisation Monte Carlo et stress testing<br/>• Positionnement sectoriel et macro-économique<br/>• 25-30 pages de recherche approfondie",
+            'BENCHMARK': f"<b>ANALYSE COMPARATIVE DEMANDÉE</b><br/>Positionnement marché complet de {company_name} ({self.symbol})<br/>• Comparaison avec indices de référence<br/>• Performance relative multi-périodes<br/>• Corrélations et analyse de volatilité<br/>• 12-15 pages d'étude comparative",
+            'PRICER': f"<b>MODÈLE DE VALORISATION DEMANDÉ</b><br/>Évaluation quantitative avancée de {company_name} ({self.symbol})<br/>• Modèles DCF, Black-Scholes, Monte Carlo<br/>• Prix théorique et fourchettes de valorisation<br/>• Analyse de sensibilité des paramètres<br/>• 20-25 pages de modélisation financière",
+            'CUSTOM': f"<b>RAPPORT PERSONNALISÉ DEMANDÉ</b><br/>Configuration sur mesure pour {company_name} ({self.symbol})<br/>• Paramètres spécifiques définis<br/>• Modules sélectionnés selon besoins<br/>• Longueur variable selon configuration"
+        }
+        
+        request_summary = request_details.get(self.report_type, f"Analyse financière de {company_name} ({self.symbol})")
+        
+        request_style = ParagraphStyle(
+            'RequestSummary',
             parent=self.styles['Normal'],
-            fontSize=12,
+            fontSize=11,
             alignment=TA_CENTER,
-            spaceAfter=20,
-            borderWidth=1,
-            borderColor=colors.HexColor('#059669'),
-            borderPadding=8,
-            backColor=colors.HexColor('#ecfdf5')
+            spaceAfter=25,
+            borderWidth=2,
+            borderColor=colors.HexColor('#1d4ed8'),
+            borderPadding=12,
+            backColor=colors.HexColor('#dbeafe'),
+            leftIndent=10,
+            rightIndent=10
         )
-        self.story.append(Paragraph(requested_info, requested_style))
+        self.story.append(Paragraph(request_summary, request_style))
         self.story.append(Spacer(1, 20))
         
         # Informations clés

@@ -278,8 +278,8 @@ export default function ReportHistoryPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Asset</TableHead>
+                <TableHead>Analyse</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>Frequency</TableHead>
                 <TableHead>Payment</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Created</TableHead>
@@ -309,11 +309,28 @@ export default function ReportHistoryPage() {
                     </div>
                   </TableCell>
                   <TableCell>
+                    {(() => {
+                      const analysisTypes = {
+                        'BASELINE': { label: 'Baseline', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' },
+                        'DETAILED': { label: 'Technique Avancée', color: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300' },
+                        'DEEP_ANALYSIS': { label: 'Recherche Exhaustive', color: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' },
+                        'BENCHMARK': { label: 'Analyse Comparative', color: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' },
+                        'PRICER': { label: 'Modèle Valorisation', color: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300' },
+                        'CUSTOM': { label: 'Personnalisé', color: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300' }
+                      };
+                      const analysisType = analysisTypes[report.reportType as keyof typeof analysisTypes] || { label: report.reportType || 'N/A', color: 'bg-gray-100 text-gray-800' };
+                      return (
+                        <Badge className={`${analysisType.color} border-0`}>
+                          {analysisType.label}
+                        </Badge>
+                      );
+                    })()}
+                  </TableCell>
+                  <TableCell>
                     <Badge variant={report.type === 'one-time' ? 'default' : 'secondary'}>
                       {report.type === 'one-time' ? 'One-time' : 'Recurring'}
                     </Badge>
                   </TableCell>
-                  <TableCell className="capitalize">{report.frequency}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       {report.paymentMethod === 'subscription' ? (
